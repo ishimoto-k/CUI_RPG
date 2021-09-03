@@ -15,4 +15,7 @@ int main(){
   MapView mapView;
   mapView.setDungeon(std::make_shared<DungeonCreate>(20,10));
   mapView.dungeon->debug();
+  auto pos = mapView.getRandomNonePosition();
+  mapView.setEnemy(std::make_shared<DummyEnemy>(pos.x,pos.y));
+  mapView.draw();
 }

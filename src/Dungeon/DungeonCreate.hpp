@@ -13,7 +13,6 @@
 
 //メインのアルゴリズムは壁伸ばし法
 class DungeonCreate : public DungeonInterfece{
-  BitMap bitmap;
   std::vector<Vector2> selectWall;
   int at(Vector2 v);
   void process();
@@ -21,7 +20,7 @@ class DungeonCreate : public DungeonInterfece{
   void buildStart();
 public:
   DungeonCreate(int w, int h);
-  BitMap create() override;
+  bool create() override;
   void debug() override;
 };
 #endif // APPEAL_DUNGEONCREATE_HPP

@@ -6,14 +6,12 @@
 
 
 
-Vector2 operator +(Vector2 l,Vector2 r){ return Vector2(l.first+r.first,l.second+r.second);}
-
 int DungeonCreate::at(Vector2 v){
-  if(v.second >= bitmap.size())return ERR;
-  if(v.second <= -1)return ERR;
-  if(v.first >= bitmap[v.second].size())return ERR;
-  if(v.first <= -1)return ERR;
-  return bitmap[v.second][v.first];
+  if(v.y >= bitmap.size())return ERR;
+  if(v.y <= -1)return ERR;
+  if(v.x >= bitmap[v.y].size())return ERR;
+  if(v.x <= -1)return ERR;
+  return bitmap[v.y][v.x];
 }
 void DungeonCreate::process(){
 
@@ -42,7 +40,7 @@ void DungeonCreate::process(){
   buildStart();
 }
 void DungeonCreate::build(Vector2 wall) {
-  bitmap[(wall).second][(wall).first] = BUILDING_WALL;
+  bitmap[(wall).y][(wall).x] = BUILDING_WALL;
   std::vector<Vector2> vectors = {Vector2(0, 1), Vector2(1, 0),
                                   Vector2(0, -1), Vector2(-1, 0)};
   std::random_device seed_gen;
@@ -58,12 +56,12 @@ void DungeonCreate::build(Vector2 wall) {
       return;
     }
     if (at(next_check) == NONE && at(next_check + vector) != BUILDING_WALL) {
-      bitmap[(next_check).second][(next_check).first] = BUILDING_WALL;
+      bitmap[(next_check).y][(next_check).x] = BUILDING_WALL;
       if (at(next_check + vector) == WALL || at(next_check + vector) == BUILDING_WALL) {
-        std::cout << "finish" << std::endl;
+        bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
         return;
       }
-      bitmap[(next_check + vector).second][(next_check + vector).first] =BUILDING_WALL;
+      bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
       if (at(next_check + vector) == NONE) {
         build(next_check + vector);
       }
@@ -74,7 +72,7 @@ void DungeonCreate::build(Vector2 wall) {
 }
 void DungeonCreate::buildStart(){
   for(auto startWall:selectWall){
-    if(bitmap[startWall.second][startWall.first] == WALL){
+    if(bitmap[startWall.y][startWall.x] == WALL){
       continue;
     }
     build(startWall);
@@ -98,11 +96,10 @@ void DungeonCreate::buildStart(){
     std::cout << "room create" << std::endl;
     for(int xx = x_ ; xx < x_+width && xx < width_ ; xx++){
       for(int yy = y_ ; yy < y_+height && yy < height_; yy++){
-        bitmap[yy][xx] = NONE;
+//        bitmap[yy][xx] = NONE;
       }
     }
   }
-  bitmap[5][2] = 9;
   return;
 }
 DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
@@ -121,9 +118,9 @@ DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
   }
   debug();
 };
-BitMap DungeonCreate::create(){
+bool DungeonCreate::create(){
   process();
-  return bitmap;
+  return true;
 }
 void DungeonCreate::debug(){
   for(auto w : bitmap){

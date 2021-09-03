@@ -6,6 +6,8 @@
 #define APPEAL_DUMMYENEMY_HPP
 
 #include <iostream>
+#include <Vector2.hpp>
+using namespace Vec;
 
 class DummyEnemy {
   int x_;
@@ -22,6 +24,10 @@ public:
   }
   void move(){
 
+  }
+  Vector2 position(){
+    Vector2 vector2 = Vector2(x_,y_);
+    return vector2;
   }
 };
 

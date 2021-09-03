@@ -6,18 +6,58 @@
 #define APPEAL_MAPVIEW_HPP
 #include <memory>
 #include <DungeonInterface.hpp>
+#include <DummyEnemy.hpp>
+
+#include <Vector2.hpp>
+using namespace Vec;
 
 class MapView {
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
+  std::vector<Vector2> nonePlacePosition;
+  std::shared_ptr<DummyEnemy> enemy;
+
   MapView(){};
 
   void setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr){
     dungeon = dungeonPtr;
     dungeon->create();
+    dungeon->debug();
+    auto bitmap = dungeon->getBitMap();
+    for(int y=0;y<bitmap.size();y++){
+      for(int x=0;x<bitmap[y].size();x++){
+        if(bitmap[y][x] != WALL){
+          nonePlacePosition.push_back(Vector2(x,y));
+        }
+      }
+    }
+  }
+  void setEnemy(std::shared_ptr<DummyEnemy> enemyPtr){
+    enemy = enemyPtr;
+  }
+
+  Vector2 getRandomNonePosition(){
+    std::random_device randomDevice;
+    auto index = randomDevice()%nonePlacePosition.size();
+    return nonePlacePosition[index];
   }
   void draw(){
-
+    auto bitmap = dungeon->getBitMap();
+    for(int y=0; y<bitmap.size(); y++){
+      for(int x=0; x<bitmap[y].size(); x++){
+        if(Vector2(x,y) == enemy->position()){
+          std::cout << "敵";
+        }
+        else if(bitmap[y][x] == WALL)	/* 移動可能な床 */
+          printf("\033[41m壁\033[49m");	/* ← 注）全角スペース */
+        else if(bitmap[y][x] == NONE)	/* 壁 */
+          printf("　");
+        else if(bitmap[y][x] == 2)	/* 塗った床 */
+          printf("ｘ");
+      }
+      std::cout << std::endl;
+    }
+    printf("move: ←↑→↓ restart: ESC\n");	/* 操作説明 */
   };
 };
 
