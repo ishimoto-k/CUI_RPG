@@ -7,25 +7,26 @@
 
 
 Vector2 operator +(Vector2 l,Vector2 r){ return Vector2(l.first+r.first,l.second+r.second);}
+
 int DungeonCreate::at(Vector2 v){
-  if(v.first >= bitmap.size())return ERR;
-  if(v.first <= -1)return ERR;
-  if(v.second >= bitmap[v.first].size())return ERR;
+  if(v.second >= bitmap.size())return ERR;
   if(v.second <= -1)return ERR;
-  return bitmap[v.first][v.second];
+  if(v.first >= bitmap[v.second].size())return ERR;
+  if(v.first <= -1)return ERR;
+  return bitmap[v.second][v.first];
 }
 void DungeonCreate::process(){
 
-  for(auto bx = bitmap.begin();bx!=bitmap.end();bx++){
-    if(bx == bitmap.begin() || bx == (bitmap.end()-1)){
+  for(auto by = bitmap.begin();by!=bitmap.end();by++){
+    if(by == bitmap.begin() || by == (bitmap.end()-1)){
       continue;
     }
-    for(auto by = bx->begin();by!=bx->end();by++){
-      if(by == bx->begin() || by == (bx->end()-1)){
+    for(auto bx = by->begin();bx!=by->end();bx++){
+      if(bx == by->begin() || bx == (by->end()-1)){
         continue;
       }
-      int x = std::distance(bx,bitmap.end()-1);
-      int y = std::distance(by,bx->end()-1);
+      int x = std::distance(bx,by->end()-1);
+      int y = std::distance(by,bitmap.end()-1);
       if(x % 2){
         continue;
       }
@@ -41,7 +42,7 @@ void DungeonCreate::process(){
   buildStart();
 }
 void DungeonCreate::build(Vector2 wall) {
-  bitmap[(wall).first][(wall).second] = BUILDING_WALL;
+  bitmap[(wall).second][(wall).first] = BUILDING_WALL;
   std::vector<Vector2> vectors = {Vector2(0, 1), Vector2(1, 0),
                                   Vector2(0, -1), Vector2(-1, 0)};
   std::random_device seed_gen;
@@ -57,12 +58,12 @@ void DungeonCreate::build(Vector2 wall) {
       return;
     }
     if (at(next_check) == NONE && at(next_check + vector) != BUILDING_WALL) {
-      bitmap[(next_check).first][(next_check).second] = BUILDING_WALL;
+      bitmap[(next_check).second][(next_check).first] = BUILDING_WALL;
       if (at(next_check + vector) == WALL || at(next_check + vector) == BUILDING_WALL) {
         std::cout << "finish" << std::endl;
         return;
       }
-      bitmap[(next_check + vector).first][(next_check + vector).second] =BUILDING_WALL;
+      bitmap[(next_check + vector).second][(next_check + vector).first] =BUILDING_WALL;
       if (at(next_check + vector) == NONE) {
         build(next_check + vector);
       }
@@ -73,14 +74,14 @@ void DungeonCreate::build(Vector2 wall) {
 }
 void DungeonCreate::buildStart(){
   for(auto startWall:selectWall){
-    if(bitmap[startWall.first][startWall.second] == WALL){
+    if(bitmap[startWall.second][startWall.first] == WALL){
       continue;
     }
     build(startWall);
-    for(auto bx = bitmap.begin();bx!=bitmap.end();bx++){
-      for(auto by = bx->begin();by!=bx->end();by++){
-        if(*by == BUILDING_WALL){
-          *by = WALL;
+    for(auto by = bitmap.begin();by!=bitmap.end();by++){
+      for(auto bx = by->begin();bx!=by->end();bx++){
+        if(*bx == BUILDING_WALL){
+          *bx = WALL;
         }
       }
     }
@@ -97,7 +98,7 @@ void DungeonCreate::buildStart(){
     std::cout << "room create" << std::endl;
     for(int xx = x_ ; xx < x_+width && xx < width_ ; xx++){
       for(int yy = y_ ; yy < y_+height && yy < height_; yy++){
-        bitmap[xx][yy] = NONE;
+        bitmap[yy][xx] = NONE;
       }
     }
   }
@@ -109,15 +110,16 @@ DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
   int width = (w % 2) == 0 ? w+1 :  w;
   int height = (h % 2) == 0 ? h+1 :  h;
   //マップを白塗りする
-  bitmap = std::vector<std::vector<int>>(width,std::vector<int>(height,NONE)); // W*Hのマップを生成
+  bitmap = std::vector<std::vector<int>>(height,std::vector<int>(width,NONE)); // W*Hのマップを生成
 
   //一番外枠を壁に変更する
-  *bitmap.begin() = std::vector<int>(height,WALL);
-  *(bitmap.end()-1) = std::vector<int>(height,WALL);
+  *bitmap.begin() = std::vector<int>(width,WALL);
+  *(bitmap.end()-1) = std::vector<int>(width,WALL);
   for(auto i = bitmap.begin();i!=bitmap.end();i++){
     *i->begin() = WALL;
     *(i->end()-1) = WALL;
   }
+  debug();
 };
 BitMap DungeonCreate::create(){
   process();
