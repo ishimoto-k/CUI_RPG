@@ -18,6 +18,8 @@ int main(){
   mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
   mapView.setEnemy(std::make_shared<DummyEnemy>(pos.x,pos.y));
+  pos = mapView.getRandomNonePosition();
+  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
   for(int i=0;i<10;i++) {
     mapView.update();
     mapView.draw();

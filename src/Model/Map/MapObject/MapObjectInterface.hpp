@@ -20,6 +20,7 @@ public:
     return id_;
   }
   virtual void move(const BitMap& bitMap) = 0;
+  virtual void move(const BitMap& bitMap,const Vector2& vecctor) = 0;
   Vector2 position(){
     return position_;
   }

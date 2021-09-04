@@ -13,5 +13,6 @@ public:
   Enemy(int x,int y):MapObjectInterface(x,y){}
   void view() override;
   void move(const BitMap& bitMap) override;
+  void move(const BitMap& bitMap,const Vector2& vecctor) override {};
 };
 #endif // APPEAL_ENEMY_HPP
