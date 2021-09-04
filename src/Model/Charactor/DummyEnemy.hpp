@@ -10,24 +10,29 @@
 using namespace Vec;
 
 class DummyEnemy {
-  int x_;
-  int y_;
+  Vector2 position_ = Vector2(0,0);
   int id_;
 
 public:
-  DummyEnemy(int x,int y):x_(x),y_(y){};
+  DummyEnemy(int x,int y):position_(Vector2(x,y)){}
   void view(){
-    std::cout << "D";
+    std::cout << "敵";
   }
   int id(){
     return id_;
   }
-  void move(){
-
+  void move(const BitMap bitMap){
+    auto directions = ShuffulDirections();
+    for(auto i:directions){
+      auto dir = position_ + i;
+      if(at(bitMap,dir) == 0){
+        position_ = dir;
+        break;
+      }
+    }
   }
   Vector2 position(){
-    Vector2 vector2 = Vector2(x_,y_);
-    return vector2;
+    return position_;
   }
 };
 

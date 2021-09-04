@@ -41,12 +41,15 @@ public:
     auto index = randomDevice()%nonePlacePosition.size();
     return nonePlacePosition[index];
   }
+  void update(){
+    enemy->move(dungeon->getBitMap());
+  }
   void draw(){
     auto bitmap = dungeon->getBitMap();
     for(int y=0; y<bitmap.size(); y++){
       for(int x=0; x<bitmap[y].size(); x++){
         if(Vector2(x,y) == enemy->position()){
-          std::cout << "敵";
+          enemy->view();
         }
         else if(bitmap[y][x] == WALL)	/* 移動可能な床 */
           printf("\033[41m壁\033[49m");	/* ← 注）全角スペース */

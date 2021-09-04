@@ -8,8 +8,9 @@
 #include <random>
 
 #include "../src/Model/Map/MapView.hpp"
-#include <DungeonCreate.hpp>
 #include <DummyEnemy.hpp>
+#include <DungeonCreate.hpp>
+#include <thread>
 
 int main(){
   MapView mapView;
@@ -17,5 +18,10 @@ int main(){
   mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
   mapView.setEnemy(std::make_shared<DummyEnemy>(pos.x,pos.y));
-  mapView.draw();
+  for(int i=0;i<10;i++) {
+    mapView.update();
+    mapView.draw();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    printf( "\033[;H\033[2J" );
+  }
 }
