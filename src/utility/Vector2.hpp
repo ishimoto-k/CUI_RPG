@@ -13,9 +13,31 @@ class Vector2{
 public:
   int x;
   int y;
+  enum Direction{
+      UP,
+      DOWN,
+      RIGHT,
+      LEFT,
+  };
   Vector2(int posx,int posy){
     x = posx;
     y = posy;
+  }
+  Vector2(Direction direction){
+    switch (direction) {
+    case UP:
+      x = 0, y = -1;
+      break;
+    case DOWN:
+      x = 0, y = 1;
+      break;
+    case RIGHT:
+      x = 1, y = 0;
+      break;
+    case LEFT:
+      x = -1, y = 0;
+      break;
+    }
   }
 
   Vector2 operator +(Vector2 r){ return Vector2(x+r.x,y+r.y);}

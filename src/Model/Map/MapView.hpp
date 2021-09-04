@@ -18,6 +18,7 @@ public:
   std::vector<Vector2> nonePlacePosition;
   std::shared_ptr<MapObjectInterface> enemy;
   std::shared_ptr<Player> player;
+  Vector2 playerDirection = {0,0};
 
   MapView(){};
 
@@ -46,9 +47,12 @@ public:
     auto index = randomDevice()%nonePlacePosition.size();
     return nonePlacePosition[index];
   }
+  void setPlayerDirection(Vector2 dir){
+    playerDirection = dir;
+  }
   void update(){
     enemy->move(dungeon->getBitMap());
-    player->move(dungeon->getBitMap(),Vector2(0,0));
+    player->move(dungeon->getBitMap(),playerDirection);
   }
   void draw(){
     auto bitmap = dungeon->getBitMap();

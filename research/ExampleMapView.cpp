@@ -8,22 +8,42 @@
 #include <random>
 
 #include "../src/Model/Map/MapView.hpp"
-#include <DungeonCreate.hpp>
 #include <DummyEnemy.hpp>
-#include <thread>
-
+#include <DungeonCreate.hpp>
+#include <InputKeyBoard.hpp>
 int main(){
   MapView mapView;
-  mapView.setDungeon(std::make_shared<DungeonCreate>(20,10));
+  mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
   mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
   mapView.setEnemy(std::make_shared<DummyEnemy>(pos.x,pos.y));
   pos = mapView.getRandomNonePosition();
   mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
-  for(int i=0;i<10;i++) {
+  mapView.draw();
+  for(int i=0;i<100;i++) {
+    printf( "\033[;H\033[2J" );
+    system("clear");
     mapView.update();
     mapView.draw();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    printf( "\033[;H\033[2J" );
+    int key;
+    while (1) {	/* キーが押されるまで待つ */
+      if ( InputKeyBoard::checkInputKey() ){
+        key = getchar();	/* 入力されたキー番号 */
+        break ;
+      }
+    }
+    if(key == 'w'){
+      mapView.setPlayerDirection(Vector2::UP);
+    }
+    else if(key == 's'){
+      mapView.setPlayerDirection(Vector2::DOWN);
+    }
+    else if(key == 'd'){
+      mapView.setPlayerDirection(Vector2::RIGHT);
+    }
+    else if(key == 'a'){
+      mapView.setPlayerDirection(Vector2::LEFT);
+    }
+//    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
