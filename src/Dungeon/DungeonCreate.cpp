@@ -4,15 +4,6 @@
 
 #include "DungeonCreate.hpp"
 
-
-
-int DungeonCreate::at(Vector2 v){
-  if(v.y >= bitmap.size())return ERR;
-  if(v.y <= -1)return ERR;
-  if(v.x >= bitmap[v.y].size())return ERR;
-  if(v.x <= -1)return ERR;
-  return bitmap[v.y][v.x];
-}
 void DungeonCreate::process(){
 
   for(auto by = bitmap.begin();by!=bitmap.end();by++){
@@ -41,28 +32,24 @@ void DungeonCreate::process(){
 }
 void DungeonCreate::build(Vector2 wall) {
   bitmap[(wall).y][(wall).x] = BUILDING_WALL;
-  std::vector<Vector2> vectors = {Vector2(0, 1), Vector2(1, 0),
-                                  Vector2(0, -1), Vector2(-1, 0)};
-  std::random_device seed_gen;
-  std::mt19937 engine(seed_gen());
-  std::shuffle(vectors.begin(), vectors.end(), engine);
+  std::vector<Vector2> vectors = ShuffulDirections();
   auto next_check = wall;
   for (auto vector : vectors) {
     next_check = wall + vector;
-    if (at(next_check) == BUILDING_WALL) {
+    if (at(bitmap,next_check) == BUILDING_WALL) {
       continue;
     }
-    if (at(next_check) == ERR || at(next_check + vector) == ERR) {
+    if (at(bitmap,next_check) == ERR || at(bitmap,next_check + vector) == ERR) {
       return;
     }
-    if (at(next_check) == NONE && at(next_check + vector) != BUILDING_WALL) {
+    if (at(bitmap,next_check) == NONE && at(bitmap,next_check + vector) != BUILDING_WALL) {
       bitmap[(next_check).y][(next_check).x] = BUILDING_WALL;
-      if (at(next_check + vector) == WALL || at(next_check + vector) == BUILDING_WALL) {
+      if (at(bitmap,next_check + vector) == WALL || at(bitmap,next_check + vector) == BUILDING_WALL) {
         bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
         return;
       }
       bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
-      if (at(next_check + vector) == NONE) {
+      if (at(bitmap,next_check + vector) == NONE) {
         build(next_check + vector);
       }
     } else {
@@ -117,7 +104,7 @@ DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
     *(i->end()-1) = WALL;
   }
   debug();
-};
+}
 bool DungeonCreate::create(){
   process();
   return true;

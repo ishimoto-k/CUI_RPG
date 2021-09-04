@@ -14,7 +14,6 @@
 //メインのアルゴリズムは壁伸ばし法
 class DungeonCreate : public DungeonInterfece{
   std::vector<Vector2> selectWall;
-  int at(Vector2 v);
   void process();
   void build(Vector2 wall);
   void buildStart();
