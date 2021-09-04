@@ -5,8 +5,7 @@
 #include "DummyEnemy.hpp"
 
 void DummyEnemy::view() { std::cout << "敵"; }
-void DummyEnemy::move(const BitMap bitMap) {
-  std::cout << "move";
+void DummyEnemy::move(const BitMap& bitMap) {
   auto directions = ShuffulDirections();
   for (auto i : directions) {
     auto dir = position_ + i;

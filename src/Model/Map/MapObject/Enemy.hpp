@@ -5,6 +5,13 @@
 #ifndef APPEAL_ENEMY_HPP
 #define APPEAL_ENEMY_HPP
 
-class Enemy {};
+#include <iostream>
+#include "MapObjectInterface.hpp"
 
+class Enemy :public MapObjectInterface{
+public:
+  Enemy(int x,int y):MapObjectInterface(x,y){}
+  void view() override;
+  void move(const BitMap& bitMap) override;
+};
 #endif // APPEAL_ENEMY_HPP

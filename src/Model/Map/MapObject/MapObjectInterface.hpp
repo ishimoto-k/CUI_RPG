@@ -19,7 +19,7 @@ public:
   int id(){
     return id_;
   }
-  virtual void move(const BitMap bitMap) = 0;
+  virtual void move(const BitMap& bitMap) = 0;
   Vector2 position(){
     return position_;
   }
