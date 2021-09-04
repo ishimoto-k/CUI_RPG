@@ -30,6 +30,5 @@ target_link_libraries(Appeal
         ${OPENGL_LIBRARY}
         dungeon
         utility
-        Charactor
         Map
         )

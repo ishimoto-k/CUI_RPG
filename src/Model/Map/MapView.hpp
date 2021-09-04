@@ -6,7 +6,7 @@
 #define APPEAL_MAPVIEW_HPP
 #include <memory>
 #include <DungeonInterface.hpp>
-#include <DummyEnemy.hpp>
+#include "MapObject/MapObjectInterface.hpp"
 
 #include <Vector2.hpp>
 using namespace Vec;
@@ -15,7 +15,7 @@ class MapView {
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
-  std::shared_ptr<DummyEnemy> enemy;
+  std::shared_ptr<MapObjectInterface> enemy;
 
   MapView(){};
 
@@ -32,7 +32,7 @@ public:
       }
     }
   }
-  void setEnemy(std::shared_ptr<DummyEnemy> enemyPtr){
+  void setEnemy(std::shared_ptr<MapObjectInterface> enemyPtr){
     enemy = enemyPtr;
   }
 

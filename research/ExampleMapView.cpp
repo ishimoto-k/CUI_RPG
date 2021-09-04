@@ -8,8 +8,8 @@
 #include <random>
 
 #include "../src/Model/Map/MapView.hpp"
-#include <DummyEnemy.hpp>
 #include <DungeonCreate.hpp>
+#include <DummyEnemy.hpp>
 #include <thread>
 
 int main(){
