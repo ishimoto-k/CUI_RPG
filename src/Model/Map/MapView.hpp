@@ -21,9 +21,13 @@ public:
   std::shared_ptr<Player> player;
   BitMap drawBitMap;
   Vector2 playerDirection = {0,0};
+  Observer observer;
 
   MapView(){};
-
+  void addObserver(Observer &observer) override{
+    Subject::addObserver(observer);
+    this->observer = observer;
+  };
   void setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr){
     dungeon = dungeonPtr;
     dungeon->create();
@@ -39,12 +43,17 @@ public:
     std::random_device seed_gen;
     std::mt19937 engine(seed_gen());
     std::shuffle(nonePlacePosition.begin(), nonePlacePosition.end(), engine);
+    drawBitMap = dungeon->getBitMap();
   }
   void setEnemy(std::vector<std::shared_ptr<MapObjectInterface>> enemyPtr){
     enemies = enemyPtr;
+    for(auto enemy:enemies){
+      enemy->addObserver(observer);
+    }
   }
   void setPlayer(std::shared_ptr<Player> playerPtr){
     player = playerPtr;
+    player->addObserver(observer);
   }
 
   Vector2 getRandomNonePosition(){
@@ -56,15 +65,18 @@ public:
     playerDirection = dir;
   }
   void update(){
-    drawBitMap = dungeon->getBitMap();
-    for(auto enemy:enemies){//最初にエネミーを動かす
-      enemy->move(drawBitMap);
-      auto pos = enemy->position();
-      drawBitMap[pos.y][pos.x] = BitMapKind::OBJECT;
-    }
-    player->move(drawBitMap,playerDirection);//次にプレイヤーを動かす
     auto pos = player->position();
-    drawBitMap[pos.y][pos.x] = BitMapKind::OBJECT;
+    drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
+    player->move(drawBitMap,playerDirection);//最初にプレイヤーを動かす　//Objectに衝突するとイベント発生する
+    pos = player->position();
+    drawBitMap[pos.y][pos.x] = BitMapKind::PLAYER;
+    for(auto enemy:enemies){//次にエネミーを動かす　//Objectに衝突するとイベント発生する
+      auto pos = enemy->position();
+      drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
+      enemy->move(drawBitMap);
+      pos = enemy->position();
+      drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
+    }
   }
   void draw(){
     for(int y=0; y<drawBitMap.size(); y++){

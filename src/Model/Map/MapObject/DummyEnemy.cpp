@@ -10,7 +10,12 @@ void DummyEnemy::move(const BitMap& bitMap) {
   for (auto i : directions) {
     auto dir = position_ + i;
     auto bit = at(bitMap, dir);
-    if (bit == NONE) {
+    if (bit != NONE && bit != WALL) {
+      auto body = std::make_shared<EventBody>();
+      body->bit = bitMap[dir.y][dir.x];
+      notify(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,body);
+      break;
+    } else if(bit == NONE){
       position_ = dir;
       break;
     }

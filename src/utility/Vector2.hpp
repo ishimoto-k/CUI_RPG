@@ -13,11 +13,12 @@ class Vector2{
 public:
   int x;
   int y;
-  enum Direction{
-      UP,
-      DOWN,
-      RIGHT,
-      LEFT,
+  enum Direction {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT,
+    NONE,
   };
   Vector2(int posx,int posy){
     x = posx;
@@ -37,6 +38,9 @@ public:
     case LEFT:
       x = -1, y = 0;
       break;
+    case NONE:
+      x = 0, y = 0;
+      break;
     }
   }
 
@@ -51,7 +55,8 @@ enum BitMapKind {
   ERR = -1,
   WALL,
   NONE,
-  OBJECT,
+  PLAYER,
+  ENEMY,
   BUILDING_WALL = 100,
 };
 typedef std::vector<std::vector<BitMapKind>> BitMap;

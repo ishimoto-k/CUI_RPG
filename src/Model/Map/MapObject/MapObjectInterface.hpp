@@ -6,14 +6,22 @@
 #define APPEAL_MAPOBJECTINTERFACE_HPP
 
 #include <Vector2.hpp>
-using namespace Vec;
+#include <Observer.hpp>
 
-class MapObjectInterface {
+using namespace Vec;
+using namespace Design;
+
+class MapObjectInterface : public Subject {
 protected:
   Vector2 position_ = Vector2(0,0);
   int id_;
 
 public:
+  class EventBody:public SubjectDataBody{
+  public:
+    BitMapKind bit;
+
+  };
   MapObjectInterface(int x,int y):position_(Vector2(x,y)){}
   virtual void view() = 0;
   int id(){

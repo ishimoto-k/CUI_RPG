@@ -11,8 +11,22 @@
 #include <DummyEnemy.hpp>
 #include <DungeonCreate.hpp>
 #include <InputKeyBoard.hpp>
+#include <thread>
 int main(){
   MapView mapView;
+  Observer observer;
+  observer.interface(std::make_shared<ObserverInterface>());
+  observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){
+    auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
+    std::cout << "object collision detection bit = "<< msg->bit << std::endl;
+
+  });
+  observer.interface()->addListener(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,[](SubjectData subject){
+    auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
+    std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
+
+  });
+  mapView.addObserver(observer);
   mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
   mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
@@ -27,29 +41,34 @@ int main(){
   mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
   mapView.draw();
   for(int i=0;i<100;i++) {
-    printf( "\033[;H\033[2J" );
-    system("clear");
+    printf("\033[;H\033[2J");
+    //    system("clear");
     mapView.update();
     mapView.draw();
-    int key;
-    while (1) {	/* キーが押されるまで待つ */
-      if ( InputKeyBoard::checkInputKey() ){
-        key = getchar();	/* 入力されたキー番号 */
-        break ;
+    int key = 0;
+    int counter = 0;
+    while (1) { /* キーが押されるまで待つ */
+      std::this_thread::sleep_for(std::chrono::milliseconds(16));
+      if (InputKeyBoard::checkInputKey()) {
+        key = getchar(); /* 入力されたキー番号 */
+        break;
+      }
+      counter++;
+      if (counter == 60) {
+        break;
       }
     }
-    if(key == 'w'){
+    std::cout << key << std::endl;
+    if (key == 'w') {
       mapView.setPlayerDirection(Vector2::UP);
-    }
-    else if(key == 's'){
+    } else if (key == 's') {
       mapView.setPlayerDirection(Vector2::DOWN);
-    }
-    else if(key == 'd'){
+    } else if (key == 'd') {
       mapView.setPlayerDirection(Vector2::RIGHT);
-    }
-    else if(key == 'a'){
+    } else if (key == 'a') {
       mapView.setPlayerDirection(Vector2::LEFT);
+    } else if (key == 0) {
+      mapView.setPlayerDirection(Vector2::NONE);
     }
-//    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
