@@ -8,9 +8,9 @@
 #include <random>
 
 #include "../src/Model/Map/MapView.hpp"
+#include <KeyBoardController.hpp>
 #include <DummyEnemy.hpp>
 #include <DungeonCreate.hpp>
-#include <InputKeyBoard.hpp>
 #include <thread>
 int main(){
   MapView mapView;
@@ -49,7 +49,7 @@ int main(){
     int counter = 0;
     while (1) { /* キーが押されるまで待つ */
       std::this_thread::sleep_for(std::chrono::milliseconds(16));
-      if (InputKeyBoard::checkInputKey()) {
+      if (KeyBoardController::checkInputKey()) {
         key = getchar(); /* 入力されたキー番号 */
         break;
       }

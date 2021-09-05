@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <KeyBoardController.hpp>
 
-#include <InputKeyBoard.hpp>
 #define STAGE       2      //ステージ数
 #define MAZE_ROW    5      //迷路の行数
 #define MAZE_COLUMN 5      //迷路の列数
@@ -83,7 +83,7 @@ void key_input(void)
 {
   int key;
   while (1) {	/* キーが押されるまで待つ */
-    if ( InputKeyBoard::checkInputKey() ){
+    if ( KeyBoardController::checkInputKey() ){
       key = getchar();	/* 入力されたキー番号 */
       break ;
     }
