@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+add_compile_definitions(CURRENT_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}")
+
+add_subdirectory(submodule/yaml-cpp)
+link_libraries(yaml-cpp)
+
 add_subdirectory(src/utility)
 add_library(event STATIC src/Observer/Observer.cpp)
 target_include_directories(event INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/Observer)
