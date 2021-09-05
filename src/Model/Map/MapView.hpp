@@ -8,16 +8,18 @@
 #include "MapObject/Player.hpp"
 #include <DungeonInterface.hpp>
 #include <memory>
-
+#include <Observer.hpp>
 #include <Vector2.hpp>
 using namespace Vec;
+using namespace Design;
 
-class MapView {
+class MapView : public Subject{
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
-  std::shared_ptr<MapObjectInterface> enemy;
+  std::vector<std::shared_ptr<MapObjectInterface>> enemies;
   std::shared_ptr<Player> player;
+  BitMap drawBitMap;
   Vector2 playerDirection = {0,0};
 
   MapView(){};
@@ -29,48 +31,63 @@ public:
     auto bitmap = dungeon->getBitMap();
     for(int y=0;y<bitmap.size();y++){
       for(int x=0;x<bitmap[y].size();x++){
-        if(bitmap[y][x] != WALL){
-          nonePlacePosition.push_back(Vector2(x,y));
+        if(bitmap[y][x] != BitMapKind::WALL){
+          nonePlacePosition.emplace_back(x,y);
         }
       }
     }
+    std::random_device seed_gen;
+    std::mt19937 engine(seed_gen());
+    std::shuffle(nonePlacePosition.begin(), nonePlacePosition.end(), engine);
   }
-  void setEnemy(std::shared_ptr<MapObjectInterface> enemyPtr){
-    enemy = enemyPtr;
+  void setEnemy(std::vector<std::shared_ptr<MapObjectInterface>> enemyPtr){
+    enemies = enemyPtr;
   }
   void setPlayer(std::shared_ptr<Player> playerPtr){
     player = playerPtr;
   }
 
   Vector2 getRandomNonePosition(){
-    std::random_device randomDevice;
-    auto index = randomDevice()%nonePlacePosition.size();
-    return nonePlacePosition[index];
+    auto itr = nonePlacePosition.begin();
+    nonePlacePosition.erase(itr);
+    return *itr;
   }
   void setPlayerDirection(Vector2 dir){
     playerDirection = dir;
   }
   void update(){
-    enemy->move(dungeon->getBitMap());
-    player->move(dungeon->getBitMap(),playerDirection);
+    drawBitMap = dungeon->getBitMap();
+    for(auto enemy:enemies){//最初にエネミーを動かす
+      enemy->move(drawBitMap);
+      auto pos = enemy->position();
+      drawBitMap[pos.y][pos.x] = BitMapKind::OBJECT;
+    }
+    player->move(drawBitMap,playerDirection);//次にプレイヤーを動かす
+    auto pos = player->position();
+    drawBitMap[pos.y][pos.x] = BitMapKind::OBJECT;
   }
   void draw(){
-    auto bitmap = dungeon->getBitMap();
-    for(int y=0; y<bitmap.size(); y++){
-      for(int x=0; x<bitmap[y].size(); x++){
-        if(Vector2(x,y) == enemy->position()){
-          enemy->view();
-          continue;
+    for(int y=0; y<drawBitMap.size(); y++){
+      for(int x=0; x<drawBitMap[y].size(); x++){
+        bool check = false;
+        for(auto enemy:enemies){
+          if(Vector2(x,y) == enemy->position()){
+            enemy->view();
+            check = true;
+            continue;
+          }
         }
+        if(check)
+          continue;
         if(Vector2(x,y) == player->position()){
           player->view();
           continue;
         }
-        else if(bitmap[y][x] == WALL)	/* 移動可能な床 */
+        else if(drawBitMap[y][x] == WALL)	/* 移動可能な床 */
           printf("\033[41m壁\033[49m");	/* ← 注）全角スペース */
-        else if(bitmap[y][x] == NONE)	/* 壁 */
+        else if(drawBitMap[y][x] == NONE)	/* 壁 */
           printf("　");
-        else if(bitmap[y][x] == 2)	/* 塗った床 */
+        else if(drawBitMap[y][x] == 2)	/* 塗った床 */
           printf("ｘ");
       }
       std::cout << std::endl;

@@ -6,11 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 add_subdirectory(src/utility)
-link_libraries(utility)
-
-
 add_library(event STATIC src/Observer/Observer.cpp)
 target_include_directories(event INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/Observer)
+link_libraries(utility event)
 
 add_library(dungeon STATIC src/Dungeon/DungeonCreate.cpp)
 target_include_directories(dungeon INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/Dungeon)

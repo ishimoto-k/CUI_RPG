@@ -45,7 +45,16 @@ public:
     return x==r.x&&y==r.y;
   }
 };
-typedef std::vector<std::vector<int>> BitMap;
+
+//ダンジョン生成で扱う一時的なパラメーター定数
+enum BitMapKind {
+  ERR = -1,
+  WALL,
+  NONE,
+  OBJECT,
+  BUILDING_WALL = 100,
+};
+typedef std::vector<std::vector<BitMapKind>> BitMap;
 
 static std::vector<Vector2> ShuffulDirections() {
   std::vector<Vector2> vectors = {Vector2(0, 1), Vector2(1, 0), Vector2(0, -1), Vector2(-1, 0)};
@@ -55,12 +64,13 @@ static std::vector<Vector2> ShuffulDirections() {
   return vectors;
 }
 
-static int at(const BitMap& bitmap,Vector2 v){
-    if(v.y >= bitmap.size())return -1;
-    if(v.y <= -1)return -1;
-    if(v.x >= bitmap[v.y].size())return -1;
-    if(v.x <= -1)return -1;
-    return bitmap[v.y][v.x];
+static BitMapKind at(const BitMap& bitmap,Vector2 v){
+  if(v.y >= bitmap.size())return ERR;
+  if(v.y <= -1)return ERR;
+  if(v.x >= bitmap[v.y].size())return ERR;
+  if(v.x <= -1)return ERR;
+  return bitmap[v.y][v.x];
 }
+
 }
 #endif // APPEAL_VECTOR2_HPP

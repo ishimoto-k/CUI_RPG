@@ -9,7 +9,7 @@ void Player::move(const BitMap& bitMap) {
 }
 void Player::move(const BitMap& bitMap,const Vector2& direction) {
   auto pos = position_ + direction;
-  if (at(bitMap, pos) == 0) {
+  if (at(bitMap, pos) == NONE) {
     position_ = pos;
   }
 }

@@ -31,25 +31,25 @@ void DungeonCreate::process(){
   buildStart();
 }
 void DungeonCreate::build(Vector2 wall) {
-  bitmap[(wall).y][(wall).x] = BUILDING_WALL;
+  bitmap[(wall).y][(wall).x] = BitMapKind::BUILDING_WALL;
   std::vector<Vector2> vectors = ShuffulDirections();
   auto next_check = wall;
   for (auto vector : vectors) {
     next_check = wall + vector;
-    if (at(bitmap,next_check) == BUILDING_WALL) {
+    if (at(bitmap,next_check) == BitMapKind::BUILDING_WALL) {
       continue;
     }
-    if (at(bitmap,next_check) == ERR || at(bitmap,next_check + vector) == ERR) {
+    if (at(bitmap,next_check) == BitMapKind::ERR || at(bitmap,next_check + vector) == BitMapKind::ERR) {
       return;
     }
-    if (at(bitmap,next_check) == NONE && at(bitmap,next_check + vector) != BUILDING_WALL) {
-      bitmap[(next_check).y][(next_check).x] = BUILDING_WALL;
-      if (at(bitmap,next_check + vector) == WALL || at(bitmap,next_check + vector) == BUILDING_WALL) {
-        bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
+    if (at(bitmap,next_check) == BitMapKind::NONE && at(bitmap,next_check + vector) != BitMapKind::BUILDING_WALL) {
+      bitmap[(next_check).y][(next_check).x] = BitMapKind::BUILDING_WALL;
+      if (at(bitmap,next_check + vector) == BitMapKind::WALL || at(bitmap,next_check + vector) == BitMapKind::BUILDING_WALL) {
+        bitmap[(next_check + vector).y][(next_check + vector).x] = BitMapKind::BUILDING_WALL;
         return;
       }
-      bitmap[(next_check + vector).y][(next_check + vector).x] = BUILDING_WALL;
-      if (at(bitmap,next_check + vector) == NONE) {
+      bitmap[(next_check + vector).y][(next_check + vector).x] = BitMapKind::BUILDING_WALL;
+      if (at(bitmap,next_check + vector) == BitMapKind::NONE) {
         build(next_check + vector);
       }
     } else {
@@ -59,14 +59,14 @@ void DungeonCreate::build(Vector2 wall) {
 }
 void DungeonCreate::buildStart(){
   for(auto startWall:selectWall){
-    if(bitmap[startWall.y][startWall.x] == WALL){
+    if(bitmap[startWall.y][startWall.x] == BitMapKind::WALL){
       continue;
     }
     build(startWall);
     for(auto by = bitmap.begin();by!=bitmap.end();by++){
       for(auto bx = by->begin();bx!=by->end();bx++){
-        if(*bx == BUILDING_WALL){
-          *bx = WALL;
+        if(*bx == BitMapKind::BUILDING_WALL){
+          *bx = BitMapKind::WALL;
         }
       }
     }
@@ -94,14 +94,14 @@ DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
   int width = (w % 2) == 0 ? w+1 :  w;
   int height = (h % 2) == 0 ? h+1 :  h;
   //マップを白塗りする
-  bitmap = std::vector<std::vector<int>>(height,std::vector<int>(width,NONE)); // W*Hのマップを生成
+  bitmap = std::vector<std::vector<BitMapKind>>(height,std::vector<BitMapKind>(width,BitMapKind::NONE)); // W*Hのマップを生成
 
   //一番外枠を壁に変更する
-  *bitmap.begin() = std::vector<int>(width,WALL);
-  *(bitmap.end()-1) = std::vector<int>(width,WALL);
+  *bitmap.begin() = std::vector<BitMapKind>(width,BitMapKind::WALL);
+  *(bitmap.end()-1) = std::vector<BitMapKind>(width,BitMapKind::WALL);
   for(auto i = bitmap.begin();i!=bitmap.end();i++){
-    *i->begin() = WALL;
-    *(i->end()-1) = WALL;
+    *i->begin() = BitMapKind::WALL;
+    *(i->end()-1) = BitMapKind::WALL;
   }
   debug();
 }

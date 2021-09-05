@@ -9,7 +9,7 @@ void Enemy::move(const BitMap& bitMap) {
   auto directions = ShuffulDirections();
   for (auto i : directions) {
     auto dir = position_ + i;
-    if (at(bitMap, dir) == 0) {
+    if (at(bitMap, dir) == NONE) {
       position_ = dir;
       break;
     }

@@ -13,11 +13,6 @@
 using namespace Vec;
 
 
-//ダンジョン生成で扱う一時的なパラメーター定数
-const int ERR = -1;
-const int WALL = 1;
-const int NONE = 0;
-const int BUILDING_WALL = 2;
 
 //ダンジョンの基底クラス
 //これを継承してダンジョン生成のアルゴリズム生成を行う

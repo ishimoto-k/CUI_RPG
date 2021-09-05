@@ -16,7 +16,13 @@ int main(){
   mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
   mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
-  mapView.setEnemy(std::make_shared<DummyEnemy>(pos.x,pos.y));
+  std::vector<std::shared_ptr<MapObjectInterface>> enemies;
+  for(int i=0;i<1;i++) {
+    enemies.push_back(std::make_shared<DummyEnemy>(pos.x, pos.y));
+    pos = mapView.getRandomNonePosition();
+  }
+
+  mapView.setEnemy({std::make_shared<DummyEnemy>(pos.x,pos.y),std::make_shared<DummyEnemy>(pos.x,pos.y)});
   pos = mapView.getRandomNonePosition();
   mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
   mapView.draw();
