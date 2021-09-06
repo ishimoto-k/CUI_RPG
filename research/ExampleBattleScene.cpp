@@ -6,6 +6,7 @@
 #include <KeyBoardController.hpp>
 #include <fstream>
 #include <iostream>
+#include <Player.hpp>
 
 int main(){
 
@@ -15,6 +16,7 @@ int main(){
   BattleScene battleScene;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
+  battleScene.setPlayer(std::make_shared<Player>(10,10));
   battleScene.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");
@@ -33,9 +35,12 @@ int main(){
       }
     }
     if (key == 'w') {
+      battleScene.cursor = (battleScene.cursor+1)%2;
     } else if (key == 's') {
     } else if (key == 'd') {
     } else if (key == 'a') {
+    } else if (key == 'z') {
+      battleScene.select();
     } else if (key == 0) {
     }
   }

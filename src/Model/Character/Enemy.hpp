@@ -5,8 +5,8 @@
 #ifndef APPEAL_ENEMY_HPP
 #define APPEAL_ENEMY_HPP
 
+#include "../Map/MapObjectInterface.hpp"
 #include <iostream>
-#include "MapObjectInterface.hpp"
 
 class Enemy :public MapObjectInterface{
 public:

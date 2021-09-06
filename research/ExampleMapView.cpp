@@ -7,10 +7,10 @@
 #include <vector>
 #include <random>
 
+#include "../src/Model/Character/DummyEnemy.hpp"
 #include "../src/Model/Map/MapView.hpp"
-#include <KeyBoardController.hpp>
-#include <DummyEnemy.hpp>
 #include <DungeonCreate.hpp>
+#include <KeyBoardController.hpp>
 #include <thread>
 int main(){
   MapView mapView;

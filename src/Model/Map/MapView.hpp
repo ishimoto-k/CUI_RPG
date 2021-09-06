@@ -4,12 +4,12 @@
 
 #ifndef APPEAL_MAPVIEW_HPP
 #define APPEAL_MAPVIEW_HPP
-#include "MapObject/MapObjectInterface.hpp"
-#include "MapObject/Player.hpp"
+#include "../Character/Player.hpp"
+#include "MapObjectInterface.hpp"
 #include <DungeonInterface.hpp>
-#include <memory>
 #include <Observer.hpp>
 #include <Vector2.hpp>
+#include <memory>
 using namespace Vec;
 using namespace Design;
 
