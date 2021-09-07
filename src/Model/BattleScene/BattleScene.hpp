@@ -13,7 +13,7 @@
 #include "Command/Attack.hpp"
 #include "Command/Escape.hpp"
 #include <Player.hpp>
-#include <Enemy.hpp>
+#include <DummyEnemy.hpp>
 
 using namespace Design;
 enum State{
@@ -50,7 +50,7 @@ public:
   BattleScene(){
   }
   void setPlayer(std::shared_ptr<Player> playPtr){player = playPtr;}
-  void setEnemy(std::shared_ptr<Enemy> enemyPtr){enemy = enemyPtr;}
+  void setEnemy(std::shared_ptr<DummyEnemy> enemyPtr){enemy = enemyPtr;}
   int cursor = 0;
   void cursorUp(){
     cursor = cursor+1;
@@ -62,8 +62,9 @@ public:
   }
   void action(std::shared_ptr<Character> fromChara,std::shared_ptr<Character> toChara,std::shared_ptr<CommandInterface> command){
     //todo ダメージ計算とHP減少
-    log.push_back(fromChara->name()+"の"+command->name());
-    log.push_back(toChara->name()+"に50のダメージ");
+    command->update(fromChara->name(),toChara->name(),fromChara->parameter,toChara->parameter,&log);
+//    log.push_back(fromChara->name()+"の"+command->name());
+//    log.push_back(toChara->name()+"に50のダメージ");
   }
 
   void update(){
@@ -73,6 +74,17 @@ public:
       action(player,enemy,selection);
       action(enemy,player,std::make_shared<Attack>());
       state = CommandSelect;
+      if(enemy->parameter.HP <= 0){
+        enemy->parameter.HP = 0;
+        auto body = std::make_shared<EventBody>();
+        body->state = Win;
+        notify(ObserverEventList::BATTLE_SCENE_WIN,body);
+      }else if(player->parameter.HP <= 0){
+        player->parameter.HP = 0;
+        auto body = std::make_shared<EventBody>();
+        body->state = Lose;
+        notify(ObserverEventList::BATTLE_SCENE_LOSE,body);
+      }
       turnCounter ++;
       selectList = commands;
       //ターン終了
@@ -110,6 +122,8 @@ public:
         cursor = 0;
         selection = commands[2];
         state = ESCAPE;
+        log.clear();
+        log.push_back("戦闘から離脱しました");
         auto body = std::make_shared<EventBody>();
         body->state = state;
         notify(ObserverEventList::BATTLE_SCENE_ESCAPE,body);
@@ -118,10 +132,10 @@ public:
     }
   }
   void view(){
-    std::cout << enemy->frontView() << std::endl;
-    std::cout << enemy->name() << std::endl << " HP:" << enemy->parameter.maxHP  << "/" << enemy->HP << std::endl;
-    std::cout << player->name() << std::endl << " HP:" << player->parameter.maxHP  << "/" << player->HP << " ";
-    std::cout << "MP:" << player->parameter.maxMP  << "/" << player->MP << std::endl << std::endl;
+    std::cout << std::endl << enemy->frontView() << std::endl;
+    std::cout << enemy->name() << std::endl << " HP:" << enemy->parameter.maxHP  << "/" << enemy->parameter.HP << std::endl;
+    std::cout << player->name() << std::endl << " HP:" << player->parameter.maxHP  << "/" << player->parameter.HP << " ";
+    std::cout << "MP:" << player->parameter.maxMP  << "/" << player->parameter.MP << std::endl << std::endl;
     if(state == CommandSelect || state == SkillSelect){
       if(state == SkillSelect)
         std::cout << "スキル" << std::endl;

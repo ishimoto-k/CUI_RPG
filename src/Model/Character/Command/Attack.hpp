@@ -16,6 +16,12 @@ class Attack :public CommandInterface{
   void select(){
     std::cout<<"攻撃します"<<std::endl;
   };
+  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
+    int damage = from.POW - to.DEX;
+    to.HP -= damage;
+    log->push_back(fromName+"の"+name());
+    log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
+  }
 };
 
 #endif // APPEAL_ATTACK_HPP

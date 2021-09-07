@@ -15,8 +15,8 @@ public:
   Player(int x,int y):MapObjectInterface(x,y){
     isEnemy = false;
     parameter.level = 1;
-    parameter.maxHP = 100;
-    parameter.maxMP = 100;
+    parameter.HP = parameter.maxHP = 100;
+    parameter.MP = parameter.maxMP = 100;
     parameter.DEX = 100;
     parameter.POW = 100;
 

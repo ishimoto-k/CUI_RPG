@@ -3,10 +3,11 @@
 //
 
 #include <BattleScene.hpp>
+#include <DummyEnemy.hpp>
 #include <KeyBoardController.hpp>
+#include <Player.hpp>
 #include <fstream>
 #include <iostream>
-#include <Player.hpp>
 
 int main(){
   enum GameState{
@@ -23,9 +24,19 @@ int main(){
     std::cout << "BATTLE_SCENE_ESCAPE ";
     gameState = EXIT;
   });
+  observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_WIN,[&](SubjectData subject){
+    auto msg = static_cast<BattleScene::EventBody*>(subject.get());
+    std::cout << "BATTLE_SCENE_WIN ";
+    gameState = EXIT;
+  });
+  observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_LOSE,[&](SubjectData subject){
+    auto msg = static_cast<BattleScene::EventBody*>(subject.get());
+    std::cout << "BATTLE_SCENE_LOSE ";
+    gameState = EXIT;
+  });
   battleScene.addObserver(observer);
   battleScene.setPlayer(std::make_shared<Player>(10,10));
-  battleScene.setEnemy(std::make_shared<Enemy>(10,10));
+  battleScene.setEnemy(std::make_shared<DummyEnemy>(10,10));
   battleScene.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");
