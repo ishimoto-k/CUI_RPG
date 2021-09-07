@@ -4,18 +4,26 @@
 
 #ifndef APPEAL_CHARACTER_HPP
 #define APPEAL_CHARACTER_HPP
-#include <SkillInterface.hpp>
+#include <Command/CommandInterface.hpp>
 
-class Character {
-public:
+struct Parameter {
   std::string name;
-  bool isEnemy=false;
   int level;
-  int HP;
-  int MP;
   int POW;
   int DEX;
-  std::vector<SkillInterface> skill;
+  int maxHP;
+  int maxMP;
+};
+class Character {
+public:
+  Parameter parameter;
+  virtual std::string frontView(){}
+  virtual std::string name() = 0;
+  bool isEnemy;
+  int HP;
+  int MP;
+  std::vector<std::shared_ptr<SkillInterface>> skill;
+  virtual void action(){};
 };
 
 #endif // APPEAL_CHARACTER_HPP

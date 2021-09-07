@@ -6,6 +6,7 @@
 #define APPEAL_ATTACK_HPP
 #include "CommandInterface.hpp"
 class Attack :public CommandInterface{
+  int id(){return 1;}
   std::string name(){
     return "攻撃";
   };

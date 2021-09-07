@@ -11,6 +11,12 @@ enum class ObserverEventList : int {
   MAP_VIEW__PLAYER_CollisionDetection,
   MAP_VIEW__ENEMY_CollisionDetection,
 
+  BATTLE_SCENE = 0x2000,
+  BATTLE_SCENE_ESCAPE,
+  BATTLE_SCENE_WIN,
+  BATTLE_SCENE_LOSE,
+
+  KEYBOARD = 0x10000,
   KEYBOARD__ON_INPUT,
 };
 #endif    // APPEAL_OBSERVEREVENTLIST_HPP

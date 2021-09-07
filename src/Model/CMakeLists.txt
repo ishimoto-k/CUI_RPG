@@ -8,16 +8,21 @@ target_include_directories(Map INTERFACE
         )
 target_link_libraries(Map dungeon)
 
-add_library(Skill STATIC Character/Skill/Fire.cpp)
+add_library(Skill STATIC
+        Character/Skill/Fire.cpp
+        Character/Command/Attack.cpp
+        Character/Command/Escape.cpp
+        )
 target_include_directories(Skill INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character/Skill
+        ${CMAKE_CURRENT_LIST_DIR}/Character/Command
         )
+
 add_library(Character STATIC
         Character/DummyEnemy.cpp
         Character/Enemy.cpp
         Character/Player.cpp
         )
-
 target_include_directories(Character INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character
         )

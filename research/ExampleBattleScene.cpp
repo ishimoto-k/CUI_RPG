@@ -9,39 +9,53 @@
 #include <Player.hpp>
 
 int main(){
-
-  fprintf(stdout,"現在のファイルパス:%s\n", CURRENT_DIRECTORY);
-
-
+  enum GameState{
+    BATTLE,
+    EXIT,
+  };
+  GameState gameState = BATTLE;
   BattleScene battleScene;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
+
+  observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_ESCAPE,[&](SubjectData subject){
+    auto msg = static_cast<BattleScene::EventBody*>(subject.get());
+    std::cout << "BATTLE_SCENE_ESCAPE ";
+    gameState = EXIT;
+  });
+  battleScene.addObserver(observer);
   battleScene.setPlayer(std::make_shared<Player>(10,10));
+  battleScene.setEnemy(std::make_shared<Enemy>(10,10));
   battleScene.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");
-    battleScene.view();
     int key = 0;
     int counter = 0;
+    battleScene.update();
+    battleScene.view();
+    if(EXIT == gameState){
+      goto finish;
+    }
     while (1) { /* キーが押されるまで待つ */
       std::this_thread::sleep_for(std::chrono::milliseconds(16));
       if (KeyBoardController::checkInputKey()) {
         key = getchar(); /* 入力されたキー番号 */
         break;
       }
-      counter++;
-      if (counter == 60) {
-        break;
-      }
     }
     if (key == 'w') {
-      battleScene.cursor = (battleScene.cursor+1)%2;
+      battleScene.cursorUp();
     } else if (key == 's') {
+      battleScene.cursorDown();
     } else if (key == 'd') {
     } else if (key == 'a') {
     } else if (key == 'z') {
       battleScene.select();
+    } else if (key == 'x') {
+      battleScene.cancel();
     } else if (key == 0) {
     }
   }
+  finish:
+  std::cout << "Exit" << std::endl;
 }

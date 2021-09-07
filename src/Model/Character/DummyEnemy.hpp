@@ -12,6 +12,9 @@ class DummyEnemy :public MapObjectInterface{
 public:
   DummyEnemy(int x,int y):MapObjectInterface(x,y){}
   void view() override;
+  std::string name(){
+    return "敵";
+  }
   void move(const BitMap& bitMap) override;
   void move(const BitMap& bitMap,const Vector2& vecctor) override {};
 };

@@ -12,11 +12,25 @@
 
 class Player :public MapObjectInterface,public Character{
 public:
-  Player(int x,int y):MapObjectInterface(x,y){}
+  Player(int x,int y):MapObjectInterface(x,y){
+    isEnemy = false;
+    parameter.level = 1;
+    parameter.maxHP = 100;
+    parameter.maxMP = 100;
+    parameter.DEX = 100;
+    parameter.POW = 100;
+
+    skill = std::vector<std::shared_ptr<CommandInterface>>{
+        std::make_shared<Fire>(),
+        std::make_shared<Ice>()
+          };
+  }
+  std::string name(){
+    return "冒険者";
+  }
   void view() override;
   void move(const BitMap& bitMap) override;
   void move(const BitMap& bitMap,const Vector2& direction) override;
 
-  std::vector<std::shared_ptr<SkillInterface>> skill = {std::make_shared<Fire>()};
 };
 #endif // APPEAL_PLAYER_HPP
