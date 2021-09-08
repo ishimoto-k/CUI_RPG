@@ -13,8 +13,6 @@ public:
   virtual int mp() { return 0;}
   virtual std::string name() = 0;
   virtual std::string description() = 0;
-  virtual std::string battleLog(){};
-  virtual void select() = 0;
   virtual void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){};
 };
 typedef CommandInterface SkillInterface;

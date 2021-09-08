@@ -14,9 +14,6 @@ class Escape:public CommandInterface{
   std::string description(){
     return "戦闘から離脱します";
   };
-  void select(){
-    std::cout<<"戦闘から離脱します"<<std::endl;
-  };
 };
 class Skill:public CommandInterface{
   int id(){return 2;}
@@ -25,9 +22,6 @@ class Skill:public CommandInterface{
   };
   std::string description(){
     return "スキルを使用します";
-  };
-  void select(){
-    std::cout<<"スキルを使用します"<<std::endl;
   };
 };
 

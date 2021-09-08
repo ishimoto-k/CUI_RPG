@@ -9,7 +9,7 @@ target_include_directories(Map INTERFACE
 target_link_libraries(Map dungeon)
 
 add_library(Skill STATIC
-        Character/Skill/Fire.cpp
+        Character/Skill/Skills.cpp
         Character/Command/Attack.cpp
         Character/Command/Escape.cpp
         )

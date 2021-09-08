@@ -11,10 +11,7 @@ class Attack :public CommandInterface{
     return "攻撃";
   };
   std::string description(){
-    return "敵に物理攻撃をします";
-  };
-  void select(){
-    std::cout<<"攻撃します"<<std::endl;
+    return "敵に攻撃します";
   };
   void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
     int damage = from.POW - to.DEX;

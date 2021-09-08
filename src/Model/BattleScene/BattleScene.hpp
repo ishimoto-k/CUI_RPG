@@ -67,25 +67,31 @@ public:
 //    log.push_back(toChara->name()+"に50のダメージ");
   }
 
-  void update(){
+  void update() {
     //戦闘ロジック
-    if(state == Action){
-      log.clear();//バトルログを消す
-      action(player,enemy,selection);
-      action(enemy,player,std::make_shared<Attack>());
-      state = CommandSelect;
-      if(enemy->parameter.HP <= 0){
+    if (state == Action) {
+      log.clear(); //バトルログを消す
+      action(player, enemy, selection);
+      if (enemy->parameter.HP <= 0) {
         enemy->parameter.HP = 0;
         auto body = std::make_shared<EventBody>();
+        log.push_back(enemy->name()+"を倒した");
         body->state = Win;
-        notify(ObserverEventList::BATTLE_SCENE_WIN,body);
-      }else if(player->parameter.HP <= 0){
+        notify(ObserverEventList::BATTLE_SCENE_WIN, body);
+        goto finish;
+      }
+      action(enemy, player, std::make_shared<Attack>());
+      if (player->parameter.HP <= 0) {
         player->parameter.HP = 0;
         auto body = std::make_shared<EventBody>();
+        log.push_back(player->name()+"は敗北した");
         body->state = Lose;
-        notify(ObserverEventList::BATTLE_SCENE_LOSE,body);
+        notify(ObserverEventList::BATTLE_SCENE_LOSE, body);
+        goto finish;
       }
-      turnCounter ++;
+    finish:
+      state = CommandSelect;
+      turnCounter++;
       selectList = commands;
       //ターン終了
     }
@@ -102,8 +108,13 @@ public:
   void select(){
     if(state == SkillSelect){
       auto skill = selectList[cursor];
-      selection = skill;
-      state = Action;
+      if(player->parameter.MP >= skill->mp()){
+        selection = skill;
+        state = Action;
+      }else{
+        log.clear();
+        log.push_back("MPが足りない");
+      }
     }else {
       auto command = commands[cursor];
       switch (command->id()) {
@@ -149,7 +160,16 @@ public:
         }else{
           std::cout << "　";
         }
-        std::cout<< (*command)->name() << std::endl;
+        std::cout<< (*command)->name() ;
+        if(state == SkillSelect) {
+          if(player->parameter.MP < (*command)->mp()){
+            std::cout << "　" << "\t\033[2m"<< (*command)->mp() << "\033[0m" << std::endl;
+          }else{
+            std::cout << "　\t" << (*command)->mp() <<  std::endl;
+          }
+        }else{
+          std::cout << std::endl;
+        }
       }
       std::cout<< "説明:" << std::endl;
       std::cout<< "　" <<selectList[cursor]->description() << std::endl;
