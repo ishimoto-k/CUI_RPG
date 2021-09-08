@@ -14,6 +14,7 @@ struct Parameter {
   int maxMP;
   int HP;
   int MP;
+  int EXP;
 };
 
 #endif // APPEAL_PARAMETER_HPP

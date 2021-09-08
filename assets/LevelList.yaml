@@ -1,0 +1,33 @@
+
+
+Level:
+  1 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 35, getSkill: [0]}
+  2 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 77 }
+  3 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 129, getSkill: [1]}
+  4 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 193 }
+  5 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 270 }
+  6 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 365 }
+  7 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 480 }
+  8 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 621 }
+  9 : {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 793 }
+  10: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 1003 }
+  11: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 1258 }
+  12: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 1570 }
+  13: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 1951 }
+  14: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 2415 }
+  15: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 2981 }
+  16: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 3672 }
+  17: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 4515 }
+  18: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 5544 }
+  19: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 6798 }
+  20: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 8329 }
+  21: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 10197 }
+  22: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 12475 }
+  23: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 15255 }
+  24: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 18646 }
+  25: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 22783 }
+  26: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 27830 }
+  27: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 33988 }
+  28: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 41501 }
+  29: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 50666 }
+  30: {HP: 20 ,MP: 20, POW: 20, DEX: 20, needEXP: 61847 }

@@ -25,6 +25,7 @@ public:
   void move(const BitMap& bitMap) override;
   void move(const BitMap& bitMap,const Vector2& vecctor) override {};
   std::string frontView() override {
+
     return "　　人　　\n"
            "　／　＼　\n"
            "［・；・］\n"
