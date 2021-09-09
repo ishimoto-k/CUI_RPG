@@ -10,12 +10,11 @@
 #include <yaml-cpp/yaml.h>
 #include <Observer.hpp>
 
-#include "Command/Attack.hpp"
-#include "Command/Escape.hpp"
+#include "../GameSceneInterface.hpp"
+#include "Command/Command.hpp"
 #include <DummyEnemy.hpp>
 #include <Enemy.hpp>
 #include <Player.hpp>
-#include "../GameSceneInterface.hpp"
 using namespace Design;
 enum State{
   CommandSelect,

@@ -10,8 +10,7 @@ target_link_libraries(Map dungeon)
 
 add_library(Skill STATIC
         Character/Skill/Skills.cpp
-        Character/Command/Attack.cpp
-        Character/Command/Escape.cpp
+        Character/Command/Command.cpp
         )
 target_include_directories(Skill INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character/Skill
