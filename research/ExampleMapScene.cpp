@@ -39,12 +39,12 @@ int main(){
   mapView.setEnemy({std::make_shared<DummyEnemy>(pos.x,pos.y),std::make_shared<DummyEnemy>(pos.x,pos.y)});
   pos = mapView.getRandomNonePosition();
   mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
-  mapView.draw();
+  mapView.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");
     //    system("clear");
     mapView.update();
-    mapView.draw();
+    mapView.view();
     int key = 0;
     int counter = 0;
     while (1) { /* キーが押されるまで待つ */

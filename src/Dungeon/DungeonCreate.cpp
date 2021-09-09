@@ -83,7 +83,7 @@ void DungeonCreate::buildStart(){
     std::cout << "room create" << std::endl;
     for(int xx = x_ ; xx < x_+width && xx < width_ ; xx++){
       for(int yy = y_ ; yy < y_+height && yy < height_; yy++){
-//        bitmap[yy][xx] = NONE;
+        bitmap[yy][xx] = NONE;
       }
     }
   }

@@ -15,7 +15,7 @@
 #include <DummyEnemy.hpp>
 #include <Enemy.hpp>
 #include <Player.hpp>
-
+#include "../GameSceneInterface.hpp"
 using namespace Design;
 enum State{
   CommandSelect,
@@ -26,7 +26,7 @@ enum State{
   Win,
   Lose,
 };
-class BattleScene:public Subject{
+class BattleScene:public GameSceneInterface{
 public:
   class EventBody:public SubjectDataBody{
   public:
@@ -59,11 +59,11 @@ public:
     enemy->initBattleBefore();
   }
   int cursor = 0;
-  void cursorUp(){
+  void Up() override {
     cursor = cursor+1;
     if(selectList.size() == cursor)cursor = 0;
   }
-  void cursorDown(){
+  void Down() override {
     cursor = cursor-1;
     if(-1 == cursor)cursor = selectList.size()-1;
   }
@@ -73,8 +73,11 @@ public:
 //    log.push_back(fromChara->name()+"の"+command->name());
 //    log.push_back(toChara->name()+"に50のダメージ");
   }
+  void Left(){}
+  void Right(){};
+  void Esc(){};
 
-  void update() {
+  void update() override {
     //戦闘ロジック
     if (state == Action) {
       log.clear(); //バトルログを消す
@@ -116,14 +119,14 @@ public:
   }
 
 
-  void cancel(){
+  void Cancel() override {
     if(state == SkillSelect){
       state = CommandSelect;
       selectList = commands;
     }
     cursor = 0;
   }
-  void select(){
+  void Select() override {
     if(state == SkillSelect){
       auto skill = selectList[cursor];
       if(player->parameter.MP >= skill->mp()){

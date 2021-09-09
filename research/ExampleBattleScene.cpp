@@ -55,15 +55,15 @@ int main(){
       }
     }
     if (key == 'w') {
-      battleScene.cursorUp();
+      battleScene.Up();
     } else if (key == 's') {
-      battleScene.cursorDown();
+      battleScene.Down();
     } else if (key == 'd') {
     } else if (key == 'a') {
     } else if (key == 'z') {
-      battleScene.select();
+      battleScene.Select();
     } else if (key == 'x') {
-      battleScene.cancel();
+      battleScene.Cancel();
     } else if (key == 0) {
     }
   }

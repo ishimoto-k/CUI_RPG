@@ -10,10 +10,11 @@
 #include <Observer.hpp>
 #include <Vector2.hpp>
 #include <memory>
+#include "../GameSceneInterface.hpp"
 using namespace Vec;
 using namespace Design;
 
-class MapScene : public Subject{
+class MapScene : public GameSceneInterface{
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
@@ -64,7 +65,18 @@ public:
   void setPlayerDirection(Vector2 dir){
     playerDirection = dir;
   }
-  void update(){
+  void Up(){
+    setPlayerDirection(Vector2::UP);
+  }
+  void Down(){
+    setPlayerDirection(Vector2::DOWN);
+  };
+  void Left(){setPlayerDirection(Vector2::LEFT);};
+  void Right(){setPlayerDirection(Vector2::RIGHT);};
+  void Select(){};
+  void Cancel(){};
+  void Esc(){};
+  void update() override {
     auto pos = player->position();
     drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
     player->move(drawBitMap,playerDirection);//最初にプレイヤーを動かす　//Objectに衝突するとイベント発生する
@@ -77,8 +89,9 @@ public:
       pos = enemy->position();
       drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
     }
+    setPlayerDirection(Vector2::NONE);
   }
-  void draw(){
+  void view() override {
     for(int y=0; y<drawBitMap.size(); y++){
       for(int x=0; x<drawBitMap[y].size(); x++){
         bool check = false;
@@ -104,7 +117,6 @@ public:
       }
       std::cout << std::endl;
     }
-    printf("move: ←↑→↓ restart: ESC\n");	/* 操作説明 */
   };
 };
 
