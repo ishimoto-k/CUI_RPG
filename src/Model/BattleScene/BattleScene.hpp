@@ -76,6 +76,17 @@ public:
         enemy->parameter.HP = 0;
         auto body = std::make_shared<EventBody>();
         log.push_back(enemy->name()+"を倒した");
+        log.push_back(std::to_string(enemy->parameter.EXP)+"の経験値を獲得した");
+        auto tmpSkillSize = player->skill.size();
+        if(player->addExp(enemy->parameter.EXP)){
+          log.push_back(player->name()+"はレベルアップし、");
+          log.push_back(std::to_string(player->parameter.level)+"になった");
+          if(tmpSkillSize < player->skill.size()){
+            for(auto skill = player->skill.begin()+(tmpSkillSize-1); skill!=player->skill.end();skill++){
+              log.push_back((*skill)->name()+"を覚えた");
+            }
+          }
+        }
         body->state = Win;
         notify(ObserverEventList::BATTLE_SCENE_WIN, body);
         goto finish;

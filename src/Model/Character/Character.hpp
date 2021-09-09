@@ -15,6 +15,7 @@ public:
   bool isEnemy;
   std::vector<std::shared_ptr<SkillInterface>> skill;
   virtual void action(){};
+  virtual bool addExp(int exp){return false;};
 };
 
 #endif // APPEAL_CHARACTER_HPP

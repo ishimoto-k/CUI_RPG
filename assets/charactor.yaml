@@ -4,8 +4,8 @@
 # Ruleなし
 
 #Actions:
-#  - { Logic: Normal,commands: [0,2]} #1ターン目はスキル0かスキル2で攻撃
-#  - { Logic: HPisLow,Parameter: [30],commands: [0,1]} #2ターン目はHPが30%以下なら、スキル0かスキル1で攻撃。HPが30%以上なら次のリストで行動。
+#  - { Logic: HPisLow,Parameter: [30],commands: [0,1]} #1ターン目はHPが30%以下なら、スキル0かスキル1で攻撃。HPが30%以上なら次のリストで行動。
+#  - { Logic: Normal,commands: [0,2]} #2ターン目はスキル0かスキル2で攻撃
 #  ##条件によっては無限ループになるので注意
 
 ENEMY:
@@ -15,7 +15,7 @@ ENEMY:
       HP: 40
       MP: 0
       POW: 5
-      DEX: 5
+      DEX: 3
       EXP: 15
       ViewPath: enemy1
       Actions:
@@ -37,7 +37,7 @@ ENEMY:
       LVEL: 10
       HP: 400
       MP: 0
-      POW: 34
+      POW: 44
       DEX: 12
       EXP: 200
       ViewPath: enemy1

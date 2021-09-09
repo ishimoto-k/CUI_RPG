@@ -17,6 +17,7 @@ public:
     parameter.MP = parameter.maxMP = 100;
     parameter.DEX = 10;
     parameter.POW = 100;
+    parameter.EXP = 100;
   }
   void view() override;
   std::string name(){
