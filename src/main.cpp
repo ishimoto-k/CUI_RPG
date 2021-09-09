@@ -8,7 +8,7 @@
 #include <random>
 
 #include "../src/Model/Character/DummyEnemy.hpp"
-#include "../src/Model/Map/MapView.hpp"
+#include "../src/Model/Map/MapScene.hpp"
 #include "Model/GameStatus.hpp"
 #include <DungeonCreate.hpp>
 #include <KeyBoardController.hpp>
@@ -21,7 +21,7 @@ int main(){
 
   Title title;
   Key key = Key::NONE;
-  MapView mapView;
+  MapScene mapView;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
   observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){
@@ -38,6 +38,14 @@ int main(){
     key = msg->key;
     std::cout << "KEYBOARD__ON_INPUT "<< msg->key.debug() << std::endl;
   });
+  observer.interface()->addListener(ObserverEventList::TITLE_SCENE_ON_SELECT,[&](SubjectData subject){
+    auto msg = static_cast<Title::EventBody*>(subject.get());
+    if(msg->selectList == Title::SelectList::START){
+      gameStatus = GameStatus::MAP_VIEW;
+    }
+  });
+  title.addObserver(observer);
+
   keyBoardController.addObserver(observer);
   keyBoardController.startInputMonitoring();
 
@@ -74,12 +82,19 @@ int main(){
     if(gameStatus == GameStatus::TITLE){
       std::cout << key.debug() << std::endl;
       if (key == Key::UP) {
-        title.cursorUp();
+        title.Up();
       } else if (key == Key::DOWN) {
-        title.cursorDown();
+        title.Down();
       } else if (key == Key::RIGHT) {
+        title.Right();
       } else if (key == Key::LEFT) {
+        title.Left();
+      } else if (key == Key::SELECT) {
+        title.Select();
+      } else if (key == Key::CANCEL) {
+        title.Cancel();
       } else if (key == Key::ESC) {
+        title.Esc();
       }
     }else {
       std::cout << key.debug() << std::endl;

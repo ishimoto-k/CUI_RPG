@@ -2,8 +2,8 @@
 // Created by IshimotoKiko on 2021/09/03.
 //
 
-#ifndef APPEAL_MAPVIEW_HPP
-#define APPEAL_MAPVIEW_HPP
+#ifndef APPEAL_MAPSCENE_HPP
+#define APPEAL_MAPSCENE_HPP
 #include "../Character/Player.hpp"
 #include "MapObjectInterface.hpp"
 #include <DungeonInterface.hpp>
@@ -13,7 +13,7 @@
 using namespace Vec;
 using namespace Design;
 
-class MapView : public Subject{
+class MapScene : public Subject{
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
@@ -23,7 +23,7 @@ public:
   Vector2 playerDirection = {0,0};
   Observer observer;
 
-  MapView(){};
+  MapScene(){};
   void addObserver(Observer &observer) override{
     Subject::addObserver(observer);
     this->observer = observer;
@@ -108,4 +108,4 @@ public:
   };
 };
 
-#endif // APPEAL_MAPVIEW_HPP
+#endif // APPEAL_MAPSCENE_HPP

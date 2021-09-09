@@ -8,12 +8,12 @@
 #include <random>
 
 #include "../src/Model/Character/DummyEnemy.hpp"
-#include "../src/Model/Map/MapView.hpp"
+#include "../src/Model/Map/MapScene.hpp"
 #include <DungeonCreate.hpp>
 #include <KeyBoardController.hpp>
 #include <thread>
 int main(){
-  MapView mapView;
+  MapScene mapView;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
   observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){

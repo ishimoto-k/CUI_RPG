@@ -11,7 +11,12 @@ enum class ObserverEventList : int {
   MAP_VIEW__PLAYER_CollisionDetection,
   MAP_VIEW__ENEMY_CollisionDetection,
 
-  BATTLE_SCENE = 0x2000,
+  TITLE_SCENE = 0x1000,
+  TITLE_SCENE_ON_SELECT,
+
+  MAP_SCENE = 0x2000,
+
+  BATTLE_SCENE = 0x4000,
   BATTLE_SCENE_ESCAPE,
   BATTLE_SCENE_WIN,
   BATTLE_SCENE_LOSE,

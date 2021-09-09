@@ -9,17 +9,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../GameSceneInterface.hpp"
 
-class Title {
+class Title : public GameSceneInterface{
   int cursor = 0;
   std::string frontView;
 public:
-  Title(){
-    std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/title");
-    std::string text = std::string(std::istreambuf_iterator<char>(ifs),
-                                   std::istreambuf_iterator<char>());
-    frontView = text;
-  }
   class SelectList{
   public:
     enum Kind{
@@ -38,23 +33,50 @@ public:
         return "終了";
       }
     }
+    bool operator ==(Kind k){ return k == kind;}
   private:
     Kind kind;
   };
+  class EventBody : public SubjectDataBody{
+  public:
+    SelectList selectList;
+    EventBody(SelectList sel):selectList(sel){}
+  };
+  Title(){
+    std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/title");
+    std::string text = std::string(std::istreambuf_iterator<char>(ifs),
+                                   std::istreambuf_iterator<char>());
+    frontView = text;
+  }
+
   std::vector<SelectList> selectList = {
       SelectList::START,
       SelectList::LOAD,
       SelectList::END,
   };
-  void cursorUp(){
+  void Up() override {
     cursor = cursor+1;
     if(selectList.size() == cursor)cursor = 0;
   }
-  void cursorDown(){
+  void Down() override {
     cursor = cursor-1;
     if(-1 == cursor)cursor = selectList.size()-1;
   }
-  void view(){
+  void Right() override {
+  }
+  void Left() override {
+  }
+  void update() override {
+  }
+  void Select() override {
+    auto body = std::make_shared<EventBody>(selectList[cursor]);
+    notify(ObserverEventList::TITLE_SCENE_ON_SELECT, body);
+  }
+  void Cancel() override {
+  }
+  void Esc() override{
+  }
+  void view() override {
     std::cout << frontView << std::endl;
     for(int i=0;i<selectList.size();i++){
       if(i == cursor){
