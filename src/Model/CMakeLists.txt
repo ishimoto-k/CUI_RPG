@@ -36,3 +36,11 @@ target_include_directories(BattleScene INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/BattleScene
         )
 target_link_libraries(BattleScene Map Character)
+
+
+add_library(Title STATIC
+        Title/Title.cpp
+        )
+target_include_directories(Title INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}/Title
+        )

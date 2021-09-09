@@ -12,7 +12,6 @@ public:
   Parameter parameter;
   virtual std::string frontView(){}
   virtual std::string name() = 0;
-  bool isEnemy;
   std::vector<std::shared_ptr<SkillInterface>> skill;
   virtual void initBattleBefore(){};
   virtual bool addExp(int exp){return false;};

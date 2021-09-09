@@ -28,4 +28,5 @@ target_link_libraries(Appeal
         dungeon
         utility
         Map
+        Title
         )

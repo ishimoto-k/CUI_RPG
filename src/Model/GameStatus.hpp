@@ -17,6 +17,7 @@ public:
   Status getStatus(){
     return status_;
   };
+  bool operator ==(Status s){ return status_==s;}
 private:
   Status status_;
 

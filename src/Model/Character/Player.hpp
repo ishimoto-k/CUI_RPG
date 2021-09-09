@@ -14,7 +14,6 @@ class Player :public MapObjectInterface,public Character{
   std::vector<Parameter> levelList;
 public:
   Player(int x,int y):MapObjectInterface(x,y) {
-    isEnemy = false;
     parameter.level = 4;
     parameter.HP = parameter.maxHP = 100;
     parameter.MP = parameter.maxMP = 8;

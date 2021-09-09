@@ -1,129 +1,97 @@
-#include <fcntl.h>
+//
+// Created by IshimotoKiko on 2021/09/03.
+//
+
+
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
+#include <vector>
+#include <random>
+
+#include "../src/Model/Character/DummyEnemy.hpp"
+#include "../src/Model/Map/MapView.hpp"
+#include "Model/GameStatus.hpp"
+#include <DungeonCreate.hpp>
 #include <KeyBoardController.hpp>
+#include <Title.hpp>
+#include <thread>
+int main(){
 
-#define STAGE       2      //ステージ数
-#define MAZE_ROW    5      //迷路の行数
-#define MAZE_COLUMN 5      //迷路の列数
+  GameStatus gameStatus = GameStatus::TITLE;
+  Title title;
+  MapView mapView;
+  Observer observer;
+  observer.interface(std::make_shared<ObserverInterface>());
+  observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){
+    auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
+    std::cout << "object collision detection bit = "<< msg->bit << std::endl;
 
+  });
+  observer.interface()->addListener(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,[](SubjectData subject){
+    auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
+    std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
 
+  });
+  mapView.addObserver(observer);
+  mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
+  mapView.dungeon->debug();
+  auto pos = mapView.getRandomNonePosition();
+  std::vector<std::shared_ptr<MapObjectInterface>> enemies;
+  for(int i=0;i<1;i++) {
+    enemies.push_back(std::make_shared<DummyEnemy>(pos.x, pos.y));
+    pos = mapView.getRandomNonePosition();
+  }
 
-#define GYO 10		/* 迷路の行数 */
-#define RETU 10		/* 迷路の列数 */
+  mapView.setEnemy({std::make_shared<DummyEnemy>(pos.x,pos.y),std::make_shared<DummyEnemy>(pos.x,pos.y)});
+  pos = mapView.getRandomNonePosition();
+  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
+  mapView.draw();
+  for(int i=0;i<100;i++) {
+    printf("\033[;H\033[2J");
+    //    system("clear");
+    if(gameStatus == GameStatus::TITLE){
+      title.view();
+    }else {
+      mapView.update();
+      mapView.draw();
+    }
 
-/* 迷路データ */
-int meiro[GYO][RETU] = {
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 1, 1, 1, 1, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 1, 1, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-    {1, 1, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-};
-
-int px, py;		/* プレイヤーのxy座標 */
-int goal_count;	/* 塗りつぶすべき床の数 */
-int count;		/* 塗りつぶした床の数 */
-
-/* 最初の状態に戻る */
-void play_start(void)
-{
-  int x, y;
-  count = 0;
-  px = 1;
-  py = 1;
-  for(y=0; y<GYO; y++)
-    for(x=0; x<RETU; x++)
-      if(meiro[y][x] == 2) meiro[y][x] = 0;	/* 塗りつぶし部分をもとに戻す */
-}
-
-/* 塗りつぶすべき床の数をカウントする */
-void goal_count_check(void)
-{
-  int x, y;
-  goal_count = 0;
-  for(y=0; y<GYO; y++)
-    for(x=0; x<RETU; x++)
-      if(meiro[y][x] == 0) goal_count++;		/* 移動可能な床の数をカウント */
-}
-
-/* 迷路を描く */
-void draw_meiro(void)
-{
-  int x, y;
-  for(y=0; y<GYO; y++){
-    for(x=0; x<RETU; x++){
-      if(x == px && y == py){	/* プレイヤーの位置のとき */
-        meiro[y][x] = 2;	/* 塗りつぶし済みにする */
-        count ++;		/* 塗りつぶした数をカウント */
-        printf("人");		/* プレイヤー */
+    int key = 0;
+    int counter = 0;
+    while (1) { /* キーが押されるまで待つ */
+      std::this_thread::sleep_for(std::chrono::milliseconds(16));
+      if (KeyBoardController::checkInputKey()) {
+        key = getchar(); /* 入力されたキー番号 */
+        break;
       }
-      else if(meiro[y][x] == 0)	/* 移動可能な床 */
-        printf("\033[41m　\033[49m");	/* ← 注）全角スペース */
-      else if(meiro[y][x] == 1)	/* 壁 */
-        printf("　");
-      else if(meiro[y][x] == 2)	/* 塗った床 */
-        printf("ｘ");
-    }
-    printf("\n");
-  }
-  printf("move: ←↑→↓ restart: ESC\n");	/* 操作説明 */
-}
-
-/* キー入力判定 */
-void key_input(void)
-{
-  int key;
-  while (1) {	/* キーが押されるまで待つ */
-    if ( KeyBoardController::checkInputKey() ){
-      key = getchar();	/* 入力されたキー番号 */
-      break ;
-    }
-  }
-  if(key == 'w' && meiro[py-1][px] == 0)			/* ↑キー */
-    py --;	/* 上に移動 */
-  else if(key == 's' && meiro[py+1][px] == 0)		/* ↓キー */
-    py ++;	/* 下に移動 */
-  else if(key == 'a' && meiro[py][px-1] == 0)		/* ←キー */
-    px --;	/* 左に移動 */
-  else if(key == 'd' && meiro[py][px+1] == 0)		/* →キー */
-    px ++;	/* 右に移動 */
-  else if(key == 27)								/* ESCキー */
-    play_start();	/* 最初の状態に戻る */
-  else											/* 上記以外のキーの場合は */
-    key_input();								/* 再度キー入力受付 */
-}
-
-int main(void)
-{
-  px = 1;				/* プレイヤーのx座標 */
-  py = 1;				/* プレイヤーのy座標 */
-  count = 0;			/* 塗りつぶした床の数 */
-
-  goal_count_check();	/* 塗りつぶすべき床の数をカウントする */
-
-  /* ゲームループ */
-  while(1){
-    printf( "\033[;H\033[2J" );
-
-//    system("cls");	/* コンソール画面をクリア *
-    draw_meiro();	/* 迷路を表示 */
-
-    if(count == goal_count){	/* 床を全て塗りつぶしたかのチェック */
-      printf("全て塗りました！\n");
-      break;
+      counter++;
+      if (counter == 60) {
+        break;
+      }
     }
 
-    key_input();		/* キー入力受付 */
+    if(gameStatus == GameStatus::TITLE){
+      std::cout << key << std::endl;
+      if (key == 'w') {
+        title.cursorUp();
+      } else if (key == 's') {
+        title.cursorDown();
+      } else if (key == 'd') {
+      } else if (key == 'a') {
+      } else if (key == 0) {
+      }
+    }else {
+      std::cout << key << std::endl;
+      if (key == 'w') {
+        mapView.setPlayerDirection(Vector2::UP);
+      } else if (key == 's') {
+        mapView.setPlayerDirection(Vector2::DOWN);
+      } else if (key == 'd') {
+        mapView.setPlayerDirection(Vector2::RIGHT);
+      } else if (key == 'a') {
+        mapView.setPlayerDirection(Vector2::LEFT);
+      } else if (key == 0) {
+        mapView.setPlayerDirection(Vector2::NONE);
+      }
+    }
   }
-
-  return 0;
 }
