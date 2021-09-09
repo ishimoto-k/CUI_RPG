@@ -37,18 +37,20 @@ public:
     Enemy(0,0);
   };
   void view() override;
-  std::string name(){
+  std::string name() override {
     return "敵";
   }
   bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
-  bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {};
+  bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {
+      return true;
+  };
   std::string frontView() override {
     return frontViewText_;
   }
   void setFrontView(const std::string& str){
     frontViewText_ = str;
   }
-  void initBattleBefore(){
+  void initBattleBefore()override {
     parameter.HP = parameter.maxHP;
     parameter.MP = parameter.maxMP;
   }

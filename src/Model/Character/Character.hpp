@@ -10,7 +10,7 @@
 class Character {
 public:
   Parameter parameter;
-  virtual std::string frontView(){}
+  virtual std::string frontView(){ return "";}
   virtual std::string name() = 0;
   std::vector<std::shared_ptr<SkillInterface>> skill;
   virtual void initBattleBefore(){};

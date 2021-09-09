@@ -27,7 +27,7 @@ public:
         std::make_shared<Heal>(),
     };
   }
-  std::string name(){
+  std::string name() override {
     return "冒険者";
   }
   void view() override;

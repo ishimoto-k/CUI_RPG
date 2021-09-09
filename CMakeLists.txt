@@ -29,4 +29,5 @@ target_link_libraries(Appeal
         utility
         Map
         Title
+        BattleScene
         )

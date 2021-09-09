@@ -115,18 +115,18 @@ public:
   void setPlayerDirection(Vector2 dir){
     playerDirection = dir;
   }
-  void Up(){
+  void Up()override {
     setPlayerDirection(Vector2::UP);
   }
-  void Down(){
+  void Down()override {
     setPlayerDirection(Vector2::DOWN);
   };
-  void Left(){setPlayerDirection(Vector2::LEFT);};
-  void Right(){setPlayerDirection(Vector2::RIGHT);};
-  void Select(){};
-  void Cancel(){};
-  void Esc(){};
-  void update() override {
+  void Left()override {setPlayerDirection(Vector2::LEFT);};
+  void Right()override {setPlayerDirection(Vector2::RIGHT);};
+  void Select()override {};
+  void Cancel()override {};
+  void Esc()override {};
+  void update()override {
     static int count = 0;
     auto pos = player->position();
     drawBitMap[pos.y][pos.x] = BitMapKind::NONE;

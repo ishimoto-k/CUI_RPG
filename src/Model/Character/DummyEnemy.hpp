@@ -21,7 +21,7 @@ public:
     parameter.EXP = 100;
   }
   void view() override;
-  std::string name(){
+  std::string name() override {
     return "敵";
   }
   bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;

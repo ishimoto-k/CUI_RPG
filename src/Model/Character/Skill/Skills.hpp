@@ -16,7 +16,7 @@ class SlashMiddle : public SkillInterface{
   std::string description() override {
     return "敵に中ダメージ";
   };
-  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
+  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log) override {
     int damage = 1.5*from.POW - to.DEX;
     to.HP -= damage;
     log->push_back(fromName+"の"+name());
@@ -27,13 +27,13 @@ class SlashMiddle : public SkillInterface{
 class SlashLarge : public SkillInterface{
   int mp() override { return 10;}
   int id() override { return 4;}
-  std::string name(){
+  std::string name() override {
     return "渾身斬り";
   };
-  std::string description(){
+  std::string description()override {
     return "敵に大ダメージ";
   };
-  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
+  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log)override {
     int damage = 2*from.POW - to.DEX;
     to.HP -= damage;
     from.MP -= mp();
@@ -48,13 +48,13 @@ class SlashLarge : public SkillInterface{
 class Heal : public SkillInterface{
   int mp() override { return 5;}
   int id() override { return 4;}
-  std::string name(){
+  std::string name()override {
     return "ヒール";
   };
-  std::string description(){
+  std::string description()override {
     return "自身を回復";
   };
-  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
+  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log)override {
     int heal = from.DEX/1.3;
     from.HP += heal;
     if(from.HP >= from.maxHP)from.HP = from.maxHP;
