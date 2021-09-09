@@ -1,0 +1,9 @@
+
+MAP:
+  - {width: 10,height: 10, roomsMin: 1, roomsMax: 2,  enemies: 2, enemyKind: [1,2], boss: 0}
+  - {width: 15,height: 10, roomsMin: 3, roomsMax: 4,  enemies: 4, enemyKind: [1,2], boss: 3}
+  - {width: 20,height: 15, roomsMin: 3, roomsMax: 5,  enemies: 5, enemyKind: [1,2,4,5], boss: 0}
+  - {width: 20,height: 20, roomsMin: 4, roomsMax: 6,  enemies: 5, enemyKind: [5,6,8], boss: 7}
+  - {width: 24,height: 24, roomsMin: 4, roomsMax: 7,  enemies: 5, enemyKind: [4,5,6,8], boss: 0}
+  - {width: 26,height: 28, roomsMin: 4, roomsMax: 9,  enemies: 7, enemyKind: [6,8,9,10], boss: 0}
+  - {width: 28,height: 30, roomsMin: 4, roomsMax: 11, enemies: 7, enemyKind: [8,9,10], boss: 11}

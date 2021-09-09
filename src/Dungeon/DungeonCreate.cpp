@@ -72,7 +72,7 @@ void DungeonCreate::buildStart(){
     }
   }
   std::random_device random;
-  for(int i=0;i<(random()%5+3);i++){//部屋を3つ以上適当に作ります。
+  for(int i=0;i<(random()%roomMax_+roomMin_);i++){//部屋をroomMin_以上適当に作ります。被ることもあり。
     std::mt19937 mt(random());
     auto x = mt() % (width_-1);
     int x_ = x+1;
@@ -89,7 +89,10 @@ void DungeonCreate::buildStart(){
   }
   return;
 }
-DungeonCreate::DungeonCreate(int w, int h) : DungeonInterfece(w,h){
+DungeonCreate::DungeonCreate(int w, int h,int roomMin,int roomMax) : DungeonInterfece(w,h){
+  roomMin_ = roomMin;
+  roomMax_ = roomMax;
+
   //マップサイズは奇数で固定したいため、奇数の場合は+1する
   int width = (w % 2) == 0 ? w+1 :  w;
   int height = (h % 2) == 0 ? h+1 :  h;

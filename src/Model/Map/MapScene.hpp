@@ -6,17 +6,21 @@
 #define APPEAL_MAPSCENE_HPP
 #include "../Character/Player.hpp"
 #include "../GameSceneInterface.hpp"
+#include "MapInformation.hpp"
 #include "MapObjectInterface.hpp"
+#include <DungeonCreate.hpp>
 #include <DungeonInterface.hpp>
 #include <Enemy.hpp>
 #include <Observer.hpp>
 #include <Vector2.hpp>
 #include <memory>
+
 using namespace Vec;
 using namespace Design;
 
 class MapScene : public GameSceneInterface{
 public:
+
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
   std::vector<std::shared_ptr<Enemy>> enemies;
@@ -33,6 +37,21 @@ public:
   };
 
   MapScene(){};
+  void makeDungeon(int level){
+    auto mapInfo = MapInformation::getMapInfo(level-1);
+    setDungeon(std::make_shared<DungeonCreate>(mapInfo.width,mapInfo.height,mapInfo.roomsMin,mapInfo.roomsMax));
+    std::vector<std::shared_ptr<Enemy>> enemies;
+    for(int i=0;i<mapInfo.enemies;i++) {
+      auto enemy = Enemy::create(i);
+      auto pos = getRandomNonePosition();
+      enemy->set(pos);
+      enemies.push_back(enemy);
+    }
+    if(mapInfo.boss != 0){ //bossが存在する。
+
+    }
+    setEnemy(enemies);
+  }
   void setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr){
     dungeon = dungeonPtr;
     dungeon->create();

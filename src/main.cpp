@@ -71,6 +71,7 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_WIN,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
+    //todo 倒した敵情報をsharedで取得し、削除する。mapSeaneが削除する。
     std::cout << "BATTLE_SCENE_WIN ";
     gameStatus = GameStatus::MAP_VIEW;
   });
@@ -87,18 +88,10 @@ int main(){
 
   battleScene->addObserver(observer);
   mapScene->addObserver(observer);
-  mapScene->setDungeon(std::make_shared<DungeonCreate>(28,30));
+  mapScene->makeDungeon(0);
   mapScene->dungeon->debug();
   Vector2 pos = Vector2::NONE;
-  std::vector<std::shared_ptr<Enemy>> enemies;
-  for(int i=0;i<2;i++) {
-    auto enemy = Enemy::create(i);
-    pos = mapScene->getRandomNonePosition();
-    enemy->set(pos);
-    enemies.push_back(enemy);
-  }
 
-  mapScene->setEnemy(enemies);
   pos = mapScene->getRandomNonePosition();
   player = std::make_shared<Player>(pos.x,pos.y);
   mapScene->setPlayer(player);

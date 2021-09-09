@@ -14,11 +14,13 @@
 //メインのアルゴリズムは壁伸ばし法
 class DungeonCreate : public DungeonInterfece{
   std::vector<Vector2> selectWall;
+  int roomMin_ = 0;
+  int roomMax_ = 0;
   void process();
   void build(Vector2 wall);
   void buildStart();
 public:
-  DungeonCreate(int w, int h);
+  DungeonCreate(int w, int h,int roomMin=0,int roomMax=1);
   bool create() override;
   void debug() override;
 };
