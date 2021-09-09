@@ -75,6 +75,7 @@ public:
     }
   }
   Kind kind = NONE;
+  bool operator == (Kind k){ return kind == k;}
 };
 class UserControllerInterface:public Subject{
 public:

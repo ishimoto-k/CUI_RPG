@@ -13,9 +13,29 @@
 
 class Enemy :public MapObjectInterface,public Character{
   std::string frontViewText_ = "";
+  std::string idx_ = "";
+  void makeIdx(){
+    if(idx_ != "")
+      return;
+    std::string unique_identifier;
+    std::string chars = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789,./;'[]-=<>?:{}|_+";
+    std::random_device rnd;
+    std::mt19937 mt(rnd());
+    std::uniform_int_distribution<> idx(0, 32);
+    for (int i = 0; i < 32; ++i) {
+      unique_identifier += chars[idx(mt)];
+    }
+    idx_ = unique_identifier;
+  }
+
 public:
-  Enemy(int x,int y):MapObjectInterface(x,y){}
-  Enemy():MapObjectInterface(0,0){};
+  std::string getIdx(){
+    return idx_;
+  }
+  Enemy(int x,int y):MapObjectInterface(x,y){makeIdx();}
+  Enemy(){
+    Enemy(0,0);
+  };
   void view() override;
   std::string name(){
     return "敵";
@@ -66,7 +86,7 @@ public:
           parameter.skillIds.push_back(getskills[s].as<int>());
         }
       }
-      Enemy enemy;
+      Enemy enemy = Enemy();
       enemy.parameter = parameter;
       std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/"+node["ViewPath"].as<std::string>());
       std::string text = std::string(std::istreambuf_iterator<char>(ifs),
@@ -82,6 +102,7 @@ public:
       std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>();
       enemy->parameter = list[id].parameter;
       enemy->setFrontView(list[id].frontView());
+      enemy->makeIdx();
       return enemy;
     }
     return nullptr;

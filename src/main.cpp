@@ -74,6 +74,7 @@ int main(){
     //todo 倒した敵情報をsharedで取得し、削除する。mapSeaneが削除する。
     std::cout << "BATTLE_SCENE_WIN ";
     gameStatus = GameStatus::MAP_VIEW;
+    mapScene->eraseEnemy(msg->enemy);
   });
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_LOSE,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
@@ -102,6 +103,7 @@ int main(){
       if (gameStatus.keyBoardWait != KeyBoardWait::WAIT) {
         break;
       }
+      std::this_thread::yield();
     }
 
     std::cout << key.debug() << std::endl;

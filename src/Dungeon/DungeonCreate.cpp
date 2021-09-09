@@ -113,6 +113,7 @@ bool DungeonCreate::create(){
   return true;
 }
 void DungeonCreate::debug(){
+  return;
   for(auto w : bitmap){
     for(auto h : w){
       std::cout << h;

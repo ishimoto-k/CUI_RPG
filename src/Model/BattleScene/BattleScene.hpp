@@ -31,12 +31,13 @@ public:
   class EventBody:public SubjectDataBody{
   public:
     State state;
+    std::shared_ptr<Enemy> enemy = nullptr;
   };
 private:
 //  std::vector<std::shared_ptr<Command>> commandLists;
 //  YAML::Node config = YAML::LoadFile("");
-  std::shared_ptr<Character> player;
-  std::shared_ptr<Character> enemy;
+  std::shared_ptr<Player> player;
+  std::shared_ptr<Enemy> enemy;
   std::vector<std::shared_ptr<CommandInterface>> commands = {
       std::make_shared<Attack>(),
       std::make_shared<Skill>(),
@@ -99,6 +100,7 @@ public:
           }
         }
         body->state = Win;
+        body->enemy = enemy;
         notify(ObserverEventList::BATTLE_SCENE_WIN, body);
         goto finish;
       }

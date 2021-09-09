@@ -48,6 +48,9 @@ public:
   bool operator == (Vector2 r){
     return x==r.x&&y==r.y;
   }
+  std::string debug(){
+    return "x:" + std::to_string(x) + " y:" + std::to_string(y);
+  }
 };
 
 //ダンジョン生成で扱う一時的なパラメーター定数
