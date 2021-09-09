@@ -7,12 +7,17 @@
 
 class GameStatus{
 public:
+  enum KeyBoardWait{
+    HIT,
+    WAIT,
+  };
   enum Status{
     TITLE = 0x1000,
     MAP_VIEW = 0x2000,
     BATTLE = 0x3000,
     GAME_OVER = 0x4000,
   };
+  KeyBoardWait keyBoardWait = KeyBoardWait::WAIT;
   GameStatus(Status status):status_(status){};
   Status getStatus(){
     return status_;

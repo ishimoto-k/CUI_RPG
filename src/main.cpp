@@ -17,20 +17,30 @@
 int main(){
 
   GameStatus gameStatus = GameStatus::TITLE;
+  KeyBoardController keyBoardController;
+
   Title title;
+  Key key = Key::NONE;
   MapView mapView;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
   observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){
     auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
     std::cout << "object collision detection bit = "<< msg->bit << std::endl;
-
   });
   observer.interface()->addListener(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,[](SubjectData subject){
     auto msg = static_cast<MapObjectInterface::EventBody*>(subject.get());
     std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
-
   });
+  observer.interface()->addListener(ObserverEventList::KEYBOARD__ON_INPUT,[&](SubjectData subject){
+    auto msg = static_cast<UserControllerInterface::EventBody*>(subject.get());
+    gameStatus.keyBoardWait = GameStatus::KeyBoardWait::HIT;
+    key = msg->key;
+    std::cout << "KEYBOARD__ON_INPUT "<< msg->key.debug() << std::endl;
+  });
+  keyBoardController.addObserver(observer);
+  keyBoardController.startInputMonitoring();
+
   mapView.addObserver(observer);
   mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
   mapView.dungeon->debug();
@@ -55,43 +65,37 @@ int main(){
       mapView.draw();
     }
 
-    int key = 0;
-    int counter = 0;
     while (1) { /* キーが押されるまで待つ */
-      std::this_thread::sleep_for(std::chrono::milliseconds(16));
-      if (KeyBoardController::checkInputKey()) {
-        key = getchar(); /* 入力されたキー番号 */
-        break;
-      }
-      counter++;
-      if (counter == 60) {
+      if(gameStatus.keyBoardWait != GameStatus::WAIT){
         break;
       }
     }
 
     if(gameStatus == GameStatus::TITLE){
-      std::cout << key << std::endl;
-      if (key == 'w') {
+      std::cout << key.debug() << std::endl;
+      if (key == Key::UP) {
         title.cursorUp();
-      } else if (key == 's') {
+      } else if (key == Key::DOWN) {
         title.cursorDown();
-      } else if (key == 'd') {
-      } else if (key == 'a') {
-      } else if (key == 0) {
+      } else if (key == Key::RIGHT) {
+      } else if (key == Key::LEFT) {
+      } else if (key == Key::ESC) {
       }
     }else {
-      std::cout << key << std::endl;
-      if (key == 'w') {
+      std::cout << key.debug() << std::endl;
+      if (key == Key::UP) {
         mapView.setPlayerDirection(Vector2::UP);
-      } else if (key == 's') {
+      } else if (key == Key::DOWN) {
         mapView.setPlayerDirection(Vector2::DOWN);
-      } else if (key == 'd') {
+      } else if (key == Key::RIGHT) {
         mapView.setPlayerDirection(Vector2::RIGHT);
-      } else if (key == 'a') {
+      } else if (key == Key::LEFT) {
         mapView.setPlayerDirection(Vector2::LEFT);
-      } else if (key == 0) {
+      } else if (key == Key::ESC) {
         mapView.setPlayerDirection(Vector2::NONE);
       }
     }
+    key = Key::NONE;
+    gameStatus.keyBoardWait = GameStatus::KeyBoardWait::WAIT;
   }
 }
