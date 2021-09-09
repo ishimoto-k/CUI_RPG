@@ -5,12 +5,13 @@
 #ifndef APPEAL_MAPSCENE_HPP
 #define APPEAL_MAPSCENE_HPP
 #include "../Character/Player.hpp"
+#include "../GameSceneInterface.hpp"
 #include "MapObjectInterface.hpp"
 #include <DungeonInterface.hpp>
+#include <Enemy.hpp>
 #include <Observer.hpp>
 #include <Vector2.hpp>
 #include <memory>
-#include "../GameSceneInterface.hpp"
 using namespace Vec;
 using namespace Design;
 
@@ -18,17 +19,20 @@ class MapScene : public GameSceneInterface{
 public:
   std::shared_ptr<DungeonInterfece> dungeon;
   std::vector<Vector2> nonePlacePosition;
-  std::vector<std::shared_ptr<MapObjectInterface>> enemies;
+  std::vector<std::shared_ptr<Enemy>> enemies;
   std::shared_ptr<Player> player;
   BitMap drawBitMap;
   Vector2 playerDirection = {0,0};
   Observer observer;
 
-  MapScene(){};
-  void addObserver(Observer &observer) override{
-    Subject::addObserver(observer);
-    this->observer = observer;
+  class EventBody:public SubjectDataBody{
+  public:
+    BitMapKind bit = NONE;
+    Vector2 fromPosition = Vector2::NONE;
+    Vector2 toPosition = Vector2::NONE;
   };
+
+  MapScene(){};
   void setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr){
     dungeon = dungeonPtr;
     dungeon->create();
@@ -46,15 +50,18 @@ public:
     std::shuffle(nonePlacePosition.begin(), nonePlacePosition.end(), engine);
     drawBitMap = dungeon->getBitMap();
   }
-  void setEnemy(std::vector<std::shared_ptr<MapObjectInterface>> enemyPtr){
+  void setEnemy(std::vector<std::shared_ptr<Enemy>> enemyPtr){
     enemies = enemyPtr;
-    for(auto enemy:enemies){
-      enemy->addObserver(observer);
-    }
   }
   void setPlayer(std::shared_ptr<Player> playerPtr){
     player = playerPtr;
-    player->addObserver(observer);
+  }
+  std::shared_ptr<Enemy> getEnemyFromPos(Vector2 pos){
+    for(auto enemy:enemies){
+      if(enemy->position() == pos){
+        return enemy;
+      }
+    }
   }
 
   Vector2 getRandomNonePosition(){
@@ -79,15 +86,29 @@ public:
   void update() override {
     auto pos = player->position();
     drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
-    player->move(drawBitMap,playerDirection);//最初にプレイヤーを動かす　//Objectに衝突するとイベント発生する
+    bool collisionCheck =  player->move(drawBitMap,playerDirection,[this](BitMapKind bitmap,Vector2 toPos,Vector2 fromPos){
+      auto body = std::make_shared<EventBody>();
+      body->bit = bitmap;
+      body->toPosition = toPos;
+      body->fromPosition = fromPos;
+      notify(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,body);
+    });//最初にプレイヤーを動かす　//Objectに衝突するとイベント発生する
     pos = player->position();
     drawBitMap[pos.y][pos.x] = BitMapKind::PLAYER;
-    for(auto enemy:enemies){//次にエネミーを動かす　//Objectに衝突するとイベント発生する
-      auto pos = enemy->position();
-      drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
-      enemy->move(drawBitMap);
-      pos = enemy->position();
-      drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
+    if(!collisionCheck) {
+      for (auto enemy : enemies) { //次にエネミーを動かす　//Objectに衝突するとイベント発生する
+        auto pos = enemy->position();
+        drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
+        enemy->move(drawBitMap,[this](BitMapKind bitmap,Vector2 toPos,Vector2 fromPos){
+          auto body = std::make_shared<EventBody>();
+          body->bit = bitmap;
+          body->toPosition = toPos;
+          body->fromPosition = fromPos;
+          notify(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,body);
+        });
+        pos = enemy->position();
+        drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
+      }
     }
     setPlayerDirection(Vector2::NONE);
   }
@@ -109,7 +130,7 @@ public:
           continue;
         }
         else if(drawBitMap[y][x] == WALL)	/* 移動可能な床 */
-          printf("\033[41m壁\033[49m");	/* ← 注）全角スペース */
+          printf("\033[41m　\033[49m");	/* ← 注）全角スペース */
         else if(drawBitMap[y][x] == NONE)	/* 壁 */
           printf("　");
         else if(drawBitMap[y][x] == 2)	/* 塗った床 */

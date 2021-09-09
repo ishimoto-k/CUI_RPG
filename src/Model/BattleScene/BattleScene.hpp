@@ -58,6 +58,7 @@ public:
     enemy = enemyPtr;
     enemy->initBattleBefore();
   }
+
   int cursor = 0;
   void Up() override {
     cursor = cursor+1;
@@ -85,7 +86,7 @@ public:
       if (enemy->parameter.HP <= 0) {
         enemy->parameter.HP = 0;
         auto body = std::make_shared<EventBody>();
-        log.push_back(enemy->name()+"を倒した");
+        log.push_back("\033[4m\033[1m"+enemy->name()+"を倒した"+"\033[0m");
         log.push_back(std::to_string(enemy->parameter.EXP)+"の経験値を獲得した");
         auto tmpSkillSize = player->skill.size();
         if(player->addExp(enemy->parameter.EXP)){

@@ -5,12 +5,12 @@
 #ifndef APPEAL_GAMESTATUS_HPP
 #define APPEAL_GAMESTATUS_HPP
 
+enum KeyBoardWait{
+  HIT,
+  WAIT,
+};
 class GameStatus{
 public:
-  enum KeyBoardWait{
-    HIT,
-    WAIT,
-  };
   enum Status{
     TITLE = 0x1000,
     MAP_VIEW = 0x2000,
@@ -23,6 +23,10 @@ public:
     return status_;
   };
   bool operator ==(Status s){ return status_==s;}
+  bool operator !=(Status s){ return status_!=s;}
+  std::string log(){
+    return std::to_string(status_);
+  }
 private:
   Status status_;
 

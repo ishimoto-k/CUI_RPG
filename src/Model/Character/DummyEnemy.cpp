@@ -5,19 +5,17 @@
 #include "DummyEnemy.hpp"
 
 void DummyEnemy::view() { std::cout << "敵"; }
-void DummyEnemy::move(const BitMap& bitMap) {
+bool DummyEnemy::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
   auto directions = ShuffulDirections();
   for (auto i : directions) {
     auto dir = position_ + i;
     auto bit = at(bitMap, dir);
     if (bit != NONE && bit != WALL) {
-      auto body = std::make_shared<EventBody>();
-      body->bit = bitMap[dir.y][dir.x];
-      notify(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,body);
-      break;
+      callback(bit,dir,position_);
+      return true;
     } else if(bit == NONE){
       position_ = dir;
-      break;
+      return false;
     }
   }
 }

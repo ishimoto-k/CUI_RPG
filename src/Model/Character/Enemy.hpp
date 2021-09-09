@@ -20,8 +20,8 @@ public:
   std::string name(){
     return "敵";
   }
-  void move(const BitMap& bitMap) override;
-  void move(const BitMap& bitMap,const Vector2& vecctor) override {};
+  bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
+  bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {};
   std::string frontView() override {
     return frontViewText_;
   }
@@ -43,8 +43,8 @@ public:
   //      ViewPath: enemy1
   //      Actions:
   //        - { Logic: Random,commands: [0]}
-  static const std::vector<std::shared_ptr<Enemy>>& getEnemyList(){
-    static std::vector<std::shared_ptr<Enemy>> enemyList{};
+  static const std::vector<Enemy>& getEnemyList(){
+    static std::vector<Enemy> enemyList{};
     if(!enemyList.empty())
       return enemyList;
 
@@ -66,15 +66,25 @@ public:
           parameter.skillIds.push_back(getskills[s].as<int>());
         }
       }
-      auto enemy = std::make_shared<Enemy>();
-      enemy->parameter = parameter;
+      Enemy enemy;
+      enemy.parameter = parameter;
       std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/"+node["ViewPath"].as<std::string>());
       std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                          std::istreambuf_iterator<char>());
-      enemy->setFrontView(text);
+      enemy.setFrontView(text);
       enemyList.push_back(enemy);
     }
     return enemyList;
+  }
+  static std::shared_ptr<Enemy> create(int id){
+    auto list = getEnemyList();
+    if(id < list.size()){
+      std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>();
+      enemy->parameter = list[id].parameter;
+      enemy->setFrontView(list[id].frontView());
+      return enemy;
+    }
+    return nullptr;
   }
 };
 #endif // APPEAL_ENEMY_HPP

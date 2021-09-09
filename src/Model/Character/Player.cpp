@@ -5,15 +5,19 @@
 #include "Player.hpp"
 
 void Player::view() { std::cout << "Ｏ"; }
-void Player::move(const BitMap& bitMap) {
+bool Player::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
+  return false;
 }
-void Player::move(const BitMap& bitMap,const Vector2& direction) {
+bool Player::move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
   auto pos = position_ + direction;
   if (at(bitMap, pos) == NONE) {
     position_ = pos;
+    return false;
   } else{
-    auto body = std::make_shared<EventBody>();
-    body->bit = bitMap[pos.y][pos.x];
-    notify(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,body);
+    callback(at(bitMap, pos),pos,position_);
+    if(at(bitMap, pos) == ENEMY){
+      return true;
+    }
+    return false;
   }
 }

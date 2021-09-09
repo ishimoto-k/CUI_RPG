@@ -36,7 +36,7 @@ int main(){
   });
   battleScene.addObserver(observer);
   battleScene.setPlayer(std::make_shared<Player>(10,10));
-  battleScene.setEnemy(Enemy::getEnemyList()[0]);
+  battleScene.setEnemy(Enemy::create(0));
   battleScene.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");

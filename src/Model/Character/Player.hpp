@@ -31,8 +31,8 @@ public:
     return "冒険者";
   }
   void view() override;
-  void move(const BitMap& bitMap) override;
-  void move(const BitMap& bitMap,const Vector2& direction) override;
+  bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
+  bool move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool addExp(int exp) override {
     parameter.EXP += exp;
     if(parameter.EXP > Parameter::getEventList()[parameter.level].targetEXP){

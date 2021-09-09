@@ -11,17 +11,12 @@
 using namespace Vec;
 using namespace Design;
 
-class MapObjectInterface : public Subject {
+class MapObjectInterface{
 protected:
   Vector2 position_ = Vector2(0,0);
   int id_;
 
 public:
-  class EventBody:public SubjectDataBody{
-  public:
-    BitMapKind bit;
-
-  };
   MapObjectInterface() = default;
   MapObjectInterface(int x,int y):position_(Vector2(x,y)){}
   virtual void view() = 0;
@@ -31,8 +26,8 @@ public:
   void set(Vector2 position){
     position_ = position;
   }
-  virtual void move(const BitMap& bitMap) = 0;
-  virtual void move(const BitMap& bitMap,const Vector2& vecctor) = 0;
+  virtual bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) = 0;
+  virtual bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) = 0;
   Vector2 position(){
     return position_;
   }

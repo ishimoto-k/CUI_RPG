@@ -39,7 +39,7 @@ void ObserverInterface::removeListener(ObserverEventList type, FuncPtr listener)
   listeners_.erase(end, listeners_.end());
 }
 
-Observer::~Observer() {std::cerr << "delete observer" << std::endl;}
+Observer::~Observer() {}
 
 void Observer::interface(Interface interface) { interface_ = interface; }
 
