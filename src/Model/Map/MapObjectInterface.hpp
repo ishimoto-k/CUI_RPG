@@ -22,10 +22,14 @@ public:
     BitMapKind bit;
 
   };
+  MapObjectInterface() = default;
   MapObjectInterface(int x,int y):position_(Vector2(x,y)){}
   virtual void view() = 0;
   int id(){
     return id_;
+  }
+  void set(Vector2 position){
+    position_ = position;
   }
   virtual void move(const BitMap& bitMap) = 0;
   virtual void move(const BitMap& bitMap,const Vector2& vecctor) = 0;

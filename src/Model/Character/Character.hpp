@@ -14,7 +14,7 @@ public:
   virtual std::string name() = 0;
   bool isEnemy;
   std::vector<std::shared_ptr<SkillInterface>> skill;
-  virtual void action(){};
+  virtual void initBattleBefore(){};
   virtual bool addExp(int exp){return false;};
 };
 

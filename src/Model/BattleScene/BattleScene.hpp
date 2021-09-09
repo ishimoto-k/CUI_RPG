@@ -12,8 +12,9 @@
 
 #include "Command/Attack.hpp"
 #include "Command/Escape.hpp"
-#include <Player.hpp>
 #include <DummyEnemy.hpp>
+#include <Enemy.hpp>
+#include <Player.hpp>
 
 using namespace Design;
 enum State{
@@ -49,8 +50,14 @@ private:
 public:
   BattleScene(){
   }
-  void setPlayer(std::shared_ptr<Player> playPtr){player = playPtr;}
-  void setEnemy(std::shared_ptr<DummyEnemy> enemyPtr){enemy = enemyPtr;}
+  void setPlayer(std::shared_ptr<Player> playPtr){
+    player = playPtr;
+    player->initBattleBefore();
+  }
+  void setEnemy(std::shared_ptr<Enemy> enemyPtr){
+    enemy = enemyPtr;
+    enemy->initBattleBefore();
+  }
   int cursor = 0;
   void cursorUp(){
     cursor = cursor+1;
