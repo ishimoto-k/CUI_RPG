@@ -1,6 +1,7 @@
 
 
 add_library(Map STATIC
+        Map/Warp.cpp
         Map/MapScene.cpp
         )
 target_include_directories(Map INTERFACE

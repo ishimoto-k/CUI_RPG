@@ -38,12 +38,8 @@ public:
       parameter.DEX = node["DEX"].as<int>();
       parameter.targetEXP = node["needEXP"].as<int>();
       parameter.level = i;
-      if(node["getSkill"]){
-        auto getskills = node["getSkill"];
-        for(auto s =0;s< getskills.size();s++){
-          parameter.skillIds.push_back(getskills[s].as<int>());
-        }
-      }
+      if(node["getSkill"])
+        parameter.skillIds = node["getSkill"].as<std::vector<int>>();
       std::cout << parameter.level << std::endl;
       levelList.push_back(parameter);
     }

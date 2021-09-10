@@ -16,12 +16,12 @@ int main(){
   MapScene mapView;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
-  observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[](SubjectData subject){
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__PLAYER_CollisionDetection,[](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
     std::cout << "object collision detection bit = "<< msg->bit << std::endl;
 
   });
-  observer.interface()->addListener(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,[](SubjectData subject){
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__ENEMY_CollisionDetection,[](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
     std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
 

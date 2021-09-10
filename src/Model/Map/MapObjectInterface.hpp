@@ -15,11 +15,18 @@ class MapObjectInterface{
 protected:
   Vector2 position_ = Vector2(0,0);
   int id_;
-
+  typedef std::function<void()> Callback;
+  std::function<void()> selectCallback;
 public:
   MapObjectInterface() = default;
   MapObjectInterface(int x,int y):position_(Vector2(x,y)){}
   virtual void view() = 0;
+  virtual void backViewStart(){}
+  virtual void backViewEnd(){}
+  virtual void select(){selectCallback();}
+  void setOnSelectCallback(Callback callback){
+    selectCallback = callback;
+  }
   int id(){
     return id_;
   }

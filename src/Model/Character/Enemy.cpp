@@ -37,12 +37,7 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     parameter.DEX = node["DEX"].as<int>();
     parameter.EXP = node["EXP"].as<int>();
     parameter.level = node["LEVEL"].as<int>();
-    if(node["getSkill"]){
-      auto getskills = node["getSkill"];
-      for(auto s =0;s< getskills.size();s++){
-        parameter.skillIds.push_back(getskills[s].as<int>());
-      }
-    }
+//    parameter.skillIds = node["getSkill"].as<std::vector<int>>();
     Enemy enemy = Enemy();
     enemy.parameter = parameter;
     enemy.name_ = node["name"].as<std::string>();

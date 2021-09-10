@@ -8,6 +8,7 @@ void MapScene::makeDungeon(int level) {
   mapInfo = MapInformation::getMapInfo(level - 1);
   setDungeon(std::make_shared<DungeonCreate>(
       mapInfo.width, mapInfo.height, mapInfo.roomsMin, mapInfo.roomsMax));
+  enemies.clear();
   buildEnemies();
   if (mapInfo.boss != 0) { // bossが存在する。
   }
@@ -43,6 +44,7 @@ void MapScene::setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr) {
   dungeon = dungeonPtr;
   dungeon->create();
   dungeon->debug();
+  nonePlacePosition.clear();
   auto bitmap = dungeon->getBitMap();
   for (int y = 0; y < bitmap.size(); y++) {
     for (int x = 0; x < bitmap[y].size(); x++) {
@@ -51,13 +53,33 @@ void MapScene::setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr) {
       }
     }
   }
+  mapObjects.clear();
   drawBitMap = dungeon->getBitMap();
 }
 void MapScene::setEnemy(std::vector<std::shared_ptr<Enemy>> enemyPtr) {
   enemies = enemyPtr;
 }
-void MapScene::setPlayer(std::shared_ptr<Player> playerPtr) {
+void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
   player = playerPtr;
+  auto warp_s = std::make_shared<Warp>(player->position().x,player->position().y, !direction);
+  warp_s->setOnSelectCallback([this,direction](){
+    if(!direction) {
+      notify(ObserverEventList::MAP_SCENE__SELECT_WARP_START);
+    }else{
+      notify(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL);
+    }
+  });
+  mapObjects.push_back(warp_s);
+  auto pos = getRandomNonePosition();
+  auto warp_f = std::make_shared<Warp>(pos.x,pos.y, direction);
+  warp_f->setOnSelectCallback([this,direction](){
+    if(direction) {
+      notify(ObserverEventList::MAP_SCENE__SELECT_WARP_START);
+    }else{
+      notify(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL);
+    }
+  });
+  mapObjects.push_back(warp_f);
 }
 std::shared_ptr<Enemy> MapScene::getEnemyFromPos(Vector2 pos) {
   for (auto enemy : enemies) {
@@ -88,7 +110,15 @@ void MapScene::Up() { setPlayerDirection(Vector2::UP); }
 void MapScene::Down() { setPlayerDirection(Vector2::DOWN); };
 void MapScene::Left() { setPlayerDirection(Vector2::LEFT); }
 void MapScene::Right() { setPlayerDirection(Vector2::RIGHT); }
-void MapScene::Select() {}
+void MapScene::Select() {
+  std::cout << "select" << std::endl;
+  auto ptr = std::find_if(mapObjects.begin(),mapObjects.end(),[this](ObjectPtr objectPtr){
+    return player->position() == objectPtr->position();
+  });
+  if(ptr != mapObjects.end()) {
+    (*ptr)->select();
+  }
+}
 void MapScene::Cancel() {}
 void MapScene::Esc() {}
 void MapScene::update() {
@@ -102,14 +132,13 @@ void MapScene::update() {
         body->bit = bitmap;
         body->toPosition = toPos;
         body->fromPosition = fromPos;
-        notify(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection, body);
+        notify(ObserverEventList::MAP_SCENE__PLAYER_CollisionDetection, body);
       }); //最初にプレイヤーを動かす　//Objectに衝突するとイベント発生する
   pos = player->position();
+//  log.push_back(pos.debug());
   drawBitMap[pos.y][pos.x] = BitMapKind::PLAYER;
   if (!collisionCheck) {
-    for (
-        auto enemy :
-        enemies) { //次にエネミーを動かす　//Objectに衝突するとイベント発生する
+    for (auto enemy : enemies) { //次にエネミーを動かす　//Objectに衝突するとイベント発生する
       auto pos = enemy->position();
       drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
       enemy->move(drawBitMap, [this](BitMapKind bitmap, Vector2 toPos,
@@ -118,7 +147,7 @@ void MapScene::update() {
         body->bit = bitmap;
         body->toPosition = toPos;
         body->fromPosition = fromPos;
-        notify(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection, body);
+        notify(ObserverEventList::MAP_SCENE__ENEMY_CollisionDetection, body);
       });
       pos = enemy->position();
       drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
@@ -134,6 +163,14 @@ void MapScene::view() {
   std::cout << "MapLevel: " << mapInfo.level << std::endl;
   for (int y = 0; y < drawBitMap.size(); y++) {
     for (int x = 0; x < drawBitMap[y].size(); x++) {
+      std::shared_ptr<MapObjectInterface> tmpObject = nullptr;
+      for(auto object: mapObjects){
+        if(Vector2(x,y) == object->position()){
+          object->backViewStart();
+          tmpObject = object;
+          break;
+        }
+      }
       bool check = false;
       for (auto enemy : enemies) {
         if (Vector2(x, y) == enemy->position()) {
@@ -142,17 +179,20 @@ void MapScene::view() {
           continue;
         }
       }
-      if (check)
-        continue;
-      if (Vector2(x, y) == player->position()) {
+      if (check);
+      else if (Vector2(x, y) == player->position()) {
         player->view();
-        continue;
-      } else if (drawBitMap[y][x] == WALL) /* 移動可能な床 */
+      }
+      else if (drawBitMap[y][x] == WALL) /* 移動可能な床 */
         printf("\033[41m　\033[49m");      /* ← 注）全角スペース */
       else if (drawBitMap[y][x] == NONE)   /* 壁 */
         printf("　");
       else if (drawBitMap[y][x] == 2) /* 塗った床 */
         printf("ｘ");
+
+      if(tmpObject){
+        tmpObject->backViewEnd();
+      }
     }
     std::cout << std::endl;
   }

@@ -12,7 +12,13 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+
+#include "GameInformation.hpp"
+
+
 int main(){
+  int mapLevel = 1;
+  int playerExp = 0;
 
   GameStatus gameStatus = GameStatus::TITLE;
   GameStatus prevGameStatus = gameStatus;
@@ -28,7 +34,7 @@ int main(){
   Key key = Key::NONE;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
-  observer.interface()->addListener(ObserverEventList::MAP_VIEW__PLAYER_CollisionDetection,[&](SubjectData subject){
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__PLAYER_CollisionDetection,[&](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
     if(msg->bit == BitMapKind::ENEMY){
       if(gameStatus != GameStatus::BATTLE){
@@ -40,7 +46,7 @@ int main(){
     }
     std::cout << "object collision detection bit = "<< msg->bit << std::endl;
   });
-  observer.interface()->addListener(ObserverEventList::MAP_VIEW__ENEMY_CollisionDetection,[&](SubjectData subject){
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__ENEMY_CollisionDetection,[&](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
     if(msg->bit == BitMapKind::PLAYER){
       if(gameStatus != GameStatus::BATTLE){
@@ -83,6 +89,31 @@ int main(){
     gameStatus = GameStatus::GAME_OVER;
   });
 
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_START,[&](SubjectData subject){
+    std::cout << "MAP_SCENE__SELECT_WARP_START ";
+    if(mapLevel == 1){
+      log.emplace_back("これ以上もどれません");
+      return;
+    }
+    mapLevel = mapLevel-1;
+    mapScene->makeDungeon(mapLevel);
+    auto pos = mapScene->getRandomNonePosition();
+    player->set(pos);
+    mapScene->setPlayer(player,true);
+  });
+  observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
+    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
+    if(mapLevel == MapInformation::getMapInfoList().size()-1){
+      log.emplace_back("ゲームクリア");
+      return;
+    }
+    mapLevel = mapLevel+1;
+    mapScene->makeDungeon(mapLevel);
+    auto pos = mapScene->getRandomNonePosition();
+    player->set(pos);
+    mapScene->setPlayer(player,false);
+  });
+
   titleScene->addObserver(observer);
 
   keyBoardController.addObserver(observer);
@@ -91,12 +122,11 @@ int main(){
   battleScene->addObserver(observer);
   mapScene->addObserver(observer);
   mapScene->makeDungeon(1);
-  mapScene->dungeon->debug();
   Vector2 pos = Vector2::NONE;
 
   pos = mapScene->getRandomNonePosition();
   player = std::make_shared<Player>(pos.x,pos.y,1);
-  mapScene->setPlayer(player);
+  mapScene->setPlayer(player,false);
 
   printf("\033[;H\033[2J");
   gameScene->view();

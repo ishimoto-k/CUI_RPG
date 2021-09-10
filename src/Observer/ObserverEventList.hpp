@@ -7,14 +7,14 @@
 enum class ObserverEventList : int {
   DUMMY = 0,
 
-  MAP_VIEW = 0x1000,
-  MAP_VIEW__PLAYER_CollisionDetection,
-  MAP_VIEW__ENEMY_CollisionDetection,
-
   TITLE_SCENE = 0x1000,
   TITLE_SCENE_ON_SELECT,
 
   MAP_SCENE = 0x2000,
+  MAP_SCENE__PLAYER_CollisionDetection,
+  MAP_SCENE__ENEMY_CollisionDetection,
+  MAP_SCENE__SELECT_WARP_START,
+  MAP_SCENE__SELECT_WARP_GOAL,
 
   BATTLE_SCENE = 0x4000,
   BATTLE_SCENE_ESCAPE,
