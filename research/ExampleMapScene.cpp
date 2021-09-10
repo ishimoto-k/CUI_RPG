@@ -38,7 +38,7 @@ int main(){
 
   mapView.setEnemy({std::make_shared<DummyEnemy>(pos.x,pos.y),std::make_shared<DummyEnemy>(pos.x,pos.y)});
   pos = mapView.getRandomNonePosition();
-  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y));
+  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y,1));
   mapView.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");

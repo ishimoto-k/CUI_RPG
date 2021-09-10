@@ -14,11 +14,8 @@ class Player :public MapObjectInterface,public Character{
   std::vector<Parameter> levelList;
 public:
   Player(int x,int y,int level):MapObjectInterface(x,y) {
-    parameter.level = level;
-    parameter.HP = parameter.maxHP = 100;
-    parameter.MP = parameter.maxMP = 8;
-    parameter.DEX = 100;
-    parameter.POW = 100;
+    auto p = Parameter::loadFromLevel(level);
+    parameter = p;
     parameter.EXP = 0;
 
     skill = std::vector<std::shared_ptr<CommandInterface>>{
@@ -35,9 +32,10 @@ public:
   bool move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool addExp(int exp) override {
     parameter.EXP += exp;
-    if(parameter.EXP > Parameter::getLevelList()[parameter.level].targetEXP){
+//    std::cout << "EXP:" <<  parameter.EXP << " targetExp:" << Parameter::loadFromLevel(parameter.level).targetEXP << std::endl;
+    if(parameter.EXP > Parameter::loadFromLevel(parameter.level).targetEXP){
       auto tmp =  parameter.EXP;
-      parameter = Parameter::getLevelList()[parameter.level+1];
+      parameter = Parameter::loadFromLevel(parameter.level+1);
       parameter.EXP = tmp;
       return true;
     }

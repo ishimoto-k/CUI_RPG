@@ -14,6 +14,7 @@
 class Enemy :public MapObjectInterface,public Character{
   std::string frontViewText_ = "";
   std::string idx_ = "";
+  std::string name_ = "";
   void makeIdx(){
     if(idx_ != "")
       return;
@@ -38,7 +39,7 @@ public:
   };
   void view() override;
   std::string name() override {
-    return "敵";
+    return name_;
   }
   bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {

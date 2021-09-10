@@ -9,6 +9,7 @@
 
 class Parameter {
 public:
+  int ID;
   int level;
   int POW;
   int DEX;
@@ -31,8 +32,8 @@ public:
       if(!node)
         continue;
       Parameter parameter;
-      parameter.maxHP = node["HP"].as<int>();
-      parameter.maxMP = node["MP"].as<int>();
+      parameter.HP = parameter.maxHP = node["HP"].as<int>();
+      parameter.MP = parameter.maxMP = node["MP"].as<int>();
       parameter.POW = node["POW"].as<int>();
       parameter.DEX = node["DEX"].as<int>();
       parameter.targetEXP = node["needEXP"].as<int>();
@@ -43,9 +44,20 @@ public:
           parameter.skillIds.push_back(getskills[s].as<int>());
         }
       }
+      std::cout << parameter.level << std::endl;
       levelList.push_back(parameter);
     }
     return levelList;
+  }
+  static Parameter loadFromLevel(int level){
+    auto list = getLevelList();
+    if(level < list.size()){
+      auto itr = std::find_if(list.begin(),list.end(),[level](Parameter parameter){
+        return parameter.level == level;
+      });
+      return *itr;
+    }
+    return Parameter();
   }
 };
 

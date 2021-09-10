@@ -35,7 +35,7 @@ int main(){
     gameState = EXIT;
   });
   battleScene.addObserver(observer);
-  battleScene.setPlayer(std::make_shared<Player>(10,10));
+  battleScene.setPlayer(std::make_shared<Player>(10,10,1));
   battleScene.setEnemy(Enemy::create(0));
   battleScene.view();
   for(int i=0;i<100;i++) {

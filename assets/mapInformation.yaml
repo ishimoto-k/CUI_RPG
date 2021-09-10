@@ -1,6 +1,6 @@
 
 MAP:
-  - {width: 10,height: 10, roomsMin: 1, roomsMax: 2,  enemies: 2, enemyKind: [1,2], boss: 0}
+  - {width: 10,height: 10, roomsMin: 1, roomsMax: 2,  enemies: 2, enemyKind: [1], boss: 0}
   - {width: 15,height: 10, roomsMin: 3, roomsMax: 4,  enemies: 4, enemyKind: [1,2], boss: 3}
   - {width: 20,height: 15, roomsMin: 3, roomsMax: 5,  enemies: 5, enemyKind: [1,2,4,5], boss: 0}
   - {width: 20,height: 20, roomsMin: 4, roomsMax: 6,  enemies: 5, enemyKind: [5,6,8], boss: 7}

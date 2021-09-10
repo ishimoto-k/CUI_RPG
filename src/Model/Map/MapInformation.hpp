@@ -9,6 +9,7 @@
 
 class MapInformation {
 public:
+  int level;
   int width;
   int height;
   int roomsMin;
@@ -24,12 +25,13 @@ public:
 
     auto nodes = YAML::LoadFile(std::string(CURRENT_DIRECTORY) +
                                 "/assets/mapInformation.yaml");
-    for (auto i = 1; i <= nodes["MAP"].size(); i++) {
+    for (auto i = 0; i < nodes["MAP"].size(); i++) {
       auto index = std::to_string(i);
       auto node = nodes["MAP"][index];
       if (!node)
         continue;
       MapInformation parameter;
+      parameter.level = i+1;
       parameter.width = node["width"].as<int>();
       parameter.height = node["height"].as<int>();
       parameter.roomsMin = node["roomsMin"].as<int>();
@@ -47,6 +49,7 @@ public:
       return list[level];
     }
     MapInformation parameter;
+    parameter.level = -1;
     parameter.width = 10;
     parameter.height = 10;
     parameter.roomsMin = 1;

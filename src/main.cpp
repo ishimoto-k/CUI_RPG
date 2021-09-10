@@ -90,12 +90,12 @@ int main(){
 
   battleScene->addObserver(observer);
   mapScene->addObserver(observer);
-  mapScene->makeDungeon(0);
+  mapScene->makeDungeon(1);
   mapScene->dungeon->debug();
   Vector2 pos = Vector2::NONE;
 
   pos = mapScene->getRandomNonePosition();
-  player = std::make_shared<Player>(pos.x,pos.y);
+  player = std::make_shared<Player>(pos.x,pos.y,1);
   mapScene->setPlayer(player);
 
   printf("\033[;H\033[2J");

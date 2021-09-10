@@ -25,11 +25,12 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     return enemyList;
 
   auto nodes = YAML::LoadFile(std::string(CURRENT_DIRECTORY)+"/assets/character.yaml");
-  for(auto i = 1 ; i <= nodes["ENEMY"].size(); i++){
+  for(auto i = 0 ; i < nodes["ENEMY"].size(); i++){
     auto node = nodes["ENEMY"][i];
     if(!node)
       continue;
     Parameter parameter;
+    parameter.ID = node["ID"].as<int>();
     parameter.maxHP = node["HP"].as<int>();
     parameter.maxMP = node["MP"].as<int>();
     parameter.POW = node["POW"].as<int>();
@@ -44,6 +45,8 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     }
     Enemy enemy = Enemy();
     enemy.parameter = parameter;
+    enemy.name_ = node["name"].as<std::string>();
+    std::cout << enemy.name_ << std::endl;
     std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/"+node["ViewPath"].as<std::string>());
     std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                    std::istreambuf_iterator<char>());
@@ -56,8 +59,12 @@ std::shared_ptr<Enemy> Enemy::create(int id){
   auto list = getEnemyList();
   if(id < list.size()){
     std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>();
-    enemy->parameter = list[id].parameter;
-    enemy->setFrontView(list[id].frontView());
+    auto itr = std::find_if(list.begin(),list.end(),[id](Enemy enemy){
+      return enemy.parameter.ID == id;
+    });
+    enemy->parameter = itr->parameter;
+    enemy->name_ = itr->name_;
+    enemy->setFrontView(itr->frontView());
     enemy->makeIdx();
     return enemy;
   }
