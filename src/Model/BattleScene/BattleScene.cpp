@@ -7,6 +7,9 @@
 void BattleScene::setPlayer(std::shared_ptr<Player> playPtr) {
   player = playPtr;
   player->initBattleBefore();
+  state = CommandSelect;
+  turnCounter = 1;
+  log.clear();
 }
 void BattleScene::setEnemy(std::shared_ptr<Enemy> enemyPtr) {
   enemy = enemyPtr;
@@ -14,14 +17,14 @@ void BattleScene::setEnemy(std::shared_ptr<Enemy> enemyPtr) {
 }
 
 void BattleScene::Up() {
-  cursor = cursor + 1;
-  if (selectList.size() == cursor)
-    cursor = 0;
-}
-void BattleScene::Down(){
   cursor = cursor - 1;
   if (-1 == cursor)
     cursor = selectList.size() - 1;
+}
+void BattleScene::Down(){
+  cursor = cursor + 1;
+  if (selectList.size() == cursor)
+    cursor = 0;
 }
 void BattleScene::action(std::shared_ptr<Character> fromChara,
                          std::shared_ptr<Character> toChara,

@@ -55,12 +55,12 @@ public:
       SelectList::END,
   };
   void Up() override {
-    cursor = cursor+1;
-    if(selectList.size() == cursor)cursor = 0;
-  }
-  void Down() override {
     cursor = cursor-1;
     if(-1 == cursor)cursor = selectList.size()-1;
+  }
+  void Down() override {
+    cursor = cursor+1;
+    if(selectList.size() == cursor)cursor = 0;
   }
   void Right() override {
   }

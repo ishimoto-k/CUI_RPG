@@ -20,7 +20,7 @@ void MapScene::buildEnemies() {
 
   for (int i = enemies.size(); i <= mapInfo.enemies; i++) {
     auto enemy = Enemy::create(mapInfo.typeOfEnemy[engine() % size]);
-    log.push_back("敵を生成 " + enemy->getIdx());
+//    log.push_back("敵を生成 " + enemy->getIdx());
     auto pos = getRandomNonePosition();
     enemy->set(pos);
     enemies.push_back(enemy);
@@ -28,13 +28,11 @@ void MapScene::buildEnemies() {
 }
 void MapScene::eraseEnemy(std::shared_ptr<Enemy> enemy) {
   for (auto en = enemies.begin(); en != enemies.end(); en++) {
-    log.push_back("敵を倒しました。" + (*en)->getIdx() + " " +
-                  (*en)->position().debug());
+//    log.push_back("敵を倒しました。" + (*en)->getIdx() + " " + (*en)->position().debug());
     if ((*en)->getIdx() == enemy->getIdx()) {
       auto pos = (*en)->position();
       drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
-      log.push_back("敵を倒しました。" + (*en)->getIdx() + " " +
-                    (*en)->position().debug());
+//      log.push_back("敵を倒しました。" + (*en)->getIdx() + " " + (*en)->position().debug());
       enemies.erase(en);
       return;
     }
@@ -52,9 +50,6 @@ void MapScene::setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr) {
       }
     }
   }
-  std::random_device seed_gen;
-  std::mt19937 engine(seed_gen());
-  std::shuffle(nonePlacePosition.begin(), nonePlacePosition.end(), engine);
   drawBitMap = dungeon->getBitMap();
 }
 void MapScene::setEnemy(std::vector<std::shared_ptr<Enemy>> enemyPtr) {
@@ -66,17 +61,25 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr) {
 std::shared_ptr<Enemy> MapScene::getEnemyFromPos(Vector2 pos) {
   for (auto enemy : enemies) {
     if (enemy->position() == pos) {
-      log.push_back("success getEnemyFromPos" + enemy->getIdx());
+//      log.push_back("success getEnemyFromPos" + enemy->getIdx());
       return enemy;
     }
   }
-  log.push_back("failed getEnemyFromPos");
+//  log.push_back("failed getEnemyFromPos");
   return nullptr;
 }
 
 Vector2 MapScene::getRandomNonePosition() {
+  std::random_device seed_gen;
+  std::mt19937 engine(seed_gen());
+  std::shuffle(nonePlacePosition.begin(), nonePlacePosition.end(), engine);
   auto itr = nonePlacePosition.begin();
-  nonePlacePosition.erase(itr);
+  for(;itr!=nonePlacePosition.end();itr++){
+    if(drawBitMap[itr->y][itr->x]  == NONE){
+      return *itr;
+    }
+  }
+//  nonePlacePosition.erase(itr);
   return *itr;
 }
 void MapScene::setPlayerDirection(Vector2 dir) { playerDirection = dir; }

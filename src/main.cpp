@@ -15,6 +15,7 @@
 int main(){
 
   GameStatus gameStatus = GameStatus::TITLE;
+  GameStatus prevGameStatus = gameStatus;
   KeyBoardController keyBoardController;
   auto titleScene = std::make_shared<Title>();
   auto mapScene = std::make_shared<MapScene>();
@@ -96,14 +97,23 @@ int main(){
   pos = mapScene->getRandomNonePosition();
   player = std::make_shared<Player>(pos.x,pos.y);
   mapScene->setPlayer(player);
+
+  printf("\033[;H\033[2J");
   gameScene->view();
   for(int i=0;gameStatus != GameStatus::GAME_OVER;i++) {
     //    system("clear");
+
+    std::cout << "gameStatus " << gameStatus.log() << std::endl;
     while (1) { /* キーが押されるまで待つ */
       if (gameStatus.keyBoardWait != KeyBoardWait::WAIT) {
         break;
       }
       std::this_thread::yield();
+    }
+    if(prevGameStatus != gameStatus){
+      prevGameStatus = gameStatus;
+      log.push_back("status check");
+      continue;
     }
 
     std::cout << key.debug() << std::endl;
@@ -124,6 +134,8 @@ int main(){
     }
     key = Key::NONE;
     gameStatus.keyBoardWait = KeyBoardWait::WAIT;
+    printf("\033[;H\033[2J");
+
     if (gameStatus == GameStatus::TITLE) {
       gameScene = titleScene;
     } else if (gameStatus == GameStatus::MAP_VIEW) {
@@ -134,9 +146,9 @@ int main(){
       break;
     }
     gameScene->update();
-    printf("\033[;H\033[2J");
-    std::cout << "gameStatus " << gameStatus.log() << std::endl;
     gameScene->view();
+
+
     for (auto i : log) {
       std::cout << i << std::endl;
     }

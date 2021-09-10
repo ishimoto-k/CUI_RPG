@@ -13,8 +13,8 @@
 class Player :public MapObjectInterface,public Character{
   std::vector<Parameter> levelList;
 public:
-  Player(int x,int y):MapObjectInterface(x,y) {
-    parameter.level = 4;
+  Player(int x,int y,int level):MapObjectInterface(x,y) {
+    parameter.level = level;
     parameter.HP = parameter.maxHP = 100;
     parameter.MP = parameter.maxMP = 8;
     parameter.DEX = 100;
@@ -35,9 +35,9 @@ public:
   bool move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool addExp(int exp) override {
     parameter.EXP += exp;
-    if(parameter.EXP > Parameter::getEventList()[parameter.level].targetEXP){
+    if(parameter.EXP > Parameter::getLevelList()[parameter.level].targetEXP){
       auto tmp =  parameter.EXP;
-      parameter = Parameter::getEventList()[parameter.level+1];
+      parameter = Parameter::getLevelList()[parameter.level+1];
       parameter.EXP = tmp;
       return true;
     }

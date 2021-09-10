@@ -22,8 +22,8 @@ public:
   Status getStatus(){
     return status_;
   };
-  bool operator ==(Status s){ return status_==s;}
-  bool operator !=(Status s){ return status_!=s;}
+  bool operator ==(GameStatus s){ return status_==s.status_;}
+  bool operator !=(GameStatus s){ return status_!=s.status_;}
   std::string log(){
     return std::to_string(status_);
   }
