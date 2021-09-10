@@ -6,6 +6,8 @@
 
 void Enemy::view() { std::cout << "敵"; }
 bool Enemy::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
+  if(isBoss_)
+    return false;
   auto directions = ShuffulDirections();
   for (auto i : directions) {
     auto dir = position_ + i;

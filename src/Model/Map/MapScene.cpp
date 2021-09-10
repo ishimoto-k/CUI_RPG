@@ -10,8 +10,6 @@ void MapScene::makeDungeon(int level) {
       mapInfo.width, mapInfo.height, mapInfo.roomsMin, mapInfo.roomsMax));
   enemies.clear();
   buildEnemies();
-  if (mapInfo.boss != 0) { // bossが存在する。
-  }
   setEnemy(enemies);
 }
 void MapScene::buildEnemies() {
@@ -80,12 +78,23 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
     }
   });
   mapObjects.push_back(warp_f);
+  boss = nullptr;
+  if(mapInfo.boss != 0){
+    boss = Enemy::create(mapInfo.boss);
+    boss->set(pos);
+    boss->setBoss();
+  }
 }
 std::shared_ptr<Enemy> MapScene::getEnemyFromPos(Vector2 pos) {
   for (auto enemy : enemies) {
     if (enemy->position() == pos) {
 //      log.push_back("success getEnemyFromPos" + enemy->getIdx());
       return enemy;
+    }
+  }
+  if(boss){
+    if (boss->position() == pos) {
+      return boss;
     }
   }
 //  log.push_back("failed getEnemyFromPos");
@@ -153,6 +162,10 @@ void MapScene::update() {
       drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
     }
   }
+  if(boss){
+    auto pos = boss->position();
+    drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
+  }
   setPlayerDirection(Vector2::NONE);
   if (count % 10 == 0) {
     buildEnemies();
@@ -177,6 +190,11 @@ void MapScene::view() {
           enemy->view();
           check = true;
           continue;
+        }
+      }
+      if(boss) {
+        if (Vector2(x, y) == boss->position()) {
+          boss->view();
         }
       }
       if (check);

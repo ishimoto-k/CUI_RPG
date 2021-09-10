@@ -12,9 +12,11 @@
 #include <iterator>
 
 class Enemy :public MapObjectInterface,public Character{
+protected:
   std::string frontViewText_ = "";
   std::string idx_ = "";
   std::string name_ = "";
+  bool isBoss_ = false;
   void makeIdx(){
     if(idx_ != "")
       return;
@@ -33,16 +35,20 @@ public:
   std::string getIdx(){
     return idx_;
   }
-  Enemy(int x,int y):MapObjectInterface(x,y){makeIdx();}
-  Enemy(){
+  Enemy(int x,int y,bool boss = false):MapObjectInterface(x,y){
+    makeIdx();
+    isBoss_=boss;
+  }
+  Enemy(bool boss = false){
     Enemy(0,0);
   };
+  void setBoss(){isBoss_=true;};
   void view() override;
   std::string name() override {
     return name_;
   }
-  bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
-  bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {
+  virtual bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
+  virtual bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) override {
       return true;
   };
   std::string frontView() override {

@@ -32,6 +32,8 @@ private:
   std::vector<Vector2> nonePlacePosition;
   std::vector<std::shared_ptr<Enemy>> enemies;
   std::shared_ptr<Player> player;
+  std::shared_ptr<Enemy> boss = nullptr;
+
   std::vector<ObjectPtr> mapObjects;
   BitMap drawBitMap;
   Vector2 playerDirection = {0,0};
