@@ -10,6 +10,8 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <EnemyLogicInterface.hpp>
+#include <EnemyLogicCreate.hpp>
 
 class Enemy :public MapObjectInterface,public Character{
 protected:
@@ -30,6 +32,7 @@ protected:
     }
     idx_ = unique_identifier;
   }
+  std::vector<std::shared_ptr<EnemyLogicInterface>> logic;
 
 public:
   std::string getIdx(){
@@ -60,6 +63,13 @@ public:
   void initBattleBefore()override {
     parameter.HP = parameter.maxHP;
     parameter.MP = parameter.maxMP;
+  }
+  std::shared_ptr<CommandInterface> battleLogic(int turn,Parameter other){
+    if(turn == 0)
+      return nullptr;
+    int select = (turn-1)%logic.size();
+    auto l = logic[select];
+    return l->execute(parameter,other);
   }
 
   static const std::vector<Enemy>& getEnemyList();

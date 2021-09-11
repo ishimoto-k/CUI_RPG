@@ -28,6 +28,7 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
 
   auto nodes = YAML::LoadFile(std::string(CURRENT_DIRECTORY)+"/assets/character.yaml");
   for(auto i = 0 ; i < nodes["ENEMY"].size(); i++){
+    Enemy enemy = Enemy();
     auto node = nodes["ENEMY"][i];
     if(!node)
       continue;
@@ -40,7 +41,18 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     parameter.EXP = node["EXP"].as<int>();
     parameter.level = node["LEVEL"].as<int>();
 //    parameter.skillIds = node["getSkill"].as<std::vector<int>>();
-    Enemy enemy = Enemy();
+    if(node["Actions"]){
+      for(auto actions:node["Actions"]){
+        std::string logicName = actions["Logic"].as<std::string>();
+        std::vector<int> commands = actions["commands"].as<std::vector<int>>();
+        std::vector<int> parameter = {};
+        if(actions["parameter"]){
+          parameter = actions["parameter"].as<std::vector<int>>();
+        }
+        auto logic = EnemyLogicCreate::createLogic(logicName,parameter,commands);
+        enemy.logic.push_back(logic);
+      }
+    }
     enemy.parameter = parameter;
     enemy.name_ = node["name"].as<std::string>();
     std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/"+node["ViewPath"].as<std::string>());
@@ -60,6 +72,7 @@ std::shared_ptr<Enemy> Enemy::create(int id){
     });
     enemy->parameter = itr->parameter;
     enemy->name_ = itr->name_;
+    enemy->logic = itr->logic;
     enemy->setFrontView(itr->frontView());
     enemy->makeIdx();
     return enemy;

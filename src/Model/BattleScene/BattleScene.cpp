@@ -70,7 +70,7 @@ void BattleScene::update() {
       notify(ObserverEventList::BATTLE_SCENE_WIN, body);
       goto finish;
     }
-    action(enemy, player, std::make_shared<Attack>());
+    action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));
     if (player->parameter.HP <= 0) {
       player->parameter.HP = 0;
       auto body = std::make_shared<EventBody>();
