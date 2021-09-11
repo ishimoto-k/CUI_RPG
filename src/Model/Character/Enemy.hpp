@@ -6,12 +6,12 @@
 #define APPEAL_ENEMY_HPP
 
 #include <Character.hpp>
+#include <Command/Command.hpp>
+#include <EnemyLogicInterface.hpp>
 #include <MapObjectInterface.hpp>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <EnemyLogicInterface.hpp>
-#include <EnemyLogicCreate.hpp>
 
 class Enemy :public MapObjectInterface,public Character{
 protected:
@@ -67,9 +67,18 @@ public:
   std::shared_ptr<CommandInterface> battleLogic(int turn,Parameter other){
     if(turn == 0)
       return nullptr;
-    int select = (turn-1)%logic.size();
-    auto l = logic[select];
-    return l->execute(parameter,other);
+    int around = turn;
+    std::shared_ptr<CommandInterface> command = nullptr;
+    do{
+      int select = (around-1)%logic.size();
+      auto l = logic[select];
+      command = l->execute(parameter,other);
+      around ++;
+      if(around == logic.size()*2) {
+        return std::make_shared<Attack>();
+      }
+    }while (!command);
+    return command;
   }
 
   static const std::vector<Enemy>& getEnemyList();

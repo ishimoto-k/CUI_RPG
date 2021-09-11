@@ -20,7 +20,7 @@ target_include_directories(Skill INTERFACE
 
 
 add_library(EnemyLogic STATIC
-        Character/EnemyLogic/RandomLogic.cpp
+        Character/EnemyLogic/LogicEntity.cpp
         )
 target_include_directories(EnemyLogic INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character/EnemyLogic
