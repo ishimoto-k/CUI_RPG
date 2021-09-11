@@ -53,7 +53,7 @@ bool KeyBoardController::checkInputKey(){
   // 参考
   // https://hotnews8.net/programming/tricky-code/c-code03
   // からコピーしました。
-  struct termios oldt, newt;
+  termios oldt, newt;
   int ch;
   int oldf;
 
@@ -79,6 +79,7 @@ bool KeyBoardController::checkInputKey(){
 void KeyBoardController::stopInputMonitoring()  {
   running = false;
 }
- KeyBoardController::~KeyBoardController(){
+KeyBoardController::~KeyBoardController(){
   inputThread.join();
+  tcsetattr(0, TCSANOW, &oldt);
 }

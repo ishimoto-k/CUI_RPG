@@ -64,6 +64,8 @@ int main(){
     auto msg = static_cast<Title::EventBody*>(subject.get());
     if(msg->selectList == Title::SelectList::START){
       gameStatus = GameSeaneStatus::MAP_VIEW;
+    }else if(msg->selectList == Title::SelectList::END){
+      gameStatus = GameSeaneStatus::GAME_OVER;
     }
   });
 

@@ -13,8 +13,10 @@
 class KeyBoardController : public UserControllerInterface{
   std::thread inputThread;
   bool running = false;
+  termios oldt;
 public:
   KeyBoardController(){
+    tcgetattr(STDIN_FILENO, &oldt);
   }
   int getCharactor();
   void startInputMonitoring() override;
