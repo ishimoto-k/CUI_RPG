@@ -18,6 +18,15 @@ target_include_directories(Skill INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character/Command
         )
 
+
+add_library(EnemyLogic STATIC
+        Character/EnemyLogic/RandomLogic.cpp
+        )
+target_include_directories(EnemyLogic INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}/Character/EnemyLogic
+        )
+target_link_libraries(EnemyLogic Skill)
+
 add_library(Character STATIC
         Character/DummyEnemy.cpp
         Character/Enemy.cpp
@@ -27,7 +36,7 @@ target_include_directories(Character INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character
         )
 target_link_libraries(Character Skill Map)
-target_link_libraries(Map Character)
+target_link_libraries(Map Character EnemyLogic)
 
 add_library(BattleScene STATIC
         BattleScene/BattleScene.cpp
