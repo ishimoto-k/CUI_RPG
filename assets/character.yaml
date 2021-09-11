@@ -30,7 +30,7 @@ ENEMY:
     POW: 21
     DEX: 24
     EXP: 50
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy2
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 弱いボス
@@ -41,7 +41,7 @@ ENEMY:
     POW: 44
     DEX: 12
     EXP: 200
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy3
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 中の下な敵
@@ -52,9 +52,9 @@ ENEMY:
     POW: 37
     DEX: 25
     EXP: 90
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy4
     Actions:
-        - { Logic: Random ,commands: [1]}
+      - { Logic: Random ,commands: [1]}
   - name: 中の中な敵
     ID: 5
     LEVEL: 12
@@ -63,7 +63,7 @@ ENEMY:
     POW: 44
     DEX: 70
     EXP: 180
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy5
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 中の上な敵
@@ -74,7 +74,7 @@ ENEMY:
     POW: 75
     DEX: 75
     EXP: 300
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy6
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 普通なボス
@@ -85,7 +85,7 @@ ENEMY:
     POW: 100
     DEX: 60
     EXP: 1600
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy7
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: やや弱めな強力な敵
@@ -96,7 +96,7 @@ ENEMY:
     POW: 120
     DEX: 110
     EXP: 500
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy8
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 強力な敵
@@ -107,7 +107,7 @@ ENEMY:
     POW: 200
     DEX: 200
     EXP: 800
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy9
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 最上級な敵
@@ -118,7 +118,7 @@ ENEMY:
     POW: 400
     DEX: 400
     EXP: 2500
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy10
     Actions:
       - { Logic: Random ,commands: [1]}
   - name: 最後のボス
@@ -129,6 +129,6 @@ ENEMY:
     POW: 300
     DEX: 300
     EXP: 5000
-    ViewPath: AsciiArt/enemy1
+    ViewPath: AsciiArt/enemy11
     Actions:
       - { Logic: Random ,commands: [1]}
