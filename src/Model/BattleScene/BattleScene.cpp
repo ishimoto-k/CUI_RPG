@@ -8,7 +8,7 @@
 void BattleScene::setPlayer(std::shared_ptr<Player> playPtr) {
   player = playPtr;
   player->initBattleBefore();
-  state = CommandSelect;
+  state = State::CommandSelect;
   turnCounter = 1;
   log.clear();
   isWin_ = false;
@@ -43,7 +43,7 @@ void BattleScene::Esc(){};
 
 void BattleScene::update() {
   //戦闘ロジック
-  if (state == Action) {
+  if (state == State::Action) {
     log.clear(); //バトルログを消す
     action(player, enemy, selection);
     if (enemy->parameter.HP <= 0) {
@@ -65,7 +65,7 @@ void BattleScene::update() {
         }
       }
       isWin_ = true;
-      body->state = Win;
+      body->state = State::Win;
       body->enemy = enemy;
       notify(ObserverEventList::BATTLE_SCENE_WIN, body);
       goto finish;
@@ -75,12 +75,12 @@ void BattleScene::update() {
       player->parameter.HP = 0;
       auto body = std::make_shared<EventBody>();
       log.push_back(player->name() + "は敗北した");
-      body->state = Lose;
+      body->state = State::Lose;
       notify(ObserverEventList::BATTLE_SCENE_LOSE, body);
       goto finish;
     }
   finish:
-    state = CommandSelect;
+    state = State::CommandSelect;
     turnCounter++;
     selectList = commands;
     //ターン終了
@@ -88,18 +88,18 @@ void BattleScene::update() {
 }
 
 void BattleScene::Cancel() {
-  if (state == SkillSelect) {
-    state = CommandSelect;
+  if (state == State::SkillSelect) {
+    state = State::CommandSelect;
     selectList = commands;
   }
   cursor = 0;
 }
 void BattleScene::Select() {
-  if (state == SkillSelect) {
+  if (state == State::SkillSelect) {
     auto skill = selectList[cursor];
     if (player->parameter.MP >= skill->mp()) {
       selection = skill;
-      state = Action;
+      state = State::Action;
     } else {
       log.clear();
       log.push_back("MPが足りない");
@@ -111,17 +111,17 @@ void BattleScene::Select() {
       selectList = commands;
       cursor = 0;
       selection = commands[0];
-      state = Action;
+      state = State::Action;
       break;
     case 2:
       cursor = 0;
-      state = SkillSelect;
+      state = State::SkillSelect;
       selectList = player->skill;
       break;
     case 3:
       cursor = 0;
       selection = commands[2];
-      state = ESCAPE;
+      state = State::ESCAPE;
       log.clear();
       log.push_back("戦闘から離脱しました");
       auto body = std::make_shared<EventBody>();
@@ -142,14 +142,14 @@ void BattleScene::view() {
   std::cout << "MP:" << player->parameter.maxMP << "/" << player->parameter.MP
             << std::endl
             << std::endl;
-  if (state == CommandSelect || state == SkillSelect) {
-    if (state == SkillSelect)
+  if (state == State::CommandSelect || state == State::SkillSelect) {
+    if (state == State::SkillSelect)
       std::cout << "スキル" << std::endl;
-    if (state == CommandSelect)
+    if (state == State::CommandSelect)
       std::cout << "コマンド" << std::endl;
     for (auto command = selectList.begin(); command != selectList.end();
          command++) {
-      if (state == SkillSelect)
+      if (state == State::SkillSelect)
         std::cout << "　";
       if (std::distance(selectList.begin(), command) == cursor) {
         std::cout << "＞";
@@ -157,7 +157,7 @@ void BattleScene::view() {
         std::cout << "　";
       }
       std::cout << (*command)->name();
-      if (state == SkillSelect) {
+      if (state == State::SkillSelect) {
         if (player->parameter.MP < (*command)->mp()) {
           std::cout << "　"
                     << "\t\033[2m" << (*command)->mp() << "\033[0m"
@@ -171,7 +171,7 @@ void BattleScene::view() {
     }
     std::cout << "説明:" << std::endl;
     std::cout << "　" << selectList[cursor]->description() << std::endl;
-  } else if (state == EnemySelect) { // todo select enemy
+  } else if (state == State::EnemySelect) { // todo select enemy
     std::cout << "どの敵" << std::endl;
   }
   std::cout << std::endl << "バトルログ:" << std::endl;

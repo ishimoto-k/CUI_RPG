@@ -16,7 +16,7 @@
 #include <Enemy.hpp>
 #include <Player.hpp>
 using namespace Design;
-enum State{
+enum class State{
   CommandSelect,
   SkillSelect,
   EnemySelect,
@@ -45,7 +45,7 @@ private:
   std::vector<std::shared_ptr<CommandInterface>> selectList = commands;
   std::shared_ptr<CommandInterface> selection = commands[0];
   std::vector<std::string> log;
-  State state = CommandSelect;
+  State state = State::CommandSelect;
   int turnCounter = 1;
   int cursor = 0;
   bool isWin_ = false;
