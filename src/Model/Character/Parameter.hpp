@@ -40,7 +40,6 @@ public:
       parameter.level = i;
       if(node["getSkill"])
         parameter.skillIds = node["getSkill"].as<std::vector<int>>();
-      std::cout << parameter.level << std::endl;
       levelList.push_back(parameter);
     }
     return levelList;

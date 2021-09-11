@@ -48,6 +48,7 @@ private:
   State state = CommandSelect;
   int turnCounter = 1;
   int cursor = 0;
+  bool isWin_ = false;
 public:
   typedef std::shared_ptr<Character> CharacterPtr;
   BattleScene(){

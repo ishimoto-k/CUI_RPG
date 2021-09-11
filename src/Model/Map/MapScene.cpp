@@ -20,7 +20,6 @@ void MapScene::buildEnemies() {
   for (int i = enemies.size(); i < mapInfo.enemies; i++) {
     auto enemyL = mapInfo.typeOfEnemy[engine() % size];
     auto enemy = Enemy::create(enemyL);
-    std::cout << "敵を生成 レベル" + std::to_string(enemyL) << std::endl;
     auto pos = getRandomNonePosition();
     enemy->set(pos);
     enemies.push_back(enemy);
@@ -183,7 +182,7 @@ void MapScene::update() {
   count++;
 }
 void MapScene::view() {
-  std::cout << "MapLevel: " << mapInfo.level << std::endl;
+  std::cout << "第" << mapInfo.level << "階層" << std::endl;
   for (int y = 0; y < drawBitMap.size(); y++) {
     for (int x = 0; x < drawBitMap[y].size(); x++) {
       std::shared_ptr<MapObjectInterface> tmpObject = nullptr;

@@ -147,11 +147,11 @@ int main(){
     }
     if(prevGameStatus != gameStatus){
       prevGameStatus = gameStatus;
+      log.clear();
       log.push_back("status check");
       continue;
     }
 
-    std::cout << key.debug() << std::endl;
     if (key == Key::UP) {
       gameScene->Up();
     } else if (key == Key::DOWN) {

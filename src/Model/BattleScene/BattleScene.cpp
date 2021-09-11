@@ -3,6 +3,7 @@
 //
 
 #include "BattleScene.hpp"
+#include <thread>
 
 void BattleScene::setPlayer(std::shared_ptr<Player> playPtr) {
   player = playPtr;
@@ -10,6 +11,7 @@ void BattleScene::setPlayer(std::shared_ptr<Player> playPtr) {
   state = CommandSelect;
   turnCounter = 1;
   log.clear();
+  isWin_ = false;
 }
 void BattleScene::setEnemy(std::shared_ptr<Enemy> enemyPtr) {
   enemy = enemyPtr;
@@ -62,6 +64,7 @@ void BattleScene::update() {
           }
         }
       }
+      isWin_ = true;
       body->state = Win;
       body->enemy = enemy;
       notify(ObserverEventList::BATTLE_SCENE_WIN, body);
@@ -174,5 +177,8 @@ void BattleScene::view() {
   std::cout << std::endl << "バトルログ:" << std::endl;
   for (auto l : log) {
     std::cout << "　" << l << std::endl;
+  }
+  if(isWin_){
+    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }

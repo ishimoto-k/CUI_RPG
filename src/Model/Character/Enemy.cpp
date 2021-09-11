@@ -43,7 +43,6 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     Enemy enemy = Enemy();
     enemy.parameter = parameter;
     enemy.name_ = node["name"].as<std::string>();
-    std::cout << enemy.name_ << std::endl;
     std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/"+node["ViewPath"].as<std::string>());
     std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                    std::istreambuf_iterator<char>());
