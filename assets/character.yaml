@@ -17,9 +17,10 @@ ENEMY:
     POW: 5
     DEX: 3
     EXP: 15
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
     Actions:
-      - { Logic: Random,commands: [0]}
+      - { Logic: Random , commands: [1]}
+      - { Logic: HPIsLow, parameter: [30],commands: [1]}
   - name: やや弱い敵
     ID: 2
     LEVEL: 5
@@ -28,10 +29,9 @@ ENEMY:
     POW: 21
     DEX: 24
     EXP: 50
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
     Actions:
-      - { command: 1}
-      - { command: 0}
+      - { Logic: Random ,commands: [1]}
   - name: 弱いボス
     ID: 3
     LEVEL: 10
@@ -40,10 +40,9 @@ ENEMY:
     POW: 44
     DEX: 12
     EXP: 200
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
     Actions:
-      - { command: 1, Rule: {Logic: HPIsLow,Parameter: [30]}}
-      - { command: 0}
+      - { Logic: Random ,commands: [1]}
   - name: 中の下な敵
     ID: 4
     LEVEL: 9
@@ -52,7 +51,9 @@ ENEMY:
     POW: 37
     DEX: 25
     EXP: 90
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+        - { Logic: Random ,commands: [1]}
   - name: 中の中な敵
     ID: 5
     LEVEL: 12
@@ -61,7 +62,9 @@ ENEMY:
     POW: 44
     DEX: 70
     EXP: 180
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: 中の上な敵
     ID: 6
     LEVEL: 18
@@ -70,7 +73,9 @@ ENEMY:
     POW: 75
     DEX: 75
     EXP: 300
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: 普通なボス
     ID: 7
     LEVEL: 21
@@ -79,7 +84,9 @@ ENEMY:
     POW: 100
     DEX: 60
     EXP: 1600
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: やや弱めな強力な敵
     ID: 8
     LEVEL: 23
@@ -88,7 +95,9 @@ ENEMY:
     POW: 120
     DEX: 110
     EXP: 500
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: 強力な敵
     ID: 9
     LEVEL: 25
@@ -97,7 +106,9 @@ ENEMY:
     POW: 200
     DEX: 200
     EXP: 800
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: 最上級な敵
     ID: 10
     LEVEL: 30
@@ -106,7 +117,9 @@ ENEMY:
     POW: 400
     DEX: 400
     EXP: 2500
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
   - name: 最後のボス
     ID: 11
     LEVEL: 28
@@ -115,4 +128,6 @@ ENEMY:
     POW: 300
     DEX: 300
     EXP: 5000
-    ViewPath: enemy1
+    ViewPath: AsciiArt/enemy1
+    Actions:
+      - { Logic: Random ,commands: [1]}
