@@ -17,4 +17,12 @@ public:
 };
 typedef CommandInterface SkillInterface;
 
+enum class TypeOfSkills : int{
+  SKILL = 100,
+  ESCAPE,
+  ATTACK = 1,
+  SLASH_MIDDLE,
+  SLASH_LARGE,
+  HEAL,
+};
 #endif // APPEAL_COMMANDINTERFACE_HPP
