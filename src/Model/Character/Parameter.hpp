@@ -20,27 +20,34 @@ public:
   int EXP;
   int targetEXP;
   std::vector<int> skillIds;
-  static const std::vector<Parameter>& getLevelList(){
+  static const std::vector<Parameter>& getLevelList() {
     static std::vector<Parameter> levelList{};
-    if(!levelList.empty())
+    if (!levelList.empty())
       return levelList;
 
-    auto nodes = YAML::LoadFile(std::string(CURRENT_DIRECTORY)+"/assets/LevelList.yaml");
-    for(auto i = 1 ; i <= nodes["Level"].size(); i++){
-      auto index = std::to_string(i);
-      auto node = nodes["Level"][index];
-      if(!node)
-        continue;
-      Parameter parameter;
-      parameter.HP = parameter.maxHP = node["HP"].as<int>();
-      parameter.MP = parameter.maxMP = node["MP"].as<int>();
-      parameter.POW = node["POW"].as<int>();
-      parameter.DEX = node["DEX"].as<int>();
-      parameter.targetEXP = node["needEXP"].as<int>();
-      parameter.level = i;
-      if(node["getSkill"])
-        parameter.skillIds = node["getSkill"].as<std::vector<int>>();
-      levelList.push_back(parameter);
+    auto fileName = "assets/LevelList.yaml";
+    try {
+      auto nodes = YAML::LoadFile(fileName);
+      for (auto i = 1; i <= nodes["Level"].size(); i++) {
+        auto index = std::to_string(i);
+        auto node = nodes["Level"][index];
+        if (!node)
+          continue;
+        Parameter parameter;
+        parameter.HP = parameter.maxHP = node["HP"].as<int>();
+        parameter.MP = parameter.maxMP = node["MP"].as<int>();
+        parameter.POW = node["POW"].as<int>();
+        parameter.DEX = node["DEX"].as<int>();
+        parameter.targetEXP = node["needEXP"].as<int>();
+        parameter.level = i;
+        if (node["getSkill"])
+          parameter.skillIds = node["getSkill"].as<std::vector<int>>();
+        levelList.push_back(parameter);
+      }
+      std::cout << fileName << "の読み込み成功" << std::endl;
+    } catch (YAML::Exception &e) {
+      std::cout << fileName << "が存在しません。終了します。" << std::endl;
+      exit(-1);
     }
     return levelList;
   }

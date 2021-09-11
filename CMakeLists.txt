@@ -1,9 +1,7 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.7.2)
 project(Appeal)
 
 set(CMAKE_CXX_STANDARD 14)
-
-add_compile_definitions(CURRENT_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(submodule/yaml-cpp)
 link_libraries(yaml-cpp)
@@ -21,8 +19,6 @@ target_include_directories(dungeon INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/Dunge
 
 add_subdirectory(src/Model)
 
-add_subdirectory(research)
-
 add_executable(Appeal src/main.cpp)
 target_link_libraries(Appeal
         dungeon
@@ -31,3 +27,17 @@ target_link_libraries(Appeal
         Title
         BattleScene
         )
+
+link_libraries(dungeon Map)
+add_executable(example_wall_stretching research/WallStretching.cpp)
+add_executable(example_map_view research/ExampleMapScene.cpp)
+add_executable(example_keybord_input research/ExampleKeyBoardInput.cpp)
+add_executable(example_battle_scene research/ExampleBattleScene.cpp)
+target_link_libraries(example_map_view dungeon Map)
+target_link_libraries(example_battle_scene BattleScene)
+
+
+add_executable(example_exp_calc research/ExampleExpCalculation.cpp)
+
+add_custom_command(TARGET Appeal POST_BUILD COMMAND
+        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Appeal>/assets)

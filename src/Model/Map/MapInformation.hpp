@@ -22,24 +22,29 @@ public:
     static std::vector<MapInformation> mapInfoList{};
     if (!mapInfoList.empty())
       return mapInfoList;
-
-    auto nodes = YAML::LoadFile(std::string(CURRENT_DIRECTORY) +
-                                "/assets/mapInformation.yaml");
-    for (auto i = 0; i < nodes["MAP"].size(); i++) {
-      auto index = std::to_string(i);
-      auto node = nodes["MAP"][index];
-      if (!node)
-        continue;
-      MapInformation parameter;
-      parameter.level = i+1;
-      parameter.width = node["width"].as<int>();
-      parameter.height = node["height"].as<int>();
-      parameter.roomsMin = node["roomsMin"].as<int>();
-      parameter.roomsMax = node["roomsMax"].as<int>();
-      parameter.enemies = node["enemies"].as<int>();
-      parameter.typeOfEnemy = node["enemyKind"].as<std::vector<int>>();
-      parameter.boss = node["boss"].as<int>();
-      mapInfoList.push_back(parameter);
+    std::string fileName = "assets/mapInformation.yaml";
+    try {
+      auto nodes = YAML::LoadFile(fileName);
+      for (auto i = 0; i < nodes["MAP"].size(); i++) {
+        auto index = std::to_string(i);
+        auto node = nodes["MAP"][index];
+        if (!node)
+          continue;
+        MapInformation parameter;
+        parameter.level = i + 1;
+        parameter.width = node["width"].as<int>();
+        parameter.height = node["height"].as<int>();
+        parameter.roomsMin = node["roomsMin"].as<int>();
+        parameter.roomsMax = node["roomsMax"].as<int>();
+        parameter.enemies = node["enemies"].as<int>();
+        parameter.typeOfEnemy = node["enemyKind"].as<std::vector<int>>();
+        parameter.boss = node["boss"].as<int>();
+        mapInfoList.push_back(parameter);
+      }
+      std::cout << fileName << "の読み込み成功" << std::endl;
+    }catch (YAML::Exception &e) {
+      std::cout << fileName << "が存在しません。終了します。" << std::endl;
+      exit(-1);
     }
     return mapInfoList;
   }

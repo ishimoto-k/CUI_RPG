@@ -28,7 +28,6 @@ int main(){
   });
   mapView.addObserver(observer);
   mapView.setDungeon(std::make_shared<DungeonCreate>(20,20));
-  mapView.dungeon->debug();
   auto pos = mapView.getRandomNonePosition();
   std::vector<std::shared_ptr<MapObjectInterface>> enemies;
   for(int i=0;i<1;i++) {
@@ -38,7 +37,7 @@ int main(){
 
   mapView.setEnemy({std::make_shared<DummyEnemy>(pos.x,pos.y),std::make_shared<DummyEnemy>(pos.x,pos.y)});
   pos = mapView.getRandomNonePosition();
-  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y,1));
+  mapView.setPlayer(std::make_shared<Player>(pos.x,pos.y,1),true);
   mapView.view();
   for(int i=0;i<100;i++) {
     printf("\033[;H\033[2J");
@@ -60,15 +59,14 @@ int main(){
     }
     std::cout << key << std::endl;
     if (key == 'w') {
-      mapView.setPlayerDirection(Vector2::UP);
+      mapView.Up();
     } else if (key == 's') {
-      mapView.setPlayerDirection(Vector2::DOWN);
+      mapView.Down();
     } else if (key == 'd') {
-      mapView.setPlayerDirection(Vector2::RIGHT);
+      mapView.Left();
     } else if (key == 'a') {
-      mapView.setPlayerDirection(Vector2::LEFT);
+      mapView.Right();
     } else if (key == 0) {
-      mapView.setPlayerDirection(Vector2::NONE);
     }
   }
 }

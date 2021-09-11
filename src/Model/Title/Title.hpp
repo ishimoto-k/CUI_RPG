@@ -43,7 +43,7 @@ public:
     EventBody(SelectList sel):selectList(sel){}
   };
   Title(){
-    std::ifstream ifs(std::string(CURRENT_DIRECTORY)+"/assets/title");
+    std::ifstream ifs("assets/title");
     std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                    std::istreambuf_iterator<char>());
     frontView = text;
