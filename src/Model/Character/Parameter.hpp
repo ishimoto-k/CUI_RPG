@@ -54,6 +54,16 @@ public:
     }
     return Parameter();
   }
+  static std::vector<int> loadSkillFromLevel(int level){
+    auto list = getLevelList();
+    std::vector<int> skills = {};
+    for(int i=0;i<level && i < list.size(); i++){
+      skills.insert(skills.end(),list[i].skillIds.begin(),list[i].skillIds.end());
+    }
+    std::sort(skills.begin(), skills.end());
+    skills.erase(std::unique(skills.begin(), skills.end()), skills.end());
+    return skills;
+  }
 };
 
 

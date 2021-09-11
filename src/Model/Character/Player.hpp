@@ -7,27 +7,37 @@
 
 #include <Character.hpp>
 #include <MapObjectInterface.hpp>
+#include <Skill/SkillsCreate.hpp>
 #include <Skills.hpp>
 #include <iostream>
 
 class Player :public MapObjectInterface,public Character{
   std::vector<Parameter> levelList;
+  std::vector<std::shared_ptr<SkillInterface>> gotSkills;
 public:
   Player(int x,int y,int level):MapObjectInterface(x,y) {
     auto p = Parameter::loadFromLevel(level);
     parameter = p;
+    auto skillIds = Parameter::loadSkillFromLevel(level);
     parameter.EXP = 0;
-
-    skill = std::vector<std::shared_ptr<CommandInterface>>{
-        std::make_shared<SlashMiddle>(),
-        std::make_shared<SlashLarge>(),
-        std::make_shared<Heal>(),
-    };
+    for(auto id:skillIds){
+      auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));
+      skill.push_back(s);
+    }
+//
+//    skill = std::vector<std::shared_ptr<CommandInterface>>{
+//        std::make_shared<SlashMiddle>(),
+//        std::make_shared<SlashLarge>(),
+//        std::make_shared<Heal>(),
+//    };
   }
   std::string name() override {
     return "冒険者";
   }
   void view() override;
+  std::vector<std::shared_ptr<SkillInterface>> getGotSkills(){
+    return gotSkills;
+  }
   bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) override;
   bool addExp(int exp) override {
@@ -36,6 +46,14 @@ public:
     if(parameter.EXP > Parameter::loadFromLevel(parameter.level).targetEXP){
       auto tmp =  parameter.EXP;
       parameter = Parameter::loadFromLevel(parameter.level+1);
+      gotSkills.clear();
+      for(auto id:parameter.skillIds){
+        auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));
+        skill.push_back(s);
+        gotSkills.push_back(s);
+      }
+      std::sort(skill.begin(), skill.end());
+      skill.erase(std::unique(skill.begin(), skill.end()), skill.end());
       parameter.EXP = tmp;
       return true;
     }

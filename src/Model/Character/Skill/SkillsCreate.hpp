@@ -19,9 +19,9 @@ public:
     case TypeOfSkills::SLASH_MIDDLE:
       return std::make_shared<SlashMiddle>();
     case TypeOfSkills::SLASH_LARGE:
-      break;
+      return std::make_shared<SlashLarge>();
     case TypeOfSkills::HEAL:
-      break;
+      return std::make_shared<Heal>();
     }
     return std::make_shared<Attack>();
   };

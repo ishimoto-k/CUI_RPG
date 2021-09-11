@@ -53,13 +53,12 @@ void BattleScene::update() {
                     "\033[0m");
       log.push_back(std::to_string(enemy->parameter.EXP) +
                     "の経験値を獲得した");
-      auto tmpSkillSize = player->skill.size();
       if (player->addExp(enemy->parameter.EXP)) {
         log.push_back(player->name() + "はレベルアップし、");
         log.push_back(std::to_string(player->parameter.level) + "になった");
-        if (tmpSkillSize < player->skill.size()) {
-          for (auto skill = player->skill.begin() + (tmpSkillSize - 1);
-               skill != player->skill.end(); skill++) {
+        auto info = player->getGotSkills();
+        if (!info.empty()) {
+          for (auto skill = info.begin(); skill != info.end(); skill++) {
             log.push_back((*skill)->name() + "を覚えた");
           }
         }

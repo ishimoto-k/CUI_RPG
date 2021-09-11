@@ -21,14 +21,14 @@ if (logicName == name::logicName()) {\
 
 
 MAKE_LOGIC(RandomLogic){
-  std::cout << "select RandomLogic " << std::endl;
+//  std::cout << "select RandomLogic " << std::endl;
   std::random_device rnd; // 非決定的な乱数生成器
   std::mt19937 mt(rnd());
   return SkillsCreate::createCommand(static_cast<TypeOfSkills>(skillIds_[mt() % skillIds_.size()]));
 }
 
 MAKE_LOGIC(HPIsLowLogic){
-  std::cout << "select HPIsLowLogic " << std::endl;
+//  std::cout << "select HPIsLowLogic " << std::endl;
   std::random_device rnd; // 非決定的な乱数生成器
   std::mt19937 mt(rnd());
   if(paramater_.size() == 0){
@@ -41,7 +41,7 @@ MAKE_LOGIC(HPIsLowLogic){
   return nullptr;
 }
 MAKE_LOGIC(HPIsHighLogic){
-  std::cout << "select HPIsHighLogic " << std::endl;
+//  std::cout << "select HPIsHighLogic " << std::endl;
   std::random_device rnd; // 非決定的な乱数生成器
   std::mt19937 mt(rnd());
   if(paramater_.size() == 0){
@@ -55,7 +55,7 @@ MAKE_LOGIC(HPIsHighLogic){
 }
 
 std::shared_ptr<EnemyLogicInterface> EnemyLogicCreate::createLogic(std::string logicName, std::vector<int> paramater, std::vector<int> skillIds) {
-  std::cout << logicName << std::endl;
+//  std::cout << logicName << std::endl;
   if (logicName == "Random") {
     return std::make_shared<RandomLogic>(paramater,skillIds);
   }
