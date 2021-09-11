@@ -18,4 +18,5 @@ bool DummyEnemy::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2
       return false;
     }
   }
+  return false;
 }

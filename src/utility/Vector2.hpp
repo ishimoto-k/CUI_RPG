@@ -20,37 +20,11 @@ public:
     LEFT,
     NONE,
   };
-  Vector2(int posx,int posy){
-    x = posx;
-    y = posy;
-  }
-  Vector2(Direction direction){
-    switch (direction) {
-    case UP:
-      x = 0, y = -1;
-      break;
-    case DOWN:
-      x = 0, y = 1;
-      break;
-    case RIGHT:
-      x = 1, y = 0;
-      break;
-    case LEFT:
-      x = -1, y = 0;
-      break;
-    case NONE:
-      x = 0, y = 0;
-      break;
-    }
-  }
-
-  Vector2 operator +(Vector2 r){ return Vector2(x+r.x,y+r.y);}
-  bool operator == (Vector2 r){
-    return x==r.x&&y==r.y;
-  }
-  std::string debug(){
-    return "x:" + std::to_string(x) + " y:" + std::to_string(y);
-  }
+  Vector2(int posx,int posy);
+  Vector2(Direction direction);
+  Vector2 operator +(Vector2 r);
+  bool operator == (Vector2 r);
+  std::string debug();
 };
 
 //ダンジョン生成で扱う一時的なパラメーター定数
