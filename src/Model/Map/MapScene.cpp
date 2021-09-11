@@ -26,7 +26,7 @@ void MapScene::buildEnemies() {
     enemies.push_back(enemy);
   }
 }
-void MapScene::eraseEnemy(std::shared_ptr<Enemy> enemy) {
+bool MapScene::eraseEnemy(std::shared_ptr<Enemy> enemy) {
   for (auto en = enemies.begin(); en != enemies.end(); en++) {
 //    log.push_back("敵を倒しました。" + (*en)->getIdx() + " " + (*en)->position().debug());
     if ((*en)->getIdx() == enemy->getIdx()) {
@@ -34,9 +34,19 @@ void MapScene::eraseEnemy(std::shared_ptr<Enemy> enemy) {
       drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
 //      log.push_back("敵を倒しました。" + (*en)->getIdx() + " " + (*en)->position().debug());
       enemies.erase(en);
-      return;
+      return true;
     }
   }
+  return false;
+}
+bool MapScene::eraseBoss(){
+  if(boss) {
+    auto pos = (boss)->position();
+    drawBitMap[pos.y][pos.x] = BitMapKind::NONE;
+    boss = nullptr;
+    return true;
+  }
+  return false;
 }
 void MapScene::setDungeon(std::shared_ptr<DungeonInterfece> dungeonPtr) {
   dungeon = dungeonPtr;

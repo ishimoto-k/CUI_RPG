@@ -52,7 +52,8 @@ public:
 
   void setEnemy(std::vector<std::shared_ptr<Enemy>> enemyPtr);//あらかじめ生成した敵をダンジョンに配置します。
   void buildEnemies();//ダンジョンに敵を配置します。内部で敵を生成し、setEnemyも代わりに行います。
-  void eraseEnemy(std::shared_ptr<Enemy> enemy);//ダンジョンの特定の敵を消します。
+  bool eraseEnemy(std::shared_ptr<Enemy> enemy);//ダンジョンの特定の敵を消します。
+  bool eraseBoss();//ダンジョンのボスを消します。
   void setPlayer(std::shared_ptr<Player> playerPtr,bool direction);//プレイヤーを配置します。direction=trueは前階層から来た時、falseは戻ってきた時
   std::shared_ptr<Enemy> getEnemyFromPos(Vector2 pos);//指定した座標の敵を取得します。存在しない場合はnullptrです。
   Vector2 getRandomNonePosition();//敵とプレイヤーが存在しないエリアの座標をランダムに取得します。

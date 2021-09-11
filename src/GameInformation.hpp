@@ -6,5 +6,11 @@
 #define APPEAL_GAMEINFORMATION_HPP
 #include <iostream>
 
+class GameInformation{
+public:
+  int mapClearStatus = 1; //到達したマップ
+  int mapLevel = 1; //今いるマップ
+
+};
 
 #endif // APPEAL_GAMEINFORMATION_HPP

@@ -2,14 +2,14 @@
 // Created by IshimotoKiko on 2021/09/03.
 //
 
-#ifndef APPEAL_GAMESTATUS_HPP
-#define APPEAL_GAMESTATUS_HPP
+#ifndef APPEAL_GAMESEANESTATUS_HPP
+#define APPEAL_GAMESEANESTATUS_HPP
 
 enum KeyBoardWait{
   HIT,
   WAIT,
 };
-class GameStatus{
+class GameSeaneStatus {
 public:
   enum Status{
     TITLE = 0x1000,
@@ -18,12 +18,12 @@ public:
     GAME_OVER = 0x4000,
   };
   KeyBoardWait keyBoardWait = KeyBoardWait::WAIT;
-  GameStatus(Status status):status_(status){};
+  GameSeaneStatus(Status status):status_(status){};
   Status getStatus(){
     return status_;
   };
-  bool operator ==(GameStatus s){ return status_==s.status_;}
-  bool operator !=(GameStatus s){ return status_!=s.status_;}
+  bool operator ==(GameSeaneStatus s){ return status_==s.status_;}
+  bool operator !=(GameSeaneStatus s){ return status_!=s.status_;}
   std::string log(){
     return std::to_string(status_);
   }
@@ -31,4 +31,4 @@ private:
   Status status_;
 
 };
-#endif // APPEAL_GAMESTATUS_HPP
+#endif // APPEAL_GAMESEANESTATUS_HPP
