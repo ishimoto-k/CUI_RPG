@@ -82,6 +82,7 @@ void BattleScene::update() {
     state = State::CommandSelect;
     turnCounter++;
     selectList = commands;
+    cursor = 0;
     //ターン終了
   }
 }

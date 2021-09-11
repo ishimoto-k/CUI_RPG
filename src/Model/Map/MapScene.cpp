@@ -223,6 +223,12 @@ void MapScene::view() {
     }
     std::cout << std::endl;
   }
+  std::cout << player->name() << std::endl;
+  std::cout << " Lv:" <<player->parameter.level << "\t";
+  std::cout << " HP:" << player->parameter.maxHP << "/" << player->parameter.HP << "\t";
+  std::cout << "MP:" << player->parameter.maxMP << "/" << player->parameter.MP << std::endl;
+  std::cout << " POW:" << player->parameter.POW << "\t DEX:" << player->parameter.DEX << std::endl;
+  std::cout << " EXP:" << player->parameter.EXP << "\t 次のレベルまで:" <<player->parameter.targetEXP-player->parameter.EXP << std::endl;
   for (auto l : log) {
     std::cout << l << std::endl;
   }

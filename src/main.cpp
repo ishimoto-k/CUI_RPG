@@ -41,25 +41,24 @@ int main(){
         gameStatus = GameSeaneStatus::BATTLE;
       }
     }
-    std::cout << "object collision detection bit = "<< msg->bit << std::endl;
+//    std::cout << "object collision detection bit = "<< msg->bit << std::endl;
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__ENEMY_CollisionDetection,[&](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
     if(msg->bit == BitMapKind::PLAYER){
       if(gameStatus != GameSeaneStatus::BATTLE){
-        log.push_back("敵から遭遇した");
+        log.push_back("敵と遭遇した");
         battleScene->setPlayer(player);
         battleScene->setEnemy(mapScene->getEnemyFromPos(msg->fromPosition));
         gameStatus = GameSeaneStatus::BATTLE;
       }
     }
-    std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
+//    std::cout << "enemy was object collision detection bit = "<< msg->bit << std::endl;
   });
   observer.interface()->addListener(ObserverEventList::KEYBOARD__ON_INPUT,[&](SubjectData subject){
     auto msg = static_cast<UserControllerInterface::EventBody*>(subject.get());
     gameStatus.keyBoardWait = KeyBoardWait::HIT;
     key = msg->key;
-//    std::cout << "KEYBOARD__ON_INPUT "<< msg->key.debug() << std::endl;
   });
   observer.interface()->addListener(ObserverEventList::TITLE_SCENE_ON_SELECT,[&](SubjectData subject){
     auto msg = static_cast<Title::EventBody*>(subject.get());
@@ -70,13 +69,13 @@ int main(){
 
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_ESCAPE,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
-    std::cout << "BATTLE_SCENE_ESCAPE ";
+//    std::cout << "BATTLE_SCENE_ESCAPE ";
     gameStatus = GameSeaneStatus::MAP_VIEW;
   });
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_WIN,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
     //todo 倒した敵情報をsharedで取得し、削除する。mapSeaneが削除する。
-    std::cout << "BATTLE_SCENE_WIN ";
+//    std::cout << "BATTLE_SCENE_WIN ";
     gameStatus = GameSeaneStatus::MAP_VIEW;
     if(!mapScene->eraseEnemy(msg->enemy)){
       mapScene->eraseBoss();
@@ -84,12 +83,12 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_LOSE,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
-    std::cout << "BATTLE_SCENE_LOSE ";
+//    std::cout << "BATTLE_SCENE_LOSE ";
     gameStatus = GameSeaneStatus::GAME_OVER;
   });
 
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_START,[&](SubjectData subject){
-    std::cout << "MAP_SCENE__SELECT_WARP_START ";
+//    std::cout << "MAP_SCENE__SELECT_WARP_START ";
     if(gameInformation.mapLevel == 1){
       log.emplace_back("これ以上もどれません");
       return;
@@ -104,7 +103,7 @@ int main(){
     }
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
-    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
+//    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
     if(gameInformation.mapLevel == MapInformation::getMapInfoList().size()-1){
       log.emplace_back("ゲームクリア");
       return;
@@ -130,7 +129,7 @@ int main(){
   Vector2 pos = Vector2::NONE;
 
   pos = mapScene->getRandomNonePosition();
-  player = std::make_shared<Player>(pos.x,pos.y,11);
+  player = std::make_shared<Player>(pos.x,pos.y,1);
   mapScene->setPlayer(player,false);
 
   printf("\033[;H\033[2J");
@@ -138,7 +137,7 @@ int main(){
   for(int i=0;gameStatus != GameSeaneStatus::GAME_OVER;i++) {
     //    system("clear");
 
-    std::cout << "gameStatus " << gameStatus.log() << std::endl;
+//    std::cout << "gameStatus " << gameStatus.log() << std::endl;
     while (1) { /* キーが押されるまで待つ */
       if (gameStatus.keyBoardWait != KeyBoardWait::WAIT) {
         break;
@@ -148,7 +147,7 @@ int main(){
     if(prevGameStatus != gameStatus){
       prevGameStatus = gameStatus;
       log.clear();
-      log.push_back("status check");
+//      log.push_back("status check");
       continue;
     }
 
@@ -189,4 +188,6 @@ int main(){
     }
     log.clear();
   }
+  std::cout << "game over" << std::endl;
+  keyBoardController.stopInputMonitoring();//スレッド終了
 }
