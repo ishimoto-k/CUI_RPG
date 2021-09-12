@@ -48,48 +48,70 @@ void BattleScene::Esc(){};
 
 void BattleScene::update() {
   //戦闘ロジック
+  auto body = std::make_shared<EventBody>();
   if (state == State::Action) {
     log.clear(); //バトルログを消す
     turnStart(player, enemy);
+    if (enemy->parameter.HP <= 0) {
+      goto win;
+    }
+    if (player->parameter.HP <= 0) {
+      goto lose;
+    }
     action(player, enemy, selection);
     if (enemy->parameter.HP <= 0) {
-      enemy->parameter.HP = 0;
-      auto body = std::make_shared<EventBody>();
-      log.push_back("\033[4m\033[1m" + enemy->name() + "を倒した" +
-                    "\033[0m");
-      log.push_back(std::to_string(enemy->parameter.EXP) +
-                    "の経験値を獲得した");
-      if (player->addExp(enemy->parameter.EXP)) {
-        log.push_back(player->name() + "はレベルアップし、");
-        log.push_back(std::to_string(player->parameter.level) + "になった");
-        auto info = player->getGotSkills();
-        if (!info.empty()) {
-          for (auto skill = info.begin(); skill != info.end(); skill++) {
-            log.push_back((*skill)->name() + "を覚えた");
-          }
-        }
-      }
-      isWin_ = true;
-      body->state = State::Win;
-      body->enemy = enemy;
-      notify(ObserverEventList::BATTLE_SCENE_WIN, body);
-      goto finish;
+      goto win;
+    }
+    if (player->parameter.HP <= 0) {
+      goto lose;
     }
     turnStart(enemy,player);
-    action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));
-    if (player->parameter.HP <= 0) {
-      player->parameter.HP = 0;
-      auto body = std::make_shared<EventBody>();
-      log.push_back(player->name() + "は敗北した");
-      body->state = State::Lose;
-      notify(ObserverEventList::BATTLE_SCENE_LOSE, body);
-      goto finish;
+    if (enemy->parameter.HP <= 0) {
+      goto win;
     }
+    if (player->parameter.HP <= 0) {
+      goto lose;
+    }
+    action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));
+    if (enemy->parameter.HP <= 0) {
+      goto win;
+    }
+    if (player->parameter.HP <= 0) {
+      goto lose;
+    }
+    goto finish;
+  win:
+    enemy->parameter.HP = 0;
+    log.push_back("\033[4m\033[1m" + enemy->name() + "を倒した" +
+                  "\033[0m");
+    log.push_back(std::to_string(enemy->parameter.EXP) +
+                  "の経験値を獲得した");
+    if (player->addExp(enemy->parameter.EXP)) {
+      log.push_back(player->name() + "はレベルアップし、");
+      log.push_back(std::to_string(player->parameter.level) + "になった");
+      auto info = player->getGotSkills();
+      if (!info.empty()) {
+        for (auto skill = info.begin(); skill != info.end(); skill++) {
+          log.push_back((*skill)->name() + "を覚えた");
+        }
+      }
+    }
+    isWin_ = true;
+    body->state = State::Win;
+    body->enemy = enemy;
+    notify(ObserverEventList::BATTLE_SCENE_WIN, body);
+    goto finish;
+  lose:
+    player->parameter.HP = 0;
+    log.push_back(player->name() + "は敗北した");
+    body->state = State::Lose;
+    notify(ObserverEventList::BATTLE_SCENE_LOSE, body);
   finish:
     state = State::CommandSelect;
     turnCounter++;
     selectList = commands;
     cursor = 0;
+    return;
     //ターン終了
   }
 }
