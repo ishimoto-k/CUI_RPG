@@ -36,10 +36,10 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
         continue;
       Parameter parameter;
       parameter.ID = node["ID"].as<int>();
-      parameter.maxHP = node["HP"].as<int>();
-      parameter.maxMP = node["MP"].as<int>();
-      parameter.POW = node["POW"].as<int>();
-      parameter.DEX = node["DEX"].as<int>();
+      parameter.HP = parameter.maxHP = node["HP"].as<int>();
+      parameter.MP = parameter.maxMP = node["MP"].as<int>();
+      parameter.POW = parameter.maxPOW =  node["POW"].as<int>();
+      parameter.DEX = parameter.maxDEX =  node["DEX"].as<int>();
       parameter.EXP = node["EXP"].as<int>();
       parameter.level = node["LEVEL"].as<int>();
       //    parameter.skillIds = node["getSkill"].as<std::vector<int>>();

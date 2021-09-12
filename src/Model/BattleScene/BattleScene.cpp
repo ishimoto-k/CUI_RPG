@@ -37,6 +37,11 @@ void BattleScene::action(std::shared_ptr<Character> fromChara,
   //    log.push_back(fromChara->name()+"の"+command->name());
   //    log.push_back(toChara->name()+"に50のダメージ");
 }
+
+void BattleScene::turnStart(CharacterPtr fromChara, CharacterPtr toChara) {
+  // todo ダメージ計算とHP減少
+  fromChara->battleTurnStart(toChara,log);
+}
 void BattleScene::Left(){}
 void BattleScene::Right(){};
 void BattleScene::Esc(){};
@@ -45,6 +50,7 @@ void BattleScene::update() {
   //戦闘ロジック
   if (state == State::Action) {
     log.clear(); //バトルログを消す
+    turnStart(player, enemy);
     action(player, enemy, selection);
     if (enemy->parameter.HP <= 0) {
       enemy->parameter.HP = 0;
@@ -69,6 +75,7 @@ void BattleScene::update() {
       notify(ObserverEventList::BATTLE_SCENE_WIN, body);
       goto finish;
     }
+    turnStart(enemy,player);
     action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));
     if (player->parameter.HP <= 0) {
       player->parameter.HP = 0;

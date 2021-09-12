@@ -6,7 +6,7 @@
 #define APPEAL_PARAMETER_HPP
 #include <vector>
 #include <yaml-cpp/yaml.h>
-
+#include "Status/StatusEnum.hpp"
 class Parameter {
 public:
   int ID;
@@ -15,11 +15,14 @@ public:
   int DEX;
   int maxHP;
   int maxMP;
+  int maxPOW;
+  int maxDEX;
   int HP;
   int MP;
   int EXP;
   int targetEXP;
   std::vector<int> skillIds;
+  std::vector<TypeOfStatus> status = {};
   static const std::vector<Parameter>& getLevelList() {
     static std::vector<Parameter> levelList{};
     if (!levelList.empty())
@@ -36,8 +39,8 @@ public:
         Parameter parameter;
         parameter.HP = parameter.maxHP = node["HP"].as<int>();
         parameter.MP = parameter.maxMP = node["MP"].as<int>();
-        parameter.POW = node["POW"].as<int>();
-        parameter.DEX = node["DEX"].as<int>();
+        parameter.POW = parameter.maxPOW = node["POW"].as<int>();
+        parameter.DEX = parameter.maxDEX = node["DEX"].as<int>();
         parameter.targetEXP = node["needEXP"].as<int>();
         parameter.level = i;
         if (node["getSkill"])

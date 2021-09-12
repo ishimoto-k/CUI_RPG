@@ -63,6 +63,8 @@ public:
   void initBattleBefore()override {
     parameter.HP = parameter.maxHP;
     parameter.MP = parameter.maxMP;
+    parameter.POW = parameter.maxPOW;
+    parameter.DEX = parameter.maxDEX;
   }
   std::shared_ptr<CommandInterface> battleLogic(int turn,Parameter other){
     if(turn == 0)

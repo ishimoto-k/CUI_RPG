@@ -59,6 +59,7 @@ public:
   void setPlayer(std::shared_ptr<Player> playPtr);
   void setEnemy(std::shared_ptr<Enemy> enemyPtr);
   void action(CharacterPtr fromChara,CharacterPtr toChara,std::shared_ptr<CommandInterface> command);
+  void turnStart(CharacterPtr fromChara,CharacterPtr toChara);
   void Up() override;
   void Down() override;
   void Left() override;

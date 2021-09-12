@@ -13,10 +13,12 @@ target_link_libraries(Map dungeon)
 add_library(Skill STATIC
         Character/Skill/SkillsEntity.cpp
         Character/Command/Command.cpp
+        Character/Status/StatusEntity.cpp
         )
 target_include_directories(Skill INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/Character/Skill
         ${CMAKE_CURRENT_LIST_DIR}/Character/Command
+        ${CMAKE_CURRENT_LIST_DIR}/Character/Status
         )
 
 

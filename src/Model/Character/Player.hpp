@@ -7,7 +7,6 @@
 
 #include <Character.hpp>
 #include <MapObjectInterface.hpp>
-#include <Skill/SkillsCreate.hpp>
 #include <iostream>
 
 class Player :public MapObjectInterface,public Character{
@@ -50,6 +49,13 @@ public:
       return true;
     }
     return false;
+  }
+  void initBattleBefore() override {
+    parameter.HP = parameter.maxHP;
+    parameter.MP = parameter.maxMP;
+    parameter.POW = parameter.maxPOW;
+    parameter.DEX = parameter.maxDEX;
+    std::cout << " power "<<parameter.maxPOW << std::endl;
   }
 };
 #endif // APPEAL_PLAYER_HPP

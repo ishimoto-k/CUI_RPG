@@ -13,6 +13,7 @@ enum class TypeOfSkills : int{
   SLASH_LARGE,
   HEAL,
   HIGH_HEAL,
+  POWERUP,
 };
 
 class SkillsCreate {
