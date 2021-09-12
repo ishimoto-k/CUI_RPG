@@ -10,7 +10,7 @@ target_include_directories(Map INTERFACE
 target_link_libraries(Map dungeon)
 
 add_library(Skill STATIC
-        Character/Skill/Skills.cpp
+        Character/Skill/SkillsEntity.cpp
         Character/Command/Command.cpp
         )
 target_include_directories(Skill INTERFACE

@@ -9,6 +9,7 @@
 #include "../Parameter.hpp"
 class CommandInterface{
 public:
+  static int damageCalc(float level, float pow,float dex);
   virtual int id() = 0;
   virtual int mp() { return 0;}
   virtual std::string name() = 0;
@@ -17,12 +18,4 @@ public:
 };
 typedef CommandInterface SkillInterface;
 
-enum class TypeOfSkills : int{
-  SKILL = 100,
-  ESCAPE,
-  ATTACK = 1,
-  SLASH_MIDDLE,
-  SLASH_LARGE,
-  HEAL,
-};
 #endif // APPEAL_COMMANDINTERFACE_HPP

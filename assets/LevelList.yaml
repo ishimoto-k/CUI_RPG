@@ -1,8 +1,8 @@
 
 
 Level:
-  1 : {HP: 30 ,MP: 20, POW: 10, DEX: 3 , needEXP: 35,getSkill: [2]}
-  2 : {HP: 33 ,MP: 22, POW: 13, DEX: 7 , needEXP: 77, getSkill: [3]}
+  1 : {HP: 30 ,MP: 20, POW: 10, DEX: 11 , needEXP: 35,getSkill: [2]}
+  2 : {HP: 33 ,MP: 22, POW: 13, DEX: 11 , needEXP: 77, getSkill: [3]}
   3 : {HP: 39 ,MP: 28, POW: 20, DEX: 11, needEXP: 129, getSkill: [4]}
   4 : {HP: 43 ,MP: 30, POW: 22, DEX: 11, needEXP: 193 }
   5 : {HP: 45 ,MP: 32, POW: 24, DEX: 13, needEXP: 270 }

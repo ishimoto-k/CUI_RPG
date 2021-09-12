@@ -12,10 +12,10 @@ ENEMY:
   - name: 弱い敵
     ID: 1
     LEVEL: 2
-    HP: 40
+    HP: 36
     MP: 0
     POW: 5
-    DEX: 3
+    DEX: 2
     EXP: 15
     ViewPath: AsciiArt/enemy1
     Actions:

@@ -11,7 +11,7 @@ std::string Attack::description(){
   return "敵に攻撃します";
 };
 void Attack::update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){
-  int damage = from.POW - to.DEX;
+  int damage = damageCalc(from.level,from.POW ,to.DEX);
   to.HP -= damage;
   log->push_back(fromName+"の"+name());
   log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");

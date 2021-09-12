@@ -4,7 +4,9 @@
 
 #ifndef APPEAL_COMMAND_HPP
 #define APPEAL_COMMAND_HPP
+#include <random>
 #include "CommandInterface.hpp"
+
 class Attack :public CommandInterface{
   int id()override {return 1;}
   std::string name()override ;

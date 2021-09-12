@@ -8,7 +8,6 @@
 #include <Character.hpp>
 #include <MapObjectInterface.hpp>
 #include <Skill/SkillsCreate.hpp>
-#include <Skills.hpp>
 #include <iostream>
 
 class Player :public MapObjectInterface,public Character{
