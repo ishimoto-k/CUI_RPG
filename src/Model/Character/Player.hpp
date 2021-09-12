@@ -55,6 +55,8 @@ public:
     parameter.MP = parameter.maxMP;
     parameter.POW = parameter.maxPOW;
     parameter.DEX = parameter.maxDEX;
+    parameter.status.clear();
+    status.clear();
     std::cout << " power "<<parameter.maxPOW << std::endl;
   }
 };
