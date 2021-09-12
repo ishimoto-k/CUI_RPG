@@ -74,9 +74,6 @@ public:
       auto l = logic[select];
       command = l->execute(parameter,other);
       around ++;
-      if(around == logic.size()*2) {
-        return std::make_shared<Attack>();
-      }
     }while (!command);
     return command;
   }
