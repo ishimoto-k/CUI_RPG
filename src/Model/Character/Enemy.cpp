@@ -4,7 +4,13 @@
 
 #include "Enemy.hpp"
 
-void Enemy::view() { std::cout << "敵"; }
+void Enemy::view() {
+  if(isBoss_){
+    std::cout << "超";
+  }else{
+    std::cout << "敵";
+  }
+}
 bool Enemy::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
   if(isBoss_)
     return false;

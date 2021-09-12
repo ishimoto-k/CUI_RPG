@@ -108,10 +108,8 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
   drawBitMap[pos.y][pos.x] = BitMapKind::MAPOBJECT;
   mapObjects.push_back(warp_f);
   boss = nullptr;
-  std::cout << "boss" << mapInfo.boss << std::endl;
   if(mapInfo.boss != 0){
     boss = Enemy::create(mapInfo.boss);
-    std::cout << "create" << mapInfo.boss << std::endl;
     boss->set(pos);
     boss->setBoss();
   }
@@ -151,7 +149,6 @@ void MapScene::Down() { setPlayerDirection(Vector2::DOWN); };
 void MapScene::Left() { setPlayerDirection(Vector2::LEFT); }
 void MapScene::Right() { setPlayerDirection(Vector2::RIGHT); }
 void MapScene::Select() {
-  std::cout << "select" << std::endl;
   auto ptr = std::find_if(mapObjects.begin(),mapObjects.end(),[this](ObjectPtr objectPtr){
     return player->position() == objectPtr->position();
   });
@@ -244,7 +241,7 @@ void MapScene::view() {
     std::cout << std::endl;
   }
   std::cout << player->name() << std::endl;
-  std::cout << " Lv:" <<player->parameter.level << "\t";
+  std::cout << " LV:" <<player->parameter.level << "\t";
   std::cout << " HP:" << player->parameter.maxHP << "/" << player->parameter.HP << "\t";
   std::cout << "MP:" << player->parameter.maxMP << "/" << player->parameter.MP << std::endl;
   std::cout << " POW:" << player->parameter.POW << "\t DEX:" << player->parameter.DEX << std::endl;

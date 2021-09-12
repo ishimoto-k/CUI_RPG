@@ -57,7 +57,6 @@ public:
     parameter.DEX = parameter.maxDEX;
     parameter.status.clear();
     status.clear();
-    std::cout << " power "<<parameter.maxPOW << std::endl;
   }
 };
 #endif // APPEAL_PLAYER_HPP
