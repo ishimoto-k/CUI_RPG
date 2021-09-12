@@ -23,27 +23,37 @@ if (logicName == name::logicName()) {\
  return std::make_shared<name>(paramater,skillIds);\
 }
 
-int CommandInterface::damageCalc(float level, float pow,float dex) {
+int CommandInterface::damageCalc(float flevel,float tolevel, float pow,float dex) { //physical
   std::random_device seed_gen;
   std::default_random_engine engine(seed_gen());
-  std::uniform_real_distribution<> rand(0.9, 1.1);
-  auto p = pow/(1+dex*1.5);
-  std::cout << pow << " " << dex << " " << (1+dex*1.5) << " " << p << std::endl;
-  auto d = p * rand(engine);
-  if(d <= 0)
-    return 1;
-  return d;
+  std::uniform_real_distribution<> rand(0.9, 1.2);
+  float d = (1+dex*1.5*tolevel*1.2);
+  float attack = flevel*0.8*(float(pow)/d)*pow * rand(engine);
+  if(attack <= 0)
+    return seed_gen()%3+1;
+  return int(attack);
+}
+int magicCalc(float flevel, float fdex, float todex) { //physical
+  std::random_device seed_gen;
+  std::default_random_engine engine(seed_gen());
+  std::uniform_real_distribution<> rand(0.9, 1.2);
+  float d = (todex*1.1);
+  float attack = ((float(fdex)/d)+fdex) * rand(engine);
+  if(attack <= 0)
+    return seed_gen()%3+1;
+  return int(attack);
 }
 
 MAKE_SKILL(SlashMiddle,8,"大斬り","敵に中ダメージ"){
-  int damage = damageCalc(from.level,1.5*from.POW ,to.DEX);
+  int damage = damageCalc(from.level,to.level,1.5*from.POW ,to.DEX);
   to.HP -= damage;
+  from.MP -= mp();
   log->push_back(fromName+"の"+name());
   log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
 }
 
 MAKE_SKILL(SlashLarge,10,"渾身斬り","敵に大ダメージ"){
-  int damage = damageCalc(from.level,2*from.POW ,to.DEX);
+  int damage = damageCalc(from.level,to.level,2*from.POW ,to.DEX);
   to.HP -= damage;
   from.MP -= mp();
   std::stringstream ss;
@@ -53,7 +63,15 @@ MAKE_SKILL(SlashLarge,10,"渾身斬り","敵に大ダメージ"){
 }
 
 MAKE_SKILL(Heal,5,"ヒール","自身を回復"){
-  int heal = from.DEX/1.3;
+  int heal = magicCalc(from.level,from.DEX*0.8,from.DEX) + from.maxHP*0.1;//from.DEX/1.3;
+  from.HP += heal;
+  if(from.HP >= from.maxHP)from.HP = from.maxHP;
+  from.MP -= mp();
+  log->push_back(fromName+"の"+name());
+  log->push_back(fromName+"に"+std::to_string(heal)+"の回復");
+}
+MAKE_SKILL(HighHeal,10,"ハイヒール","自身を大回復"){
+  int heal = magicCalc(from.level,from.DEX*1.1,from.DEX) + from.maxHP*0.3;//from.DEX/1.3;
   from.HP += heal;
   if(from.HP >= from.maxHP)from.HP = from.maxHP;
   from.MP -= mp();
@@ -74,5 +92,7 @@ std::shared_ptr<CommandInterface> SkillsCreate::createCommand(TypeOfSkills skill
     return std::make_shared<SlashLarge>();
   case TypeOfSkills::HEAL:
     return std::make_shared<Heal>();
+  case TypeOfSkills::HIGH_HEAL:
+    return std::make_shared<HighHeal>();
   }
 };

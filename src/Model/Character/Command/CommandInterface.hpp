@@ -9,7 +9,7 @@
 #include "../Parameter.hpp"
 class CommandInterface{
 public:
-  static int damageCalc(float level, float pow,float dex);
+  static int damageCalc(float p_level,float e_level, float pow,float dex);
   virtual int id() = 0;
   virtual int mp() { return 0;}
   virtual std::string name() = 0;
