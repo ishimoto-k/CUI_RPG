@@ -185,6 +185,7 @@ int main(){
       gameScene->Cancel();
     } else if (key == Key::ESC) {
       gameScene->Esc();
+      gameStatus = GameSeaneStatus::GAME_OVER;
     }
     key = Key::NONE;
     gameStatus.keyBoardWait = KeyBoardWait::WAIT;
@@ -208,6 +209,6 @@ int main(){
     }
     log.clear();
   }
-  std::cout << "game over" << std::endl;
+  std::cout << "ゲーム終了" << std::endl;
   keyBoardController.stopInputMonitoring();//スレッド終了
 }
