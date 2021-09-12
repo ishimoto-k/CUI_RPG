@@ -71,13 +71,13 @@ int main(){
       gameInformation.create();
       mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
       auto pos = mapScene->getRandomNonePosition();
-      player = std::make_shared<Player>(pos.x,pos.y,1);
+      player = std::make_shared<Player>(pos.x,pos.y,0);
       mapScene->setPlayer(player,false);
       gameStatus = GameSeaneStatus::MAP_VIEW;
     }else if(msg->selectList == Title::SelectList::LOAD){
       mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
       auto pos = mapScene->getRandomNonePosition();
-      player = std::make_shared<Player>(pos.x,pos.y,1);
+      player = std::make_shared<Player>(pos.x,pos.y,gameInformation.getInfo().exp);
       mapScene->setPlayer(player,false);
       gameStatus = GameSeaneStatus::MAP_VIEW;
     }else if(msg->selectList == Title::SelectList::END){
@@ -112,6 +112,7 @@ int main(){
       return;
     }
     gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel-1;
+    gameInformation.getInfo().exp = player->parameter.EXP;
     gameInformation.save();
     log.push_back("セーブが完了しました");
     mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
@@ -124,11 +125,8 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
-    if(gameInformation.getInfo().mapLevel == MapInformation::getMapInfoList().size()-1){
-      log.emplace_back("ゲームクリア");
-      return;
-    }
     gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel+1;
+    gameInformation.getInfo().exp = player->parameter.EXP;
     gameInformation.save();
     log.push_back("セーブが完了しました");
     mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
@@ -137,6 +135,10 @@ int main(){
     mapScene->setPlayer(player,false);
     if(gameInformation.getInfo().mapClearStatus > gameInformation.getInfo().mapLevel){
       mapScene->eraseBoss();
+    }
+    if(gameInformation.getInfo().mapLevel == MapInformation::getMapInfoList().size()){
+      log.emplace_back("ゲームクリア");
+      return;
     }
   });
 

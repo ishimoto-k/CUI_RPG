@@ -61,6 +61,26 @@ public:
     }
     return Parameter();
   }
+  static Parameter loadFromExp(int exp){
+    auto list = getLevelList();
+    bool check = false;
+    for(auto l:list){
+      if(check){
+        if(l.targetEXP > exp){
+          auto p = l;
+          p.EXP = exp;
+          return p;
+        }
+        check = false;
+      }
+      if(l.targetEXP <= exp){
+        check = true;
+      }
+    }
+    auto p = loadFromLevel(1);
+    p.EXP = 0;
+    return p;
+  }
   static std::vector<int> loadSkillFromLevel(int level){
     auto list = getLevelList();
     std::vector<int> skills = {};

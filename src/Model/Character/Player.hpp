@@ -15,21 +15,14 @@ class Player :public MapObjectInterface,public Character{
   std::vector<Parameter> levelList;
   std::vector<std::shared_ptr<SkillInterface>> gotSkills;
 public:
-  Player(int x,int y,int level):MapObjectInterface(x,y) {
-    auto p = Parameter::loadFromLevel(level);
+  Player(int x,int y,int exp):MapObjectInterface(x,y) {
+    auto p = Parameter::loadFromExp(exp);
     parameter = p;
-    auto skillIds = Parameter::loadSkillFromLevel(level);
-    parameter.EXP = 0;
+    auto skillIds = Parameter::loadSkillFromLevel(p.level);
     for(auto id:skillIds){
       auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));
       skill.push_back(s);
     }
-//
-//    skill = std::vector<std::shared_ptr<CommandInterface>>{
-//        std::make_shared<SlashMiddle>(),
-//        std::make_shared<SlashLarge>(),
-//        std::make_shared<Heal>(),
-//    };
   }
   std::string name() override {
     return "冒険者";

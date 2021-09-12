@@ -81,7 +81,7 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
 }
 std::shared_ptr<Enemy> Enemy::create(int id){
   auto list = getEnemyList();
-  if(id < list.size()){
+  if(id <= list.size()){
     std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>();
     auto itr = std::find_if(list.begin(),list.end(),[id](Enemy enemy){
       return enemy.parameter.ID == id;

@@ -88,8 +88,10 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
   });
   mapObjects.push_back(warp_f);
   boss = nullptr;
+  std::cout << "boss" << mapInfo.boss << std::endl;
   if(mapInfo.boss != 0){
     boss = Enemy::create(mapInfo.boss);
+    std::cout << "create" << mapInfo.boss << std::endl;
     boss->set(pos);
     boss->setBoss();
   }
