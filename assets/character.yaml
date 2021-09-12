@@ -21,7 +21,6 @@ ENEMY:
     Actions:
       - { Logic: HPIsLow, parameter: [30],commands: [2]}
       - { Logic: Random , commands: [1]}
-      - { Logic: HPIsLow, parameter: [30],commands: [1]}
   - name: やや弱い敵
     ID: 2
     LEVEL: 5

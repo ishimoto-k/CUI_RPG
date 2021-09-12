@@ -34,6 +34,7 @@ public:
       }
     }
     bool operator ==(Kind k){ return k == kind;}
+    bool operator ==(SelectList k){ return k.kind == kind;}
   private:
     Kind kind;
   };
@@ -54,6 +55,12 @@ public:
       SelectList::LOAD,
       SelectList::END,
   };
+  void setCursor(SelectList list){
+    auto itr = std::find_if(selectList.begin(),selectList.end(),[&](SelectList select){
+      return list == select;
+    });
+    cursor = std::distance(selectList.begin(),itr);
+  }
   void Up() override {
     cursor = cursor-1;
     if(-1 == cursor)cursor = selectList.size()-1;

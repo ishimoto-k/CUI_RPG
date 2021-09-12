@@ -17,6 +17,8 @@
 
 int main(){
   GameInformation gameInformation;
+  gameInformation.setSlot(0);
+
   GameSeaneStatus gameStatus = GameSeaneStatus::TITLE;
   GameSeaneStatus prevGameStatus = gameStatus;
   KeyBoardController keyBoardController;
@@ -27,6 +29,9 @@ int main(){
   std::shared_ptr<Player> player = nullptr;
 
   std::shared_ptr<GameSceneInterface> gameScene = titleScene; //起動時はタイトル画面
+  if(gameInformation.hasSaveFile()){
+    titleScene->setCursor(Title::SelectList::LOAD);
+  }
 
   Key key = Key::NONE;
   Observer observer;
@@ -63,6 +68,17 @@ int main(){
   observer.interface()->addListener(ObserverEventList::TITLE_SCENE_ON_SELECT,[&](SubjectData subject){
     auto msg = static_cast<Title::EventBody*>(subject.get());
     if(msg->selectList == Title::SelectList::START){
+      gameInformation.create();
+      mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
+      auto pos = mapScene->getRandomNonePosition();
+      player = std::make_shared<Player>(pos.x,pos.y,1);
+      mapScene->setPlayer(player,false);
+      gameStatus = GameSeaneStatus::MAP_VIEW;
+    }else if(msg->selectList == Title::SelectList::LOAD){
+      mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
+      auto pos = mapScene->getRandomNonePosition();
+      player = std::make_shared<Player>(pos.x,pos.y,1);
+      mapScene->setPlayer(player,false);
       gameStatus = GameSeaneStatus::MAP_VIEW;
     }else if(msg->selectList == Title::SelectList::END){
       gameStatus = GameSeaneStatus::GAME_OVER;
@@ -91,31 +107,35 @@ int main(){
 
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_START,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE__SELECT_WARP_START ";
-    if(gameInformation.mapLevel == 1){
+    if(gameInformation.getInfo().mapLevel == 1){
       log.emplace_back("これ以上もどれません");
       return;
     }
-    gameInformation.mapLevel = gameInformation.mapLevel-1;
-    mapScene->makeDungeon(gameInformation.mapLevel);
+    gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel-1;
+    gameInformation.save();
+    log.push_back("セーブが完了しました");
+    mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
     auto pos = mapScene->getRandomNonePosition();
     player->set(pos);
     mapScene->setPlayer(player,true);
-    if(gameInformation.mapClearStatus >= gameInformation.mapLevel){
+    if(gameInformation.getInfo().mapClearStatus >= gameInformation.getInfo().mapLevel){
       mapScene->eraseBoss();
     }
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
-    if(gameInformation.mapLevel == MapInformation::getMapInfoList().size()-1){
+    if(gameInformation.getInfo().mapLevel == MapInformation::getMapInfoList().size()-1){
       log.emplace_back("ゲームクリア");
       return;
     }
-    gameInformation.mapClearStatus = gameInformation.mapLevel = gameInformation.mapLevel+1;
-    mapScene->makeDungeon(gameInformation.mapLevel);
+    gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel+1;
+    gameInformation.save();
+    log.push_back("セーブが完了しました");
+    mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
     auto pos = mapScene->getRandomNonePosition();
     player->set(pos);
     mapScene->setPlayer(player,false);
-    if(gameInformation.mapClearStatus > gameInformation.mapLevel){
+    if(gameInformation.getInfo().mapClearStatus > gameInformation.getInfo().mapLevel){
       mapScene->eraseBoss();
     }
   });
@@ -127,12 +147,8 @@ int main(){
 
   battleScene->addObserver(observer);
   mapScene->addObserver(observer);
-  mapScene->makeDungeon(gameInformation.mapLevel);
   Vector2 pos = Vector2::NONE;
 
-  pos = mapScene->getRandomNonePosition();
-  player = std::make_shared<Player>(pos.x,pos.y,1);
-  mapScene->setPlayer(player,false);
 
   printf("\033[;H\033[2J");
   gameScene->view();
