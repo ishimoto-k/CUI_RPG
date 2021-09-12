@@ -3,6 +3,7 @@
 //
 
 #include "MapScene.hpp"
+#include "HealPoint.hpp"
 
 void MapScene::makeDungeon(int level) {
   mapInfo = MapInformation::getMapInfo(level - 1);
@@ -11,6 +12,24 @@ void MapScene::makeDungeon(int level) {
   enemies.clear();
   buildEnemies();
   setEnemy(enemies);
+  for(auto i = 0; i < mapInfo.heal;i++){
+    auto pos = getRandomNonePosition();
+    auto heal = std::make_shared<HealPoint>(pos.x,pos.y);
+    heal->setOnSelectCallback([this,heal](){
+      if(heal->use()){
+        log.push_back("回復スポットに触れた。");
+        log.push_back("しかし何も起きなかった。");
+        return;
+      }
+      player->parameter.HP = player->parameter.maxHP;
+      player->parameter.MP = player->parameter.maxMP;
+      heal->use(true);
+      log.push_back("回復スポットに触れた。");
+      log.push_back("\033[32m全回復\033[39mした。");
+    });
+    drawBitMap[pos.y][pos.x] = BitMapKind::MAPOBJECT;
+    mapObjects.push_back(heal);
+  }
 }
 void MapScene::buildEnemies() {
   std::random_device seed_gen;
@@ -86,6 +105,7 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
       notify(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL);
     }
   });
+  drawBitMap[pos.y][pos.x] = BitMapKind::MAPOBJECT;
   mapObjects.push_back(warp_f);
   boss = nullptr;
   std::cout << "boss" << mapInfo.boss << std::endl;
@@ -214,10 +234,8 @@ void MapScene::view() {
       }
       else if (drawBitMap[y][x] == WALL) /* 移動可能な床 */
         printf("\033[41m　\033[49m");      /* ← 注）全角スペース */
-      else if (drawBitMap[y][x] == NONE)   /* 壁 */
+      else if (drawBitMap[y][x] == NONE || drawBitMap[y][x] == BitMapKind::MAPOBJECT)
         printf("　");
-      else if (drawBitMap[y][x] == 2) /* 塗った床 */
-        printf("ｘ");
 
       if(tmpObject){
         tmpObject->backViewEnd();

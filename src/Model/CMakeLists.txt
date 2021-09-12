@@ -2,6 +2,7 @@
 
 add_library(Map STATIC
         Map/Warp.cpp
+        Map/HealPoint.cpp
         Map/MapScene.cpp
         )
 target_include_directories(Map INTERFACE

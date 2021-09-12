@@ -15,6 +15,7 @@ public:
   int roomsMin;
   int roomsMax;
   int enemies;
+  int heal;
   std::vector<int> typeOfEnemy;
   int boss;
 
@@ -37,6 +38,7 @@ public:
         parameter.roomsMin = node["roomsMin"].as<int>();
         parameter.roomsMax = node["roomsMax"].as<int>();
         parameter.enemies = node["enemies"].as<int>();
+        parameter.heal = node["heal"].as<int>();
         parameter.typeOfEnemy = node["enemyKind"].as<std::vector<int>>();
         parameter.boss = node["boss"].as<int>();
         mapInfoList.push_back(parameter);
@@ -60,6 +62,7 @@ public:
     parameter.roomsMin = 1;
     parameter.roomsMax = 2;
     parameter.enemies = 1;
+    parameter.heal = 0;
     parameter.typeOfEnemy = {1,2};
     parameter.boss = 0;
     return parameter;

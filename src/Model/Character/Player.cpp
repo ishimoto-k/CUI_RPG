@@ -10,7 +10,7 @@ bool Player::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vec
 }
 bool Player::move(const BitMap& bitMap,const Vector2& direction,std::function<void(BitMapKind,Vector2,Vector2)> callback) {
   auto pos = position_ + direction;
-  if (at(bitMap, pos) == NONE) {
+  if (at(bitMap, pos) == NONE || at(bitMap, pos) == MAPOBJECT) {
     position_ = pos;
     return false;
   } else{

@@ -34,6 +34,7 @@ enum BitMapKind {
   NONE,
   PLAYER,
   ENEMY,
+  MAPOBJECT,
   BUILDING_WALL = 100,
 };
 typedef std::vector<std::vector<BitMapKind>> BitMap;

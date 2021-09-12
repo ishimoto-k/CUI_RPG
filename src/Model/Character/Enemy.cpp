@@ -15,7 +15,7 @@ bool Enemy::move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vect
     if (bit != NONE && bit != WALL) {
       callback(bit,dir,position_);
       return true;
-    } else if(bit == NONE){
+    } else if(bit == NONE || bit == MAPOBJECT){
       position_ = dir;
       return false;
     }
