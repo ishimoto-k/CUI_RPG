@@ -24,12 +24,18 @@ if (logicName == name::logicName()) {\
 MAKE_STATUS(NoneStatus,0,""){}
 
 MAKE_STATUS(PowerUpStatus,1,"攻撃力アップ"){
-  from.POW = float(from.maxPOW)*1.2;
-//  std::cout << "攻撃力アップ" << from.POW  <<std::endl;
+  from.POW = float(from.maxPOW)*2.2;
+  std::cout << "攻撃力アップ" << from.POW  <<std::endl;
 }
 
 MAKE_STATUS(DefenceUpStatus,2,"守備力アップ"){
-  to.DEX = from.maxDEX*1.1;
+  from.DEX = from.maxDEX*1.1;
+}
+
+
+MAKE_STATUS(PoisonStatus,3,"毒状態"){
+  from.HP = from.HP - 2;
+  log->push_back(fromName+"は毒で2ダメージ食らった");
 }
 
 
@@ -41,6 +47,7 @@ std::shared_ptr<StatusInterface> StatusCreate::createStatus(TypeOfStatus status)
     return std::make_shared<PowerUpStatus>();
   case TypeOfStatus::DEFENCE_UP:
     return std::make_shared<DefenceUpStatus>();
+  case TypeOfStatus::POISON:
+    return std::make_shared<PoisonStatus>();
   }
-
-};
+}

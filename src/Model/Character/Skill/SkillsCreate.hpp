@@ -14,6 +14,8 @@ enum class TypeOfSkills : int{
   HEAL,
   HIGH_HEAL,
   POWERUP,
+  DEFUP,
+  POISON,
 };
 
 class SkillsCreate {

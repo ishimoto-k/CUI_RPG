@@ -9,6 +9,7 @@ enum class TypeOfStatus: int{
   NONE = 0,
   POWER_UP ,
   DEFENCE_UP,
+  POISON,
 };
 
 #endif // APPEAL_STATUSENUM_HPP

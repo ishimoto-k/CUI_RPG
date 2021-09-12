@@ -96,6 +96,17 @@ MAKE_SKILL(PowerUp,10,"ちからため","自身の攻撃力をあげる"){
   log->push_back(fromName+"は攻撃力が上がった");
 }
 
+MAKE_SKILL(DefUp,0,"防御","1ターン身を守る"){
+  from.DEX = from.maxDEX + 50;
+  log->push_back(fromName+"は身を守った");
+}
+
+
+MAKE_SKILL(Poison,1,"毒攻撃","相手を毒にする"){
+  to.status.push_back(TypeOfStatus::POISON);
+  log->push_back(toName+"は毒になった");
+}
+
 std::shared_ptr<CommandInterface>
 SkillsCreate::createCommand(TypeOfSkills skill) {
   switch (skill){
@@ -114,5 +125,9 @@ SkillsCreate::createCommand(TypeOfSkills skill) {
     return std::make_shared<HighHeal>();
   case TypeOfSkills::POWERUP:
     return std::make_shared<PowerUp>();
+  case TypeOfSkills::DEFUP:
+    return std::make_shared<DefUp>();
+  case TypeOfSkills::POISON:
+    return std::make_shared<Poison>();
   }
 };
