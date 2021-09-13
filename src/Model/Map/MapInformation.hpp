@@ -6,7 +6,7 @@
 #define APPEAL_MAPINFORMATION_HPP
 
 #include <yaml-cpp/yaml.h>
-
+#include <Defines.hpp>
 class MapInformation {
 public:
   int level;
@@ -23,7 +23,7 @@ public:
     static std::vector<MapInformation> mapInfoList{};
     if (!mapInfoList.empty())
       return mapInfoList;
-    std::string fileName = "assets/mapInformation.yaml";
+    std::string fileName = define::AssetsMapInformation();
     try {
       auto nodes = YAML::LoadFile(fileName);
       for (auto i = 0; i < nodes["MAP"].size(); i++) {
@@ -46,7 +46,7 @@ public:
       std::cout << fileName << "の読み込み成功" << std::endl;
     }catch (YAML::Exception &e) {
       std::cout << fileName << "が存在しません。終了します。" << std::endl;
-      exit(-1);
+//      exit(-1);
     }
     return mapInfoList;
   }

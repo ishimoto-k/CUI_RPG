@@ -9,7 +9,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <Defines.hpp>
 #include "../GameSceneInterface.hpp"
+
 
 class Title : public GameSceneInterface{
   int cursor = 0;
@@ -44,7 +46,7 @@ public:
     EventBody(SelectList sel):selectList(sel){}
   };
   Title(){
-    std::ifstream ifs("assets/title");
+    std::ifstream ifs(define::AssetsTitle());
     std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                    std::istreambuf_iterator<char>());
     frontView = text;

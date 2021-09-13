@@ -6,6 +6,7 @@
 #define APPEAL_PARAMETER_HPP
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include <Defines.hpp>
 #include "Status/StatusEnum.hpp"
 class Parameter {
 public:
@@ -28,7 +29,7 @@ public:
     if (!levelList.empty())
       return levelList;
 
-    auto fileName = "assets/LevelList.yaml";
+    auto fileName = define::AssetsLevelList();
     try {
       auto nodes = YAML::LoadFile(fileName);
       for (auto i = 1; i <= nodes["Level"].size(); i++) {
@@ -50,7 +51,7 @@ public:
       std::cout << fileName << "の読み込み成功" << std::endl;
     } catch (YAML::Exception &e) {
       std::cout << fileName << "が存在しません。終了します。" << std::endl;
-      exit(-1);
+//      exit(-1);
     }
     return levelList;
   }

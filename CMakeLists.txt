@@ -39,5 +39,5 @@ target_link_libraries(example_battle_scene BattleScene)
 
 add_executable(example_exp_calc research/ExampleExpCalculation.cpp)
 
-#add_custom_command(TARGET Appeal POST_BUILD COMMAND
-#        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Appeal>/assets)
+add_custom_command(TARGET Appeal POST_BUILD COMMAND
+        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Appeal>/assets)

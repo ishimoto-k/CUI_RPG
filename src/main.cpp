@@ -12,10 +12,14 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-
+#include <Defines.hpp>
 #include "GameInformation.hpp"
 
 int main(){
+  if(!define::haveConfigFileCheck()){
+    std::cout << "ゲームを起動できませんでした。" << std::endl;
+    return -1;
+  }
   GameInformation gameInformation;
   gameInformation.setSlot(0);
 

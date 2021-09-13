@@ -3,7 +3,7 @@
 //
 
 #include "Enemy.hpp"
-
+#include <Defines.hpp>
 void Enemy::view() {
   if(isBoss_){
     std::cout << "超";
@@ -32,7 +32,7 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
   static std::vector<Enemy> enemyList{};
   if(!enemyList.empty())
     return enemyList;
-  std::string fileName = "assets/character.yaml";
+  std::string fileName = define::AssetsCharacter();
   try {
     auto nodes = YAML::LoadFile(fileName);
     for (auto i = 0; i < nodes["ENEMY"].size(); i++) {
@@ -69,7 +69,7 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
       std::ifstream ifs(viewFile);
       if(!ifs.is_open()){
         std::cout << viewFile << "が存在しません。終了します。" << std::endl;
-        exit(-1);
+//        exit(-1);
       }
       std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                      std::istreambuf_iterator<char>());
@@ -81,7 +81,6 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
     std::cout << fileName << "の読み込み成功" << std::endl;
   }catch (YAML::Exception& e) {
     std::cout << fileName << "が存在しません。終了します。" << std::endl;
-    exit(-1);
   }
   return enemyList;
 }

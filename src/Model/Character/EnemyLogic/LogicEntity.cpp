@@ -62,6 +62,9 @@ std::shared_ptr<EnemyLogicInterface> EnemyLogicCreate::createLogic(std::string l
   if (logicName == "HPIsLow") {
     return std::make_shared<HPIsLowLogic>(paramater,skillIds);
   }
+  if (logicName == "HPIsHigh") {
+    return std::make_shared<HPIsLowLogic>(paramater,skillIds);
+  }
 
   return std::make_shared<RandomLogic>(paramater,skillIds);
 };
