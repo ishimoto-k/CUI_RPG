@@ -17,15 +17,15 @@ void MapScene::makeDungeon(int level) {
     auto heal = std::make_shared<HealPoint>(pos.x,pos.y);
     heal->setOnSelectCallback([this,heal](){
       if(heal->use()){
-        log.push_back("回復スポットに触れた。");
-        log.push_back("しかし何も起きなかった。");
+        log.emplace_back("回復スポットに触れた。");
+        log.emplace_back("しかし何も起きなかった。");
         return;
       }
       player->parameter.HP = player->parameter.maxHP;
       player->parameter.MP = player->parameter.maxMP;
       heal->use(true);
-      log.push_back("回復スポットに触れた。");
-      log.push_back("\033[32m全回復\033[39mした。");
+      log.emplace_back("回復スポットに触れた。");
+      log.emplace_back("\033[32m全回復\033[39mした。");
     });
     drawBitMap[pos.y][pos.x] = BitMapKind::MAPOBJECT;
     mapObjects.push_back(heal);

@@ -131,7 +131,7 @@ void BattleScene::Select() {
       state = State::Action;
     } else {
       log.clear();
-      log.push_back("MPが足りない");
+      log.emplace_back("MPが足りない");
     }
   } else {
     auto command = commands[cursor];
@@ -152,7 +152,7 @@ void BattleScene::Select() {
       selection = commands[2];
       state = State::ESCAPE;
       log.clear();
-      log.push_back("戦闘から離脱しました");
+      log.emplace_back("戦闘から離脱しました");
       auto body = std::make_shared<EventBody>();
       body->state = state;
       notify(ObserverEventList::BATTLE_SCENE_ESCAPE, body);
@@ -160,6 +160,7 @@ void BattleScene::Select() {
     }
   }
 }
+
 void BattleScene::view() {
   std::cout << std::endl << enemy->frontView() << std::endl;
   std::cout << enemy->name() << std::endl
@@ -188,9 +189,8 @@ void BattleScene::view() {
       std::cout << (*command)->name();
       if (state == State::SkillSelect) {
         if (player->parameter.MP < (*command)->mp()) {
-          std::cout << "　"
-                    << "\t\033[2m" << (*command)->mp() << "\033[0m"
-                    << std::endl;
+          //MP足りない場合は灰色文字
+          std::cout << "\t\033[2m" << (*command)->mp() << "\033[0m" << std::endl;
         } else {
           std::cout << "　\t" << (*command)->mp() << std::endl;
         }
