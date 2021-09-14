@@ -73,7 +73,7 @@ MAKE_SKILL(SlashLarge,10,"渾身斬り","敵に大ダメージ"){
 }
 
 MAKE_SKILL(Heal,5,"ヒール","自身を回復"){
-  int heal = magicCalc(from.level,from.DEX*0.8,from.DEX) + from.maxHP*0.1;//from.DEX/1.3;
+  int heal = magicCalc(from.level,from.DEX*0.9,from.DEX) + from.maxHP*0.3;//from.DEX/1.3;
   from.HP += heal;
   if(from.HP >= from.maxHP)from.HP = from.maxHP;
   from.MP -= mp();
@@ -81,7 +81,7 @@ MAKE_SKILL(Heal,5,"ヒール","自身を回復"){
   log->push_back(fromName+"に"+std::to_string(heal)+"の回復");
 }
 MAKE_SKILL(HighHeal,10,"ハイヒール","自身を大回復"){
-  int heal = magicCalc(from.level,from.DEX*1.1,from.DEX) + from.maxHP*0.3;//from.DEX/1.3;
+  int heal = magicCalc(from.level,from.DEX*1.3,from.DEX) + from.maxHP*0.5;//from.DEX/1.3;
   from.HP += heal;
   if(from.HP >= from.maxHP)from.HP = from.maxHP;
   from.MP -= mp();
@@ -101,9 +101,21 @@ MAKE_SKILL(DefUp,0,"防御","1ターン身を守る"){
 }
 
 
-MAKE_SKILL(Poison,1,"毒攻撃","相手を毒にする"){
-  to.status.push_back(TypeOfStatus::POISON);
-  log->push_back(toName+"は毒になった");
+MAKE_SKILL(Poison,6,"毒攻撃","相手にダメージ与えて毒にする"){
+  int damage = damageCalc(from.level,to.level,1.05*from.POW ,to.DEX);
+  to.HP -= damage;
+  from.MP -= mp();
+  std::stringstream ss;
+  ss << fromName << "は" << name() << "を放った。";
+  log->push_back(ss.str());
+  log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
+  std::random_device seed_gen;
+  std::default_random_engine engine(seed_gen());
+  std::uniform_real_distribution<> rand(0.0, 1.0);
+  if(rand(engine) > 0.5){
+    log->push_back(toName+"は毒になった");
+    to.status.push_back(TypeOfStatus::POISON);
+  }
 }
 
 std::shared_ptr<CommandInterface>

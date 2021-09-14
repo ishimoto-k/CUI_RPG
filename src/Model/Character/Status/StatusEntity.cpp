@@ -5,14 +5,17 @@
 #include "StatusCreate.hpp"
 #include <random>
 
-#define MAKE_STATUS(classname,id_,statusName) \
-class classname : public StatusInterface{ \
+#define MAKE_STATUS(classname,id_,statusName,turn_) \
+class classname : public StatusInterface{              \
 public: \
-  int id() override { return id_;} \
+  int id() override { return static_cast<int>(id_);}                     \
+  int turn = turn_+1;\
+  bool check(){return turn <= 0;}\
   std::string name() override { return statusName;} \
-  void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log) override; \
+  bool update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log) override; \
 }; \
-void classname::update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log)
+bool classname::update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log)
+
 
 
 #define CHECK_AND_CREATE_RETURN(name)   \
@@ -21,21 +24,48 @@ if (logicName == name::logicName()) {\
 }
 
 
-MAKE_STATUS(NoneStatus,0,""){}
-
-MAKE_STATUS(PowerUpStatus,1,"攻撃力アップ"){
-  from.POW = float(from.maxPOW)*2.2;
-  std::cout << "攻撃力アップ" << from.POW  <<std::endl;
+MAKE_STATUS(NoneStatus, TypeOfStatus::NONE,"",0){
+  return true;
 }
 
-MAKE_STATUS(DefenceUpStatus,2,"守備力アップ"){
-  from.DEX = from.maxDEX*1.1;
+MAKE_STATUS(PowerUpStatus,TypeOfStatus::POWER_UP,"攻撃力アップ",3){
+  turn--;
+  if(check()){
+    if(turn == 0){
+      log->push_back("攻撃力が元に戻った");
+    }
+    return true;
+  }
+  from.POW = float(from.POW)*2.2;
+  return false;
+}
+
+MAKE_STATUS(DefenceUpStatus,TypeOfStatus::DEFENCE_UP,"守備力アップ",3){
+  turn--;
+  if(check()){
+    if(turn == 0){
+      log->push_back("守備力が元に戻った");
+    }
+    return true;
+  }
+  from.DEX = from.DEX*1.1;
+  return false;
 }
 
 
-MAKE_STATUS(PoisonStatus,3,"毒状態"){
-  from.HP = from.HP - 2;
-  log->push_back(fromName+"は毒で2ダメージ食らった");
+MAKE_STATUS(PoisonStatus,TypeOfStatus::POISON,"毒状態",5){
+  turn--;
+  if(check()){
+    if(turn == 0){
+      log->push_back("毒が治った");
+    }
+    return true;
+  }
+  int damage = to.maxPOW/3;
+  from.HP = from.HP - damage;
+  log->push_back(fromName+"は毒で" + std::to_string(damage) +"ダメージ食らった");
+  std::cout << "毒" << turn << std::endl;
+  return false;
 }
 
 

@@ -16,7 +16,11 @@ public:
   virtual std::string name() = 0;
   std::vector<std::shared_ptr<SkillInterface>> skill;
   std::vector<std::shared_ptr<StatusInterface>> status;
-  virtual void initBattleBefore(){};
+  virtual void initBattleBefore(){}
+  virtual void initTurnBefore(){
+    parameter.DEX = parameter.maxDEX;
+    parameter.POW = parameter.maxPOW;
+  };
   virtual bool addExp(int exp){return false;};
   virtual void battleTurnStart(std::shared_ptr<Character> toChara,std::vector<std::string> &log){
     std::sort(parameter.status.begin(), parameter.status.end());
@@ -30,10 +34,20 @@ public:
         status.push_back(createSt);
       }
     }
-    for(auto st: status){
-      st->update(name(), toChara->name(), parameter, toChara->parameter, &log);
+    for(auto st=status.begin(); st!=status.end();){
+      if((*st)->update(name(), toChara->name(), parameter, toChara->parameter, &log)){
+        for(auto p_st=parameter.status.begin();p_st!=parameter.status.end();){
+          if(static_cast<int>(*p_st) == (*st)->id()){
+            p_st = parameter.status.erase(p_st);
+          }else{
+            ++p_st;
+          }
+        }
+        st = status.erase(st);
+      }else{
+        ++st;
+      }
     }
-    return;
   }
 };
 

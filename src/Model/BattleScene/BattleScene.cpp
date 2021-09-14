@@ -51,6 +51,8 @@ void BattleScene::update() {
   auto body = std::make_shared<EventBody>();
   if (state == State::Action) {
     log.clear(); //バトルログを消す
+    player->initTurnBefore();
+    enemy->initTurnBefore();
     turnStart(player, enemy);
     if (enemy->parameter.HP <= 0) {
       goto win;

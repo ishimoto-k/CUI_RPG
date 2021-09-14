@@ -23,10 +23,10 @@ ENEMY:
   - name: やや弱い敵
     ID: 2
     LEVEL: 5
-    HP: 28
+    HP: 22
     MP: 0
-    POW: 10
-    DEX: 4
+    POW: 8
+    DEX: 1
     EXP: 50
     ViewPath: AsciiArt/enemy2
     Actions:
@@ -36,13 +36,13 @@ ENEMY:
     LEVEL: 10
     HP: 50
     MP: 50
-    POW: 15
-    DEX: 8
+    POW: 12
+    DEX: 4
     EXP: 200
     ViewPath: AsciiArt/enemy3
     Actions:
+      - { Logic: HPIsLow , parameter: [30] ,commands: [2]}
       - { Logic: Random ,commands: [1]}
-      - { Logic: HPIsLow , parameters: [30] ,commands: [2]}
   - name: 中の下な敵
     ID: 4
     LEVEL: 9
@@ -124,7 +124,7 @@ ENEMY:
     ID: 11
     LEVEL: 28
     HP: 210
-    MP: 400
+    MP: 2000
     POW: 21
     DEX: 26
     EXP: 5000

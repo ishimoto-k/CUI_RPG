@@ -13,7 +13,7 @@ public:
   bool getActive(){ return active_;}
   virtual int id() = 0;
   virtual std::string name() = 0;
-  virtual void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){};
+  virtual bool update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log){};
 };
 
 #endif // APPEAL_STATUSINTERFACE_HPP
