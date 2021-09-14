@@ -28,7 +28,7 @@ int CommandInterface::damageCalc(float flevel,float tolevel, float pow,float dex
   std::random_device seed_gen;
   std::default_random_engine engine(seed_gen());
   std::uniform_real_distribution<> rand(0.9, 1.1);
-  int d = ((pow*1.1+flevel/10) - (dex*1.2+tolevel/10)) * rand(engine);
+  int d = ((pow*1.1+flevel/3) - (dex*1.2+tolevel/3)) * rand(engine);
   if(d <= 0){
     return seed_gen()%2+1;
   }

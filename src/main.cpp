@@ -54,6 +54,7 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__ENEMY_CollisionDetection,[&](SubjectData subject){
     auto msg = static_cast<MapScene::EventBody*>(subject.get());
+    return;
     if(msg->bit == BitMapKind::PLAYER){
       if(gameStatus != GameSeaneStatus::BATTLE){
         log.push_back("敵と遭遇した");
@@ -106,7 +107,7 @@ int main(){
   observer.interface()->addListener(ObserverEventList::BATTLE_SCENE_LOSE,[&](SubjectData subject){
     auto msg = static_cast<BattleScene::EventBody*>(subject.get());
 //    std::cout << "BATTLE_SCENE_LOSE ";
-    gameStatus = GameSeaneStatus::GAME_OVER;
+    gameStatus = GameSeaneStatus::TITLE;
   });
 
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_START,[&](SubjectData subject){
@@ -129,20 +130,23 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
+
+    if(gameInformation.getInfo().mapLevel >= MapInformation::getMapInfoList().size()-1){
+      log.emplace_back("ゲームクリア");
+      gameInformation.getInfo().mapClearStatus = MapInformation::getMapInfoList().size();
+      gameInformation.getInfo().exp = player->parameter.EXP;
+      gameInformation.save();
+      return;
+    }
     gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel+1;
     gameInformation.getInfo().exp = player->parameter.EXP;
     gameInformation.save();
-    log.push_back("セーブが完了しました");
     mapScene->makeDungeon(gameInformation.getInfo().mapLevel);
     auto pos = mapScene->getRandomNonePosition();
     player->set(pos);
     mapScene->setPlayer(player,false);
     if(gameInformation.getInfo().mapClearStatus > gameInformation.getInfo().mapLevel){
       mapScene->eraseBoss();
-    }
-    if(gameInformation.getInfo().mapLevel == MapInformation::getMapInfoList().size()){
-      log.emplace_back("ゲームクリア");
-      return;
     }
   });
 

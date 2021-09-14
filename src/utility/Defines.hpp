@@ -4,8 +4,9 @@
 
 #ifndef APPEAL_DEFINES_HPP
 #define APPEAL_DEFINES_HPP
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <unistd.h>
 #include <vector>
 namespace define{
 static std::string AssetsTitle(){

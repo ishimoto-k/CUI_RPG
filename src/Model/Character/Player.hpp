@@ -35,6 +35,9 @@ public:
     parameter.EXP += exp;
 //    std::cout << "EXP:" <<  parameter.EXP << " targetExp:" << Parameter::loadFromLevel(parameter.level).targetEXP << std::endl;
     if(parameter.EXP > Parameter::loadFromLevel(parameter.level).targetEXP){
+      if(parameter.level == Parameter::getLevelList().size()){
+        return false;
+      }
       auto tmp =  parameter.EXP;
       parameter = Parameter::loadFromLevel(parameter.level+1);
       gotSkills.clear();
@@ -51,8 +54,8 @@ public:
     return false;
   }
   void initBattleBefore() override {
-    parameter.HP = parameter.maxHP;
-    parameter.MP = parameter.maxMP;
+//    parameter.HP = parameter.maxHP;
+//    parameter.MP = parameter.maxMP;
     parameter.POW = parameter.maxPOW;
     parameter.DEX = parameter.maxDEX;
     parameter.status.clear();

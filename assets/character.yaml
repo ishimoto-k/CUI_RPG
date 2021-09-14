@@ -16,12 +16,10 @@ ENEMY:
     MP: 0
     POW: 3
     DEX: 0
-    EXP: 15
+    EXP: 18
     ViewPath: AsciiArt/enemy1
     Actions:
-      - { Logic: Random  , commands:  [1,2]}
-      - { Logic: HPIsHigh, parameter: [30], commands: [1,4]}
-      - { Logic: HPIsLow , parameter: [30], commands: [1,3]}
+      - { Logic: Random  , commands:  [1]}
   - name: やや弱い敵
     ID: 2
     LEVEL: 5
@@ -37,31 +35,32 @@ ENEMY:
     ID: 3
     LEVEL: 10
     HP: 50
-    MP: 0
-    POW: 13
+    MP: 50
+    POW: 15
     DEX: 8
     EXP: 200
     ViewPath: AsciiArt/enemy3
     Actions:
-      - { Logic: Random ,commands: [2]}
+      - { Logic: Random ,commands: [1]}
+      - { Logic: HPIsLow , parameters: [30] ,commands: [2]}
   - name: 中の下な敵
     ID: 4
     LEVEL: 9
-    HP: 180
+    HP: 28
     MP: 20
-    POW: 37
-    DEX: 25
+    POW: 17
+    DEX: 8
     EXP: 90
     ViewPath: AsciiArt/enemy4
     Actions:
-      - { Logic: Random ,commands: [1]}
+      - { Logic: Random ,commands: [1,2]}
   - name: 中の中な敵
     ID: 5
     LEVEL: 12
-    HP: 300
+    HP: 40
     MP: 20
-    POW: 44
-    DEX: 70
+    POW: 28
+    DEX: 10
     EXP: 180
     ViewPath: AsciiArt/enemy5
     Actions:
@@ -69,10 +68,10 @@ ENEMY:
   - name: 中の上な敵
     ID: 6
     LEVEL: 18
-    HP: 220
+    HP: 67
     MP: 30
-    POW: 75
-    DEX: 75
+    POW: 20
+    DEX: 10
     EXP: 300
     ViewPath: AsciiArt/enemy6
     Actions:
@@ -80,10 +79,10 @@ ENEMY:
   - name: 普通なボス
     ID: 7
     LEVEL: 21
-    HP: 800
-    MP: 800
-    POW: 100
-    DEX: 60
+    HP: 210
+    MP: 80
+    POW: 22
+    DEX: 12
     EXP: 1600
     ViewPath: AsciiArt/enemy7
     Actions:
@@ -91,10 +90,10 @@ ENEMY:
   - name: やや弱めな強力な敵
     ID: 8
     LEVEL: 23
-    HP: 542
-    MP: 323
-    POW: 120
-    DEX: 110
+    HP: 105
+    MP: 40
+    POW: 22
+    DEX: 13
     EXP: 500
     ViewPath: AsciiArt/enemy8
     Actions:
@@ -102,10 +101,10 @@ ENEMY:
   - name: 強力な敵
     ID: 9
     LEVEL: 25
-    HP: 800
+    HP: 122
     MP: 400
-    POW: 200
-    DEX: 200
+    POW: 24
+    DEX: 13
     EXP: 800
     ViewPath: AsciiArt/enemy9
     Actions:
@@ -113,10 +112,10 @@ ENEMY:
   - name: 最上級な敵
     ID: 10
     LEVEL: 30
-    HP: 1500
+    HP: 330
     MP: 400
-    POW: 300
-    DEX: 300
+    POW: 30
+    DEX: 30
     EXP: 2500
     ViewPath: AsciiArt/enemy10
     Actions:
@@ -124,10 +123,10 @@ ENEMY:
   - name: 最後のボス
     ID: 11
     LEVEL: 28
-    HP: 2000
+    HP: 210
     MP: 2000
-    POW: 300
-    DEX: 300
+    POW: 21
+    DEX: 26
     EXP: 5000
     ViewPath: AsciiArt/enemy11
     Actions:
