@@ -130,15 +130,15 @@ int main(){
   });
   observer.interface()->addListener(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE__SELECT_WARP_GOAL ";
-
-    if(gameInformation.getInfo().mapLevel >= MapInformation::getMapInfoList().size()-1){
+//    gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel+1;
+    if(gameInformation.getInfo().mapLevel > MapInformation::getMapInfoList().size()){
       log.emplace_back("ゲームクリア");
       gameInformation.getInfo().mapClearStatus = MapInformation::getMapInfoList().size();
       gameInformation.getInfo().exp = player->parameter.EXP;
       gameInformation.save();
       return;
     }
-    gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel = gameInformation.getInfo().mapLevel+1;
+    gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel =gameInformation.getInfo().mapLevel +1;
     gameInformation.getInfo().exp = player->parameter.EXP;
     gameInformation.save();
     mapScene->makeDungeon(gameInformation.getInfo().mapLevel);

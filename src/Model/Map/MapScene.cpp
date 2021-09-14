@@ -40,6 +40,7 @@ void MapScene::buildEnemies() {
     auto enemyL = mapInfo.typeOfEnemy[engine() % size];
     auto enemy = Enemy::create(enemyL);
     auto pos = getRandomNonePosition();
+    drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
     enemy->set(pos);
     enemies.push_back(enemy);
   }
@@ -95,6 +96,7 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
       notify(ObserverEventList::MAP_SCENE__SELECT_WARP_GOAL);
     }
   });
+  drawBitMap[player->position().y][player->position().x] = BitMapKind::MAPOBJECT;
   mapObjects.push_back(warp_s);
   auto pos = getRandomNonePosition();
   auto warp_f = std::make_shared<Warp>(pos.x,pos.y, direction);
@@ -111,6 +113,7 @@ void MapScene::setPlayer(std::shared_ptr<Player> playerPtr,bool direction) {
   if(mapInfo.boss != 0){
     boss = Enemy::create(mapInfo.boss);
     boss->set(pos);
+    drawBitMap[pos.y][pos.x] = BitMapKind::ENEMY;
     boss->setBoss();
   }
 }

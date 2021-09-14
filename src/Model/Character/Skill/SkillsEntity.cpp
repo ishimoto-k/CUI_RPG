@@ -110,9 +110,8 @@ MAKE_SKILL(Poison,8,"毒攻撃","相手にダメージ与えて毒にする"){
     to.status.push_back(TypeOfStatus::POISON);
   }
 }
-
 MAKE_SKILL(MagicMiddle,8,"中魔法","魔力を消費して中ダメージを与える"){
-  int damage = magicCalc(from.level,from.DEX*1.6,0) + from.maxHP*0.3;
+  int damage = magicCalc(from.level,from.DEX*1.6,0);
   to.HP -= damage;
   from.MP -= mp();
   std::stringstream ss;
@@ -120,9 +119,8 @@ MAKE_SKILL(MagicMiddle,8,"中魔法","魔力を消費して中ダメージを与
   log->push_back(ss.str());
   log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
 }
-
 MAKE_SKILL(MagicHigh,10,"大魔法","魔力を消費して大ダメージを与える"){
-  int damage = magicCalc(from.level*1.3,from.DEX*2.0,0) + from.maxHP*0.5;
+  int damage = magicCalc(from.level*1.3,from.DEX*2.0,0);
   to.HP -= damage;
   from.MP -= mp();
   std::stringstream ss;
