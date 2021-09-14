@@ -124,7 +124,7 @@ ENEMY:
     ID: 11
     LEVEL: 28
     HP: 210
-    MP: 2000
+    MP: 400
     POW: 21
     DEX: 26
     EXP: 5000
