@@ -45,57 +45,22 @@ public:
     SelectList selectList;
     EventBody(SelectList sel):selectList(sel){}
   };
-  Title(){
-    std::ifstream ifs(define::AssetsTitle());
-    std::string text = std::string(std::istreambuf_iterator<char>(ifs),
-                                   std::istreambuf_iterator<char>());
-    frontView = text;
-  }
-
   std::vector<SelectList> selectList = {
       SelectList::START,
       SelectList::LOAD,
       SelectList::END,
   };
-  void setCursor(SelectList list){
-    auto itr = std::find_if(selectList.begin(),selectList.end(),[&](SelectList select){
-      return list == select;
-    });
-    cursor = std::distance(selectList.begin(),itr);
-  }
-  void Up() override {
-    cursor = cursor-1;
-    if(-1 == cursor)cursor = selectList.size()-1;
-  }
-  void Down() override {
-    cursor = cursor+1;
-    if(selectList.size() == cursor)cursor = 0;
-  }
-  void Right() override {
-  }
-  void Left() override {
-  }
-  void update() override {
-  }
-  void Select() override {
-    auto body = std::make_shared<EventBody>(selectList[cursor]);
-    notify(ObserverEventList::TITLE_SCENE_ON_SELECT, body);
-  }
-  void Cancel() override {
-  }
-  void Esc() override{
-  }
-  void view() override {
-    std::cout << frontView << std::endl;
-    for(int i=0;i<selectList.size();i++){
-      if(i == cursor){
-        std::cout << "＞";
-      } else {
-        std::cout << "　";
-      }
-      std::cout << selectList[i].toLabel() << std::endl;
-    }
-  }
+  Title();
+  void setCursor(SelectList list);
+  void Up() override;
+  void Down() override;
+  void Right() override;
+  void Left() override;
+  void update() override;
+  void Select() override;
+  void Cancel() override;
+  void Esc() override;
+  void view() override;
 };
 
 #endif // APPEAL_TITLE_HPP

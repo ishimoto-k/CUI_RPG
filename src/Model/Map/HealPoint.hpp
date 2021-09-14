@@ -10,34 +10,17 @@ class HealPoint : public MapObjectInterface {
   bool isUse_ = false;
 
 public:
-  HealPoint(int x, int y) : MapObjectInterface(x, y) {
-  }
-  void view() override { std::cout << "\033[44m　\033[49m"; };
-  void backViewStart() override {
-    if (isUse_)
-      std::cout << "\033[42m";
-    else
-      std::cout << "\033[102m";
-  }
-  void use(bool u){
-    isUse_ = u;
-  }
-  bool use(){
-    return isUse_;
-  }
-  void backViewEnd() override { std::cout << "\033[49m"; }
-  void select() override { MapObjectInterface::select(); }
-
+  HealPoint(int x, int y);
+  void view() override;
+  void backViewStart() override;
+  void use(bool u);
+  bool use();
+  void backViewEnd() override;
+  void select() override;
   bool move(const BitMap &bitMap,
-            std::function<void(BitMapKind, Vector2, Vector2)> callback)
-      override {
-    return false;
-  }
+            std::function<void(BitMapKind, Vector2, Vector2)> callback) override;
   bool move(const BitMap &bitMap, const Vector2 &vector,
-            std::function<void(BitMapKind, Vector2, Vector2)> callback)
-      override {
-    return false;
-  }
+            std::function<void(BitMapKind, Vector2, Vector2)> callback) override;
 };
 
 #endif // APPEAL_HEALPOINT_HPP

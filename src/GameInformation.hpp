@@ -89,9 +89,6 @@ public:
   bool hasSaveFile(){
     return hasSaveFile_;
   }
-  static bool hasGameFiles(){
-
-  }
 };
 
 #endif // APPEAL_GAMEINFORMATION_HPP
