@@ -254,4 +254,5 @@ void MapScene::view() {
   for (auto l : log) {
     std::cout << l << std::endl;
   }
+  log.clear();
 }

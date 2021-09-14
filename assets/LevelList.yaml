@@ -1,33 +1,33 @@
 
 #ステータス値は小さめ
 Level:
-  1 : {HP: 10  ,MP: 5, POW: 4, DEX: 3 , needEXP: 35,getSkill: [2,4,5,6,7,8]}
-  2 : {HP: 11  ,MP: 7, POW: 6, DEX: 5 , needEXP: 77, getSkill: [3]}
-  3 : {HP: 13  ,MP: 10, POW: 6, DEX: 5, needEXP: 129, getSkill: [4]}
+  1 : {HP: 10  ,MP: 5, POW: 4, DEX: 3 , needEXP: 35,getSkill: [2]}
+  2 : {HP: 11  ,MP: 7, POW: 6, DEX: 5 , needEXP: 77}
+  3 : {HP: 13  ,MP: 10, POW: 6, DEX: 5, needEXP: 129}
   4 : {HP: 14  ,MP: 12, POW: 7, DEX: 6, needEXP: 193 }
   5 : {HP: 18  ,MP: 14, POW: 7, DEX: 6, needEXP: 270 }
   6 : {HP: 22  ,MP: 17, POW: 7, DEX: 7, needEXP: 365 }
-  7 : {HP: 24  ,MP: 19, POW: 8, DEX: 7, needEXP: 480 }
+  7 : {HP: 24  ,MP: 19, POW: 8, DEX: 7, needEXP: 480, getSkill: [5] }
   8 : {HP: 27  ,MP: 21, POW: 8, DEX: 8, needEXP: 621 }
   9 : {HP: 30  ,MP: 22, POW: 8, DEX: 8, needEXP: 793 }
   10: {HP: 34  ,MP: 25, POW: 9, DEX: 8, needEXP: 1003 }
   11: {HP: 38  ,MP: 26, POW: 9, DEX: 9, needEXP: 1258 }
-  12: {HP: 42  ,MP: 29, POW: 10, DEX: 9, needEXP: 1570 }
+  12: {HP: 42  ,MP: 29, POW: 10, DEX: 9, needEXP: 1570 , getSkill: [3] }
   13: {HP: 47  ,MP: 31, POW: 11, DEX: 9, needEXP: 1951 }
   14: {HP: 51  ,MP: 32, POW: 12, DEX: 10, needEXP: 2415 }
-  15: {HP: 53  ,MP: 34, POW: 13, DEX: 10, needEXP: 2981 }
+  15: {HP: 53  ,MP: 34, POW: 13, DEX: 10, needEXP: 2981 , getSkill: [6,4]}
   16: {HP: 57  ,MP: 35, POW: 14, DEX: 10, needEXP: 3672 }
-  17: {HP: 61  ,MP: 37, POW: 15, DEX: 10, needEXP: 4515 }
+  17: {HP: 61  ,MP: 37, POW: 15, DEX: 10, needEXP: 4515 , getSkill: [10]}
   18: {HP: 65  ,MP: 39, POW: 17, DEX: 11, needEXP: 5544 }
   19: {HP: 69  ,MP: 41, POW: 19, DEX: 11, needEXP: 6798 }
-  20: {HP: 71  ,MP: 43, POW: 20, DEX: 12, needEXP: 8329 }
-  21: {HP: 74  ,MP: 45, POW: 21, DEX: 12, needEXP: 10197 }
+  20: {HP: 71  ,MP: 43, POW: 20, DEX: 12, needEXP: 8329 , getSkill: [8]}
+  21: {HP: 74  ,MP: 45, POW: 21, DEX: 12, needEXP: 10197 , getSkill: [7]}
   22: {HP: 78  ,MP: 48, POW: 23, DEX: 12, needEXP: 12475 }
   23: {HP: 82  ,MP: 52, POW: 25, DEX: 12, needEXP: 15255 }
-  24: {HP: 84  ,MP: 55, POW: 27, DEX: 13, needEXP: 18646 }
+  24: {HP: 84  ,MP: 55, POW: 27, DEX: 13, needEXP: 18646 , getSkill: [9]}
   25: {HP: 86  ,MP: 57, POW: 31, DEX: 13, needEXP: 22783 }
   26: {HP: 88  ,MP: 59, POW: 32, DEX: 13, needEXP: 27830 }
   27: {HP: 91  ,MP: 63, POW: 34, DEX: 14, needEXP: 33988 }
   28: {HP: 93  ,MP: 66, POW: 36, DEX: 14, needEXP: 41501 }
-  29: {HP: 95  ,MP: 68, POW: 38, DEX: 15, needEXP: 50666 }
+  29: {HP: 95  ,MP: 68, POW: 38, DEX: 15, needEXP: 50666 , getSkill: [11]}
   30: {HP: 100 ,MP: 70, POW: 40, DEX: 15, needEXP: 61847 }

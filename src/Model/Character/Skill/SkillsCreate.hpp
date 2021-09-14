@@ -9,13 +9,16 @@ enum class TypeOfSkills : int{
   SKILL = 100,
   ESCAPE,
   ATTACK = 1,
-  SLASH_MIDDLE,
-  SLASH_LARGE,
-  HEAL,
-  HIGH_HEAL,
-  POWERUP,
-  DEFUP,
-  POISON,
+  SHIELD = 2,
+  SLASH_MIDDLE = 3,
+  SLASH_LARGE = 4,
+  HEAL = 5,
+  HIGH_HEAL = 6,
+  POWERUP = 7,
+  DEFENCEUP = 8,
+  POISON = 9,
+  MAGIC_MIDDLE = 10,
+  MAGIC_HIGH = 11,
 };
 
 class SkillsCreate {

@@ -29,11 +29,11 @@ MAKE_LOGIC(RandomLogic){
 
 MAKE_LOGIC(HPIsLowLogic){
 //  std::cout << "select HPIsLowLogic " << std::endl;
-  std::random_device rnd; // 非決定的な乱数生成器
-  std::mt19937 mt(rnd());
   if(paramater_.size() == 0){
     return nullptr;
   }
+  std::random_device rnd; // 非決定的な乱数生成器
+  std::mt19937 mt(rnd());
   int lessThen = paramater_[0];
   if(self.maxHP*lessThen/100.0 >= self.HP){
     return SkillsCreate::createCommand(static_cast<TypeOfSkills>(skillIds_[mt() % skillIds_.size()]));
@@ -42,11 +42,11 @@ MAKE_LOGIC(HPIsLowLogic){
 }
 MAKE_LOGIC(HPIsHighLogic){
 //  std::cout << "select HPIsHighLogic " << std::endl;
-  std::random_device rnd; // 非決定的な乱数生成器
-  std::mt19937 mt(rnd());
   if(paramater_.size() == 0){
     return nullptr;
   }
+  std::random_device rnd; // 非決定的な乱数生成器
+  std::mt19937 mt(rnd());
   int more = paramater_[0];
   if(self.maxHP*more/100.0 <= self.HP){
     return SkillsCreate::createCommand(static_cast<TypeOfSkills>(skillIds_[mt() % skillIds_.size()]));
@@ -63,7 +63,7 @@ std::shared_ptr<EnemyLogicInterface> EnemyLogicCreate::createLogic(std::string l
     return std::make_shared<HPIsLowLogic>(paramater,skillIds);
   }
   if (logicName == "HPIsHigh") {
-    return std::make_shared<HPIsLowLogic>(paramater,skillIds);
+    return std::make_shared<HPIsHighLogic>(paramater,skillIds);
   }
 
   return std::make_shared<RandomLogic>(paramater,skillIds);

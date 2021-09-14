@@ -36,7 +36,7 @@ MAKE_STATUS(PowerUpStatus,TypeOfStatus::POWER_UP,"攻撃力アップ",3){
     }
     return true;
   }
-  from.POW = float(from.POW)*2.2;
+  from.POW = float(from.POW)*1.5;
   return false;
 }
 
