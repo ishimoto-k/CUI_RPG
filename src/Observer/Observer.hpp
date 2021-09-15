@@ -24,6 +24,9 @@ struct ListenerEntry {
   FuncPtr listener;
 };
 
+//observerのリスナーを持つクラス
+//observerに委譲することで、
+//リスナーを実行できる
 class ObserverInterface {
   friend class Subject;
 
@@ -38,6 +41,9 @@ public:
   void removeListener(ObserverEventList type, FuncPtr listener);
 };
 
+//イベント観測者
+//subject.addObserverで自信を登録してもらうと、
+//subjectからのイベントを受信できる。
 class Observer {
   friend class Subject;
   typedef std::shared_ptr<ObserverInterface> Interface;
@@ -51,6 +57,9 @@ public:
   Interface interface() const { return interface_; }
 };
 
+//イベント発行者
+//継承し、notifyを実行することで、
+//登録しているobserversにイベントを発行できる。
 class Subject {
 private:
   std::vector<std::weak_ptr<ObserverInterface>> observers = {};

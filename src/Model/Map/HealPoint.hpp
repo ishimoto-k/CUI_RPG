@@ -6,6 +6,7 @@
 #define APPEAL_HEALPOINT_HPP
 #include "MapObjectInterface.hpp"
 
+//回復スポット
 class HealPoint : public MapObjectInterface {
   bool isUse_ = false;
 

@@ -18,10 +18,9 @@ public:
   KeyBoardController(){
     tcgetattr(STDIN_FILENO, &oldt);
   }
-  int getCharactor();
+  int getCharactor(); //キー入力された値を取得
   void startInputMonitoring() override;
-  static int getKey();
-  static bool checkInputKey();
+  static bool checkInputKey(); //キー入力チェック
   void stopInputMonitoring() override;
   virtual ~KeyBoardController();
 };

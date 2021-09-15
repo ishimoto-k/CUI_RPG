@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7.2)
-project(Appeal)
+project(CUI_RPG)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -19,8 +19,8 @@ target_include_directories(dungeon INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/Dunge
 
 add_subdirectory(src/Model)
 
-add_executable(Appeal src/main.cpp)
-target_link_libraries(Appeal
+add_executable(CUI_RPG src/main.cpp)
+target_link_libraries(CUI_RPG
         dungeon
         utility
         Map
@@ -39,5 +39,5 @@ target_link_libraries(example_battle_scene BattleScene)
 
 add_executable(example_exp_calc research/ExampleExpCalculation.cpp)
 
-add_custom_command(TARGET Appeal POST_BUILD COMMAND
-        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Appeal>/assets)
+add_custom_command(TARGET CUI_RPG POST_BUILD COMMAND
+        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:CUI_RPG>/assets)

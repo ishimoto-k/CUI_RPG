@@ -7,11 +7,8 @@
 
 int KeyBoardController::getCharactor(){
 
-  termios t, t0;
-  int c, c0 = 0;
-  long ti;
+  termios t;
   tcgetattr(0, &t);
-  int oldf;
   t.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
                  | INLCR | IGNCR | ICRNL | IXON);
   t.c_lflag &= ~(ECHO  | ICANON  | IEXTEN);
@@ -30,24 +27,9 @@ void KeyBoardController::startInputMonitoring() {
       key = getCharactor(); /* 入力されたキー番号 */
       auto body = std::make_shared<EventBody>();
       body->key = Key(key);
-      notify(ObserverEventList::KEYBOARD__ON_INPUT,body);
+      notify(ObserverEventList::KEYBOARD_ON_INPUT,body);
     }
   });
-}
-int KeyBoardController::getKey(){
-
-  termios t, t0;
-  int c, c0 = 0;
-  long ti;
-  tcgetattr(0, &t);
-  int oldf;
-  t.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-                 | INLCR | IGNCR | ICRNL | IXON);
-  t.c_lflag &= ~(ECHO  | ICANON  | IEXTEN);
-  tcsetattr(0, TCSANOW, &t);
-  auto ret = getchar();
-
-  return ret;
 }
 bool KeyBoardController::checkInputKey(){
   // 参考
@@ -82,4 +64,5 @@ void KeyBoardController::stopInputMonitoring()  {
 KeyBoardController::~KeyBoardController(){
   inputThread.join();
   tcsetattr(0, TCSANOW, &oldt);
+  //終了時、端末の入力設定を戻す。
 }

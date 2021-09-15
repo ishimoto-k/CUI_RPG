@@ -5,6 +5,9 @@
 #include <SkillsCreate.hpp>
 #include <random>
 
+// MAKE_STATUSはマクロで記載
+// EnemyLogicInterfaceを継承したクラスを生成し、
+// 容易にエネミーの戦闘ロジックを作成できる。
 #define MAKE_LOGIC(name) \
 class name : public EnemyLogicInterface{ \
 public: \
@@ -19,7 +22,7 @@ if (logicName == name::logicName()) {\
  return std::make_shared<name>(paramater,skillIds);\
 }
 
-
+//スキルをランダムで選択する
 MAKE_LOGIC(RandomLogic){
 //  std::cout << "select RandomLogic " << std::endl;
   std::random_device rnd; // 非決定的な乱数生成器
@@ -27,6 +30,7 @@ MAKE_LOGIC(RandomLogic){
   return SkillsCreate::createCommand(static_cast<TypeOfSkills>(skillIds_[mt() % skillIds_.size()]));
 }
 
+//HPがx％以下の時に技をランダムで選択する。
 MAKE_LOGIC(HPIsLowLogic){
 //  std::cout << "select HPIsLowLogic " << std::endl;
   if(paramater_.size() == 0){
@@ -40,6 +44,8 @@ MAKE_LOGIC(HPIsLowLogic){
   }
   return nullptr;
 }
+
+//HPがx％以上の時に技をランダムで選択する。
 MAKE_LOGIC(HPIsHighLogic){
 //  std::cout << "select HPIsHighLogic " << std::endl;
   if(paramater_.size() == 0){
@@ -55,7 +61,7 @@ MAKE_LOGIC(HPIsHighLogic){
 }
 
 std::shared_ptr<EnemyLogicInterface> EnemyLogicCreate::createLogic(std::string logicName, std::vector<int> paramater, std::vector<int> skillIds) {
-//  std::cout << logicName << std::endl;
+  //factory method
   if (logicName == "Random") {
     return std::make_shared<RandomLogic>(paramater,skillIds);
   }
@@ -65,6 +71,5 @@ std::shared_ptr<EnemyLogicInterface> EnemyLogicCreate::createLogic(std::string l
   if (logicName == "HPIsHigh") {
     return std::make_shared<HPIsHighLogic>(paramater,skillIds);
   }
-
   return std::make_shared<RandomLogic>(paramater,skillIds);
 };

@@ -10,6 +10,7 @@
 #include <MapObjectInterface.hpp>
 #include <iostream>
 
+//テストクラス
 class DummyEnemy :public Enemy{
 public:
   DummyEnemy(int x,int y):Enemy(x,y){

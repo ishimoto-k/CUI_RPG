@@ -5,6 +5,7 @@
 #ifndef APPEAL_STATUSENUM_HPP
 #define APPEAL_STATUSENUM_HPP
 
+//状態異常の種類
 enum class TypeOfStatus: int{
   NONE = 0,
   POWER_UP ,

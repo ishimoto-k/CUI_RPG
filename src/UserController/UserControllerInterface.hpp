@@ -14,6 +14,7 @@ using namespace Design;
 //  NORMAL_CONTROLLER,
 //  SCRIPT,
 //};
+
 class Key{
 public:
   enum Kind{
@@ -77,13 +78,19 @@ public:
   Kind kind = NONE;
   bool operator == (Kind k){ return kind == k;}
 };
+
+//今回はキーボードだけど、他の入力も対応することが可能
 class UserControllerInterface:public Subject{
 public:
+  //イベント送信で使用するクラス
+  //SubjectDataBodyの継承が必要
   class EventBody:public SubjectDataBody{
   public:
     Key key = Key::NONE;
   };
+  //コントローラー入力のthreadの開始
   virtual void startInputMonitoring() = 0;
+  //コントローラー入力のthreadの終了
   virtual void stopInputMonitoring() = 0;
 };
 

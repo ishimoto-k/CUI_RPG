@@ -10,21 +10,22 @@
 #include "Status/StatusEnum.hpp"
 class Parameter {
 public:
-  int ID;
-  int level;
-  int POW;
-  int DEX;
+  int ID; //id
+  int level; //レベル
+  int POW; //戦闘中の攻撃力、戦闘中は変動する。戦闘開始時にmaxPOWを代入する。
+  int DEX; //戦闘中の守備力、戦闘中は変動する。戦闘開始時にmaxDEXを代入する。
+  int HP;  //戦闘中のHP、戦闘中は変動する。戦闘開始時にmaxHPを代入する。
+  int MP;  //戦闘中のMP、戦闘中は変動する。戦闘開始時にmaxMPを代入する。
   int maxHP;
   int maxMP;
   int maxPOW;
   int maxDEX;
-  int HP;
-  int MP;
-  int EXP;
-  int targetEXP;
-  std::vector<int> skillIds;
-  std::vector<TypeOfStatus> status = {};
+  int EXP; //現在の経験値
+  int targetEXP; //次レベルまでの経験値
+  std::vector<int> skillIds; //習得しているスキルID
+  std::vector<TypeOfStatus> status = {}; //かかっている状態異常ID
   static const std::vector<Parameter>& getLevelList() {
+    // assetsからプレイヤーリストを読み込む。
     static std::vector<Parameter> levelList{};
     if (!levelList.empty())
       return levelList;
@@ -56,6 +57,7 @@ public:
     return levelList;
   }
   static Parameter loadFromLevel(int level){
+    //レベル値からステータスを取得
     auto list = getLevelList();
     if(level < list.size()){
       auto itr = std::find_if(list.begin(),list.end(),[level](Parameter parameter){
@@ -66,6 +68,7 @@ public:
     return Parameter();
   }
   static Parameter loadFromExp(int exp){
+    //経験値かレベルとステータスを習得
     auto list = getLevelList();
     bool check = false;
     for(auto l:list){
@@ -86,6 +89,8 @@ public:
     return p;
   }
   static std::vector<int> loadSkillFromLevel(int level){
+    //レベルから、覚えているスキルを取得
+    //10の場合、1~10までで獲得するスキルをリストにして返す
     auto list = getLevelList();
     std::vector<int> skills = {};
     for(int i=0;i<level && i < list.size(); i++){
@@ -93,6 +98,8 @@ public:
     }
     std::sort(skills.begin(), skills.end());
     skills.erase(std::unique(skills.begin(), skills.end()), skills.end());
+    //被ったものは削除
+    std::sort(skills.begin(), skills.end());
     return skills;
   }
 };

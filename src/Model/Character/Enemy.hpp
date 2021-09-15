@@ -36,6 +36,7 @@ protected:
 
 public:
   std::string getIdx(){
+    //同じオブジェクトかを判断するためのユニークID
     return idx_;
   }
   Enemy(int x,int y,bool boss = false):MapObjectInterface(x,y){
@@ -69,20 +70,23 @@ public:
     status.clear();
   }
   std::shared_ptr<CommandInterface> battleLogic(int turn,Parameter other){
+    //todo virtual化
     if(turn == 0)
       return nullptr;
     int around = turn;
     std::shared_ptr<CommandInterface> command = nullptr;
     do{
+      //エネミーロジックの読み込み、
+      //ターンごとに行動が変わる
       int select = (around-1)%logic.size();
       auto l = logic[select];
-      command = l->execute(parameter,other);
+      command = l->execute(parameter,other);//ロジックの実行とコマンドの取得
       around ++;
     }while (!command);
     return command;
   }
 
-  static const std::vector<Enemy>& getEnemyList();
-  static std::shared_ptr<Enemy> create(int id);
+  static const std::vector<Enemy>& getEnemyList();//assetsから敵情報を読み込む
+  static std::shared_ptr<Enemy> create(int id);//敵情報をIDから取得
 };
 #endif // APPEAL_ENEMY_HPP

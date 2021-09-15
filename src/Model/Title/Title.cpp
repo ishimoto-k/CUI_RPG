@@ -4,6 +4,7 @@
 
 #include "Title.hpp"
 Title::Title(){
+  //assets/titleを表示データを取得
   std::ifstream ifs(define::AssetsTitle());
   std::string text = std::string(std::istreambuf_iterator<char>(ifs),
                                  std::istreambuf_iterator<char>());

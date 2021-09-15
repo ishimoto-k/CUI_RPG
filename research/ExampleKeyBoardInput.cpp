@@ -9,9 +9,9 @@ int main(){
   KeyBoardController keyBoardController;
   Observer observer;
   observer.interface(std::make_shared<ObserverInterface>());
-  observer.interface()->addListener(ObserverEventList::KEYBOARD__ON_INPUT,[](SubjectData subject){
+  observer.interface()->addListener(ObserverEventList::KEYBOARD_ON_INPUT,[](SubjectData subject){
     auto msg = static_cast<UserControllerInterface::EventBody*>(subject.get());
-    std::cout << "KEYBOARD__ON_INPUT "<< msg->key.debug() << std::endl;
+    std::cout << "KEYBOARD_ON_INPUT "<< msg->key.debug() << std::endl;
 
   });
   keyBoardController.addObserver(observer);

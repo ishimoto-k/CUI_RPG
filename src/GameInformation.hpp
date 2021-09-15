@@ -7,13 +7,16 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
+//ゲーム情報を扱うクラス
+//データの保存と読み込みを行う。
 class GameInformation {
+  //todo シングルトンにしたほうがいい？
 public:
   class SaveDate;
 
 private:
   bool hasSaveFile_ = false;
-  std::vector<SaveDate> vectorSaveData;
+  std::vector<SaveDate> vectorSaveData;//セーブデータの配列、今回は一つしか使わない
   int useSlot = 0;
 
   void save_(){
@@ -41,6 +44,7 @@ private:
 public:
   class SaveDate{
   public:
+    //保存するデータは3つ
     int mapClearStatus = 1; //到達したマップ
     int mapLevel = 1;       //今いるマップ
     int exp = 0;            //持っている経験値
@@ -49,8 +53,8 @@ public:
     std::string fileName = "savedata.yaml";
     try {
       auto nodes = YAML::LoadFile(fileName);
-      auto saveNum = nodes["SAVEDATA"].size();
       for(auto savedate:nodes["SAVEDATA"]){
+        //データの読み込み
         SaveDate saveDate;
         saveDate.mapLevel = savedate["currentMap"].as<int>();
         saveDate.mapClearStatus = savedate["clearMap"].as<int>();
@@ -59,6 +63,8 @@ public:
         vectorSaveData.push_back(saveDate);
       }
     }catch (YAML::Exception& e) {
+      //データがない場合
+      //初回起動時。
       SaveDate saveDate;
       saveDate.mapLevel = 1;
       saveDate.mapClearStatus = 1;

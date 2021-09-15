@@ -6,6 +6,10 @@
 #include "SkillsCreate.hpp"
 
 
+// MAKE_STATUSはマクロで記載
+// SkillInterfaceを継承したクラスを生成し、
+// 容易にスキルを作成できる。
+
 #define MAKE_SKILL(classname,mp_,skillName_,desc_) \
 class classname : public SkillInterface{ \
 public: \
@@ -23,6 +27,10 @@ if (logicName == name::logicName()) {\
  return std::make_shared<name>(paramater,skillIds);\
 }
 
+//基本ダメージ計算
+//パラメータは試行錯誤
+//POW-DEXのアステリオス方式を採用
+//破綻しないよう、パラメータは低く設定
 int CommandInterface::damageCalc(float flevel,float tolevel, float pow,float dex) { //physical
   //アステリオス方式
   std::random_device seed_gen;
@@ -34,6 +42,9 @@ int CommandInterface::damageCalc(float flevel,float tolevel, float pow,float dex
   }
   return d;
 }
+
+//基本魔法ダメージ計算
+//DEXによるダメージ計算
 int magicCalc(float flevel, float fdex, float todex) { //physical
   std::random_device seed_gen;
   std::default_random_engine engine(seed_gen());
@@ -79,7 +90,7 @@ MAKE_SKILL(HighHeal,6,"ハイヒール","自身を大回復"){
 }
 MAKE_SKILL(PowerUp,10,"攻撃上げ","3ターン自身の攻撃力をあげる"){
   from.MP -= mp();
-  from.status.push_back(TypeOfStatus::POWER_UP);
+  from.status.push_back(TypeOfStatus::POWER_UP);//状態異常IDをparameter.statusに追加
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"は攻撃力が上がった");
 }
@@ -90,7 +101,7 @@ MAKE_SKILL(Shield,0,"まもる","1ターン身を守る"){
 }
 MAKE_SKILL(DefUp,8,"防御上げ","3ターン自身の防御力をあげる"){
   from.MP -= mp();
-  from.status.push_back(TypeOfStatus::DEFENCE_UP);
+  from.status.push_back(TypeOfStatus::DEFENCE_UP);//状態異常IDをparameter.statusに追加
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"は防御力が上がった");
 }
@@ -105,9 +116,9 @@ MAKE_SKILL(Poison,8,"毒攻撃","相手にダメージ与えて毒にする"){
   std::random_device seed_gen;
   std::default_random_engine engine(seed_gen());
   std::uniform_real_distribution<> rand(0.0, 1.0);
-  if(rand(engine) > 0.5){
+  if(rand(engine) > 0.5){//50%の確率で毒を付与
     log->push_back(toName+"は毒になった");
-    to.status.push_back(TypeOfStatus::POISON);
+    to.status.push_back(TypeOfStatus::POISON); //状態異常IDをparameter.statusに追加
   }
 }
 MAKE_SKILL(MagicMiddle,8,"中魔法","魔力を消費して中ダメージを与える"){
@@ -131,6 +142,7 @@ MAKE_SKILL(MagicHigh,10,"大魔法","魔力を消費して大ダメージを与�
 
 std::shared_ptr<CommandInterface>
 SkillsCreate::createCommand(TypeOfSkills skill) {
+  //factory method
   switch (skill){
   case TypeOfSkills::SKILL:
   case TypeOfSkills::ESCAPE:

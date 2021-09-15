@@ -5,6 +5,7 @@
 #ifndef APPEAL_SKILLSCREATER_HPP
 #define APPEAL_SKILLSCREATER_HPP
 
+//スキルの種類
 enum class TypeOfSkills : int{
   SKILL = 100,
   ESCAPE,
@@ -21,6 +22,7 @@ enum class TypeOfSkills : int{
   MAGIC_HIGH = 11,
 };
 
+//ID使ってスキルを生成する
 class SkillsCreate {
 public:
   static std::shared_ptr<CommandInterface> createCommand(TypeOfSkills skill);

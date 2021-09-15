@@ -10,7 +10,7 @@ Warp::Warp(int x, int y, bool isStart) : MapObjectInterface(x, y) {
 void Warp::view() { std::cout << "\033[44m　\033[49m"; };
 void Warp::backViewStart() {
   if (isStart_)
-    std::cout << "\033[44m";
+    std::cout << "\033[44m";//青に表示
   else
     std::cout << "\033[104m";
 }

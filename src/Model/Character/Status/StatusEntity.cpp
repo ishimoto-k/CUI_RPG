@@ -5,23 +5,19 @@
 #include "StatusCreate.hpp"
 #include <random>
 
+// MAKE_STATUSはマクロで記載
+// StatusInterfaceを継承したクラスを生成し、
+//　容易に状態異常を作成できる。
 #define MAKE_STATUS(classname,id_,statusName,turn_) \
 class classname : public StatusInterface{              \
 public: \
-  int id() override { return static_cast<int>(id_);}                     \
+  int id() override { return static_cast<int>(id_);}\
   int turn = turn_+1;\
   bool check(){return turn <= 0;}\
   std::string name() override { return statusName;} \
   bool update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log) override; \
 }; \
 bool classname::update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log)
-
-
-
-#define CHECK_AND_CREATE_RETURN(name)   \
-if (logicName == name::logicName()) {\
- return std::make_shared<name>(paramater,skillIds);\
-}
 
 
 MAKE_STATUS(NoneStatus, TypeOfStatus::NONE,"",0){
@@ -31,6 +27,7 @@ MAKE_STATUS(NoneStatus, TypeOfStatus::NONE,"",0){
 MAKE_STATUS(PowerUpStatus,TypeOfStatus::POWER_UP,"攻撃力アップ",3){
   turn--;
   if(check()){
+    //3ターン後に元に戻る
     if(turn == 0){
       log->push_back("攻撃力が元に戻った");
     }
@@ -43,6 +40,7 @@ MAKE_STATUS(PowerUpStatus,TypeOfStatus::POWER_UP,"攻撃力アップ",3){
 MAKE_STATUS(DefenceUpStatus,TypeOfStatus::DEFENCE_UP,"守備力アップ",3){
   turn--;
   if(check()){
+    //3ターン後に元に戻る
     if(turn == 0){
       log->push_back("守備力が元に戻った");
     }
@@ -56,6 +54,7 @@ MAKE_STATUS(DefenceUpStatus,TypeOfStatus::DEFENCE_UP,"守備力アップ",3){
 MAKE_STATUS(PoisonStatus,TypeOfStatus::POISON,"毒状態",5){
   turn--;
   if(check()){
+    //5ターン後に元に戻る
     if(turn == 0){
       log->push_back("毒が治った");
     }
@@ -64,12 +63,12 @@ MAKE_STATUS(PoisonStatus,TypeOfStatus::POISON,"毒状態",5){
   int damage = to.maxPOW/3;
   from.HP = from.HP - damage;
   log->push_back(fromName+"は毒で" + std::to_string(damage) +"ダメージ食らった");
-  std::cout << "毒" << turn << std::endl;
   return false;
 }
 
 
 std::shared_ptr<StatusInterface> StatusCreate::createStatus(TypeOfStatus status) {
+  //factory method.
   switch (status){
   case TypeOfStatus::NONE :
     return std::make_shared<NoneStatus>();

@@ -9,6 +9,7 @@
 #include "StatusInterface.hpp"
 #include "StatusEnum.hpp"
 
+//ID使って状態異常を生成する
 class StatusCreate {
 public:
   static std::shared_ptr<StatusInterface> createStatus(TypeOfStatus status);

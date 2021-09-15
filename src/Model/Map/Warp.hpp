@@ -6,6 +6,7 @@
 #define APPEAL_WARP_HPP
 #include "MapObjectInterface.hpp"
 
+//入口、出口
 class Warp : public MapObjectInterface{
   bool isStart_ = true;
 public:

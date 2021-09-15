@@ -27,18 +27,19 @@ public:
   std::string debug();
 };
 
-//ダンジョン生成で扱う一時的なパラメーター定数
+//ダンジョン生成で扱うパラメーター定数
 enum BitMapKind {
   ERR = -1,
-  WALL,
-  NONE,
-  PLAYER,
-  ENEMY,
-  MAPOBJECT,
-  BUILDING_WALL = 100,
+  WALL, //壁
+  NONE, //道
+  PLAYER, //プレイヤー
+  ENEMY, //敵
+  MAPOBJECT, //マップオブジェクト
+  BUILDING_WALL = 100, //ダンジョン生成で使う定数
 };
 typedef std::vector<std::vector<BitMapKind>> BitMap;
 
+//4方向をランダムに並び替えて配列で出力
 static std::vector<Vector2> ShuffulDirections() {
   std::vector<Vector2> vectors = {Vector2(0, 1), Vector2(1, 0), Vector2(0, -1), Vector2(-1, 0)};
   std::random_device seed_gen;
@@ -47,6 +48,7 @@ static std::vector<Vector2> ShuffulDirections() {
   return vectors;
 }
 
+//指定した位置のBitMapKindを出力
 static BitMapKind at(const BitMap& bitmap,Vector2 v){
   if(v.y >= bitmap.size())return ERR;
   if(v.y <= -1)return ERR;

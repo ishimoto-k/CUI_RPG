@@ -6,16 +6,21 @@
 #include <thread>
 
 void BattleScene::setPlayer(std::shared_ptr<Player> playPtr) {
+  //プレイヤーの登録
   player = playPtr;
-  player->initBattleBefore();
+  player->initBattleBefore();//パラメーター初期化
+
+  //コマンドセレクト画面
   state = State::CommandSelect;
+  //ターン1
   turnCounter = 1;
   log.clear();
   isWin_ = false;
 }
 void BattleScene::setEnemy(std::shared_ptr<Enemy> enemyPtr) {
+  //エネミー登録
   enemy = enemyPtr;
-  enemy->initBattleBefore();
+  enemy->initBattleBefore();//パラメーター初期化
 }
 
 void BattleScene::Up() {
@@ -28,18 +33,17 @@ void BattleScene::Down(){
   if (selectList.size() == cursor)
     cursor = 0;
 }
+
 void BattleScene::action(std::shared_ptr<Character> fromChara,
                          std::shared_ptr<Character> toChara,
                          std::shared_ptr<CommandInterface> command) {
-  // todo ダメージ計算とHP減少
+  // コマンドアクション
   command->update(fromChara->name(), toChara->name(), fromChara->parameter,
                   toChara->parameter, &log);
-  //    log.push_back(fromChara->name()+"の"+command->name());
-  //    log.push_back(toChara->name()+"に50のダメージ");
 }
 
 void BattleScene::turnStart(CharacterPtr fromChara, CharacterPtr toChara) {
-  // todo ダメージ計算とHP減少
+  // ターン開始
   fromChara->battleTurnStart(toChara,log);
 }
 void BattleScene::Left(){}
@@ -49,32 +53,34 @@ void BattleScene::Esc(){};
 void BattleScene::update() {
   //戦闘ロジック
   auto body = std::make_shared<EventBody>();
-  if (state == State::Action) {
+  if (state == State::Action) {//ターン処理
     log.clear(); //バトルログを消す
-    player->initTurnBefore();
-    enemy->initTurnBefore();
-    turnStart(player, enemy);
+
+    player->initTurnBefore();//プレイヤーの守備力、攻撃力を一旦戻す。
+
+    turnStart(player, enemy);//状態異常を反映
     if (enemy->parameter.HP <= 0) {
       goto win;
     }
     if (player->parameter.HP <= 0) {
       goto lose;
     }
-    action(player, enemy, selection);
+    action(player, enemy, selection);//スキル実行
     if (enemy->parameter.HP <= 0) {
       goto win;
     }
     if (player->parameter.HP <= 0) {
       goto lose;
     }
-    turnStart(enemy,player);
+    enemy->initTurnBefore();//敵の守備力、攻撃力を一旦戻す。
+    turnStart(enemy,player);//状態異常を反映
     if (enemy->parameter.HP <= 0) {
       goto win;
     }
     if (player->parameter.HP <= 0) {
       goto lose;
     }
-    action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));
+    action(enemy, player, enemy->battleLogic(turnCounter,player->parameter));//バトルロジックよりコマンドが選択される。
     if (enemy->parameter.HP <= 0) {
       goto win;
     }
@@ -83,12 +89,13 @@ void BattleScene::update() {
     }
     goto finish;
   win:
+    //goto win　敵のHPを0にした時
     enemy->parameter.HP = 0;
     log.push_back("\033[4m\033[1m" + enemy->name() + "を倒した" +
                   "\033[0m");
     log.push_back(std::to_string(enemy->parameter.EXP) +
                   "の経験値を獲得した");
-    if (player->addExp(enemy->parameter.EXP)) {
+    if (player->addExp(enemy->parameter.EXP)) {//経験値UP
       log.push_back(player->name() + "はレベルアップし、");
       log.push_back(std::to_string(player->parameter.level) + "になった");
       auto info = player->getGotSkills();
@@ -101,14 +108,16 @@ void BattleScene::update() {
     isWin_ = true;
     body->state = State::Win;
     body->enemy = enemy;
-    notify(ObserverEventList::BATTLE_SCENE_WIN, body);
+    notify(ObserverEventList::BATTLE_SCENE_WIN, body);//勝利イベント
     goto finish;
   lose:
+    //goto lose　プレイヤーのHPを0にした時
     player->parameter.HP = 0;
     log.push_back(player->name() + "は敗北した");
     body->state = State::Lose;
-    notify(ObserverEventList::BATTLE_SCENE_LOSE, body);
+    notify(ObserverEventList::BATTLE_SCENE_LOSE, body);//敗北イベント
   finish:
+    //　終了処理
     state = State::CommandSelect;
     turnCounter++;
     selectList = commands;
@@ -129,6 +138,7 @@ void BattleScene::Select() {
   if (state == State::SkillSelect) {
     auto skill = selectList[cursor];
     if (player->parameter.MP >= skill->mp()) {
+      //持っているMPがスキルの消費MP足りていれば発動
       selection = skill;
       state = State::Action;
     } else {
@@ -138,18 +148,18 @@ void BattleScene::Select() {
   } else {
     auto command = commands[cursor];
     switch (command->id()) {
-    case 1:
+    case 1: //ATTACK
       selectList = commands;
       cursor = 0;
       selection = commands[0];
       state = State::Action;
       break;
-    case 2:
+    case 2: //SKILL
       cursor = 0;
       state = State::SkillSelect;
       selectList = player->skill;
       break;
-    case 3:
+    case 3: //ESCAPE
       cursor = 0;
       selection = commands[2];
       state = State::ESCAPE;
@@ -164,10 +174,13 @@ void BattleScene::Select() {
 }
 
 void BattleScene::view() {
+  //敵の絵を表示
   std::cout << std::endl << enemy->frontView() << std::endl;
+  //敵のパラメーター
   std::cout << enemy->name() << std::endl
             << " HP:" << enemy->parameter.maxHP << "/" << enemy->parameter.HP
             << std::endl;
+  //プレイヤーのパラメーター
   std::cout << player->name() << std::endl
             << " HP:" << player->parameter.maxHP << "/"
             << player->parameter.HP << " ";
@@ -210,6 +223,7 @@ void BattleScene::view() {
     std::cout << "　" << l << std::endl;
   }
   if(isWin_){
+    //勝利時は若干waitを入れ、キーボードの入力を無効にする。
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }

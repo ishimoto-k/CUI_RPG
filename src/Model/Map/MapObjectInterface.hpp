@@ -11,19 +11,20 @@
 using namespace Vec;
 using namespace Design;
 
+//マップに配置するオブジェクトのインターフェース
 class MapObjectInterface{
 protected:
   Vector2 position_ = Vector2(0,0);
   int id_;
   typedef std::function<void()> Callback;
-  std::function<void()> selectCallback;
+  Callback selectCallback; //選択されたときの処理
 public:
   MapObjectInterface() = default;
   MapObjectInterface(int x,int y):position_(Vector2(x,y)){}
-  virtual void view() = 0;
-  virtual void backViewStart(){}
-  virtual void backViewEnd(){}
-  virtual void select(){selectCallback();}
+  virtual void view() = 0; //表示
+  virtual void backViewStart(){} //背景色表示開始
+  virtual void backViewEnd(){}  //背景色表示終了
+  virtual void select(){selectCallback();}//選択されたときの処理
   void setOnSelectCallback(Callback callback){
     selectCallback = callback;
   }
@@ -33,11 +34,15 @@ public:
   void set(Vector2 position){
     position_ = position;
   }
+
+  //アルゴリズムによってオブジェクトを移動したい場合
   virtual bool move(const BitMap& bitMap,std::function<void(BitMapKind,Vector2,Vector2)> callback) = 0;
+
+  //座標を指定してオブジェクトを移動したい場合
   virtual bool move(const BitMap& bitMap,const Vector2& vector,std::function<void(BitMapKind,Vector2,Vector2)> callback) = 0;
   Vector2 position(){
     return position_;
   }
 };
 
-#endif // APPEAL_CHARACTORINTERFACE_HPP
+#endif // APPEAL_MAPOBJECTINTERFACE_HPP

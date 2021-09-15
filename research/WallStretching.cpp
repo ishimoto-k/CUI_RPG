@@ -3,12 +3,9 @@
 //
 //
 
-#include <iostream>
-#include <vector>
-#include <random>
-
 #include "DungeonCreate.hpp"
 
+//ダンジョン生成アルゴリズムの動作確認
 int main(){
   auto dungeon = DungeonCreate(2,2);
   dungeon.create();

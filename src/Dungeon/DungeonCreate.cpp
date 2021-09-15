@@ -6,6 +6,8 @@
 
 void DungeonCreate::process(){
 
+  //1マス置き柱を設置します。
+  //ここでは、設置せず、selectWallに該当の柱ポジションを格納します。
   for(auto by = bitmap.begin();by!=bitmap.end();by++){
     if(by == bitmap.begin() || by == (bitmap.end()-1)){
       continue;
@@ -17,9 +19,11 @@ void DungeonCreate::process(){
       int x = std::distance(bx,by->end()-1);
       int y = std::distance(by,bitmap.end()-1);
       if(x % 2){
+        //1マス毎
         continue;
       }
       if(y % 2){
+        //1マス毎
         continue;
       }
       selectWall.emplace_back(x,y);
@@ -27,29 +31,40 @@ void DungeonCreate::process(){
   }
   std::random_device seed_gen;
   std::mt19937 engine(seed_gen());
+  //柱をシャッフルします。
   std::shuffle(selectWall.begin(), selectWall.end(), engine);
-  buildStart();
+  //初期化終了
+
+  buildStart();//生成開始
 }
 void DungeonCreate::build(Vector2 wall) {
+  //いきなり壁にせず、設置中の壁にする(BUILDING_WALL)
   bitmap[(wall).y][(wall).x] = BitMapKind::BUILDING_WALL;
+  //ランダムに4方向の配列を生成
   std::vector<Vector2> vectors = ShuffulDirections();
   auto next_check = wall;
   for (auto vector : vectors) {
     next_check = wall + vector;
     if (at(bitmap,next_check) == BitMapKind::BUILDING_WALL) {
+      //一つ先のマスが設置中の壁ならスキップして次の方向へ、
       continue;
     }
     if (at(bitmap,next_check) == BitMapKind::ERR || at(bitmap,next_check + vector) == BitMapKind::ERR) {
+      //一つ先とその先のマスがエラーなら終了
+      //エラー：マップ外
       return;
     }
     if (at(bitmap,next_check) == BitMapKind::NONE && at(bitmap,next_check + vector) != BitMapKind::BUILDING_WALL) {
+      //一つ先のマスが道、さらに先のマスが設置中の壁ではない場合、壁を伸ばす。
       bitmap[(next_check).y][(next_check).x] = BitMapKind::BUILDING_WALL;
       if (at(bitmap,next_check + vector) == BitMapKind::WALL || at(bitmap,next_check + vector) == BitMapKind::BUILDING_WALL) {
+        //さらに先のマスが壁か設置中の壁の場合、打ち止め。
         bitmap[(next_check + vector).y][(next_check + vector).x] = BitMapKind::BUILDING_WALL;
         return;
       }
       bitmap[(next_check + vector).y][(next_check + vector).x] = BitMapKind::BUILDING_WALL;
       if (at(bitmap,next_check + vector) == BitMapKind::NONE) {
+        //さらに先のマスが道なら再帰呼び出し。
         build(next_check + vector);
       }
     } else {
@@ -59,10 +74,13 @@ void DungeonCreate::build(Vector2 wall) {
 }
 void DungeonCreate::buildStart(){
   for(auto startWall:selectWall){
+    //柱を一つ選びます。
     if(bitmap[startWall.y][startWall.x] == BitMapKind::WALL){
+      //その柱がすでに壁なら次の柱へ、
       continue;
     }
-    build(startWall);
+    build(startWall);//再起的に柱から壁を伸ばします。
+    //再起終了後、一旦設置中の壁は壁に昇格。
     for(auto by = bitmap.begin();by!=bitmap.end();by++){
       for(auto bx = by->begin();bx!=by->end();bx++){
         if(*bx == BitMapKind::BUILDING_WALL){
@@ -86,7 +104,6 @@ void DungeonCreate::buildStart(){
       }
     }
   }
-  return;
 }
 DungeonCreate::DungeonCreate(int w, int h,int roomMin,int roomMax) : DungeonInterfece(w,h){
   roomMin_ = roomMin;
@@ -105,14 +122,15 @@ DungeonCreate::DungeonCreate(int w, int h,int roomMin,int roomMax) : DungeonInte
     *i->begin() = BitMapKind::WALL;
     *(i->end()-1) = BitMapKind::WALL;
   }
-  debug();
+//  debug();
 }
+
+
 bool DungeonCreate::create(){
   process();
   return true;
 }
 void DungeonCreate::debug(){
-  return;
   for(auto w : bitmap){
     for(auto h : w){
       std::cout << h;
@@ -123,4 +141,5 @@ void DungeonCreate::debug(){
   std::cout << std::endl;
   std::cout << std::endl;
   std::cout << std::endl;
+  return;
 }

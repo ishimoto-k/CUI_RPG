@@ -23,8 +23,8 @@ protected:
   int height_;
 public:
   DungeonInterfece(int w,int h):width_(w),height_(h){}; //縦横の入力は必須
-  virtual bool create() = 0;
-  virtual void debug() = 0;
+  virtual bool create() = 0;//ダンジョン生成開始
+  virtual void debug() = 0;//デバッグ用
   const BitMap& getBitMap() {return bitmap;};
 };
 

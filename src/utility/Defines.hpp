@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include <vector>
 namespace define{
+
+//設定ファイルのパス
+//実行パスからの相対パス
 static std::string AssetsTitle(){
   return "assets/title";
 }
@@ -21,6 +24,8 @@ static std::string AssetsLevelList(){
 static std::string AssetsMapInformation(){
   return "assets/mapInformation.yaml";
 }
+
+//設定ファイルのチェック
 static bool haveConfigFileCheck(){
   std::vector<std::string> checkList={
       AssetsTitle(),

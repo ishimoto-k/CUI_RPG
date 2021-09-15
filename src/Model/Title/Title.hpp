@@ -30,7 +30,7 @@ public:
       case START:
         return "はじめから";
       case LOAD:
-        return "続きから";
+        return "つづきから";
       case END:
         return "終了";
       }
@@ -41,6 +41,7 @@ public:
     Kind kind;
   };
   class EventBody : public SubjectDataBody{
+    //イベント通知のためのクラス
   public:
     SelectList selectList;
     EventBody(SelectList sel):selectList(sel){}

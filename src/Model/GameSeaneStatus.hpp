@@ -5,6 +5,7 @@
 #ifndef APPEAL_GAMESEANESTATUS_HPP
 #define APPEAL_GAMESEANESTATUS_HPP
 
+//ゲーム状態クラス
 enum KeyBoardWait{
   HIT,
   WAIT,
@@ -19,6 +20,9 @@ public:
   };
   KeyBoardWait keyBoardWait = KeyBoardWait::WAIT;
   GameSeaneStatus(Status status):status_(status){};
+  /*コンストラクタ
+   * GameSeaneStatus gameStatus = GameSeaneStatus::TITLE
+   * と記載できる。暗黙的型変換を利用した小技*/
   Status getStatus(){
     return status_;
   };

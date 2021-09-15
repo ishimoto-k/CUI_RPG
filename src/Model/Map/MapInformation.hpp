@@ -7,19 +7,22 @@
 
 #include <yaml-cpp/yaml.h>
 #include <Defines.hpp>
+
+//マップ情報を保持するクラス
 class MapInformation {
 public:
-  int level;
-  int width;
-  int height;
-  int roomsMin;
-  int roomsMax;
-  int enemies;
-  int heal;
-  std::vector<int> typeOfEnemy;
-  int boss;
+  int level; //階層
+  int width; //マップ横幅
+  int height;//マップ縦幅
+  int roomsMin;//マップの最低限の部屋数
+  int roomsMax;//マップの最大限の部屋数
+  int enemies; //マップに出現する敵数
+  int heal;    //回復スポットの数
+  std::vector<int> typeOfEnemy; //出現する敵の種類
+  int boss; //出現するボスの種類　//0は出現しない
 
   static const std::vector<MapInformation> &getMapInfoList() {
+    //マップ情報をファイルから読み込む。
     static std::vector<MapInformation> mapInfoList{};
     if (!mapInfoList.empty())
       return mapInfoList;
@@ -46,11 +49,12 @@ public:
       std::cout << fileName << "の読み込み成功" << std::endl;
     }catch (YAML::Exception &e) {
       std::cout << fileName << "が存在しません。終了します。" << std::endl;
-//      exit(-1);
     }
     return mapInfoList;
   }
   static const MapInformation getMapInfo(int level){
+    //level = 階層
+    //階層毎の情報を取得する
     auto list = getMapInfoList();
     if(list.size() > level){
       return list[level];

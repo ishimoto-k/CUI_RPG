@@ -49,17 +49,18 @@ const std::vector<Enemy>& Enemy::getEnemyList(){
       parameter.EXP = node["EXP"].as<int>();
       parameter.level = node["LEVEL"].as<int>();
       //    parameter.skillIds = node["getSkill"].as<std::vector<int>>();
+
+
       if (node["Actions"]) {
+        //敵の行動ロジックの取得
         for (auto actions : node["Actions"]) {
           std::string logicName = actions["Logic"].as<std::string>();
-          std::vector<int> commands =
-              actions["commands"].as<std::vector<int>>();
+          std::vector<int> commands = actions["commands"].as<std::vector<int>>();
           std::vector<int> parameter = {};
           if (actions["parameter"]) {
             parameter = actions["parameter"].as<std::vector<int>>();
           }
-          auto logic =
-              EnemyLogicCreate::createLogic(logicName, parameter, commands);
+          auto logic = EnemyLogicCreate::createLogic(logicName, parameter, commands);//logicNameとパラメーターを元に行動パターンを生成する。
           enemy.logic.push_back(logic);
         }
       }
