@@ -207,7 +207,7 @@ void BattleScene::view() {
           //MP足りない場合は灰色文字
           std::cout << "\t\033[2m" << (*command)->mp() << "\033[0m" << std::endl;
         } else {
-          std::cout << "　\t" << (*command)->mp() << std::endl;
+          std::cout << "\t" << (*command)->mp() << std::endl;
         }
       } else {
         std::cout << std::endl;
