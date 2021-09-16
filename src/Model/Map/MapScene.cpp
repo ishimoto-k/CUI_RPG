@@ -260,7 +260,14 @@ void MapScene::view() {
   //最後ステータスやゲームログを出力
   std::cout << player->name() << std::endl;
   std::cout << " LV:" <<player->parameter.level << "\t";
-  std::cout << " HP:" << player->parameter.maxHP << "/" << player->parameter.HP << "\t";
+  std::cout << " HP:" << player->parameter.maxHP << "/";
+  if(player->parameter.maxHP*0.3 > player->parameter.HP){
+    std::cout <<"\033[31m";
+  }
+  else if(player->parameter.maxHP*0.5 > player->parameter.HP){
+    std::cout <<"\033[91m";
+  }
+  std::cout << player->parameter.HP <<"\033[39m" << "\t";
   std::cout << "MP:" << player->parameter.maxMP << "/" << player->parameter.MP << std::endl;
   std::cout << " POW:" << player->parameter.POW << "\t DEX:" << player->parameter.DEX << std::endl;
   std::cout << " EXP:" << player->parameter.EXP ;

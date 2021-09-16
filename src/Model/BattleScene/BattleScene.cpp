@@ -178,12 +178,24 @@ void BattleScene::view() {
   std::cout << std::endl << enemy->frontView() << std::endl;
   //敵のパラメーター
   std::cout << enemy->name() << std::endl
-            << " HP:" << enemy->parameter.maxHP << "/" << enemy->parameter.HP
-            << std::endl;
+            << " HP:" << enemy->parameter.maxHP << "/";
+  if(enemy->parameter.maxHP*0.3 > enemy->parameter.HP){
+    std::cout <<"\033[31m";
+  }
+  else if(enemy->parameter.maxHP*0.5 > enemy->parameter.HP){
+    std::cout <<"\033[91m";
+  }
+  std::cout << enemy->parameter.HP <<"\033[39m"<< std::endl;
   //プレイヤーのパラメーター
   std::cout << player->name() << std::endl
-            << " HP:" << player->parameter.maxHP << "/"
-            << player->parameter.HP << " ";
+            << " HP:" << player->parameter.maxHP << "/";
+  if(player->parameter.maxHP*0.3 > player->parameter.HP){
+    std::cout <<"\033[31m";
+  }else if(player->parameter.maxHP*0.5 > player->parameter.HP){
+    std::cout <<"\033[91m";
+  }
+  std::cout << player->parameter.HP <<"\033[39m";
+  std::cout << " ";
   std::cout << "MP:" << player->parameter.maxMP << "/" << player->parameter.MP
             << std::endl
             << std::endl;
