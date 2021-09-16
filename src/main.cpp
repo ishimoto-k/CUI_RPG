@@ -102,6 +102,9 @@ int main(){
       player = std::make_shared<Player>(pos.x,pos.y,gameInformation.getInfo().exp);
       mapScene->setPlayerAndCreateMapObject(player,false);
       //ゲームステータスをマップに変更
+      if(gameInformation.getInfo().mapClearStatus > gameInformation.getInfo().mapLevel){
+        mapScene->eraseBoss();
+      }
       gameStatus = GameSeaneStatus::MAP_VIEW;
     }else if(msg->selectList == Title::SelectList::END){
       //ゲームステータスを終了に変更
@@ -162,16 +165,20 @@ int main(){
   observer.interface()->addListener(ObserverEventList::MAP_SCENE_SELECT_WARP_GOAL,[&](SubjectData subject){
 //    std::cout << "MAP_SCENE_SELECT_WARP_GOAL ";
     //マップシーンで入り口ワープを選択した
+    gameInformation.getInfo().mapLevel =gameInformation.getInfo().mapLevel +1;
+    if(gameInformation.getInfo().mapClearStatus < gameInformation.getInfo().mapLevel){
+      gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel;
+    }
     if(gameInformation.getInfo().mapLevel > MapInformation::getMapInfoList().size()){
       //最終マップの場合はクリア
       log.emplace_back("ゲームクリア");
-      gameInformation.getInfo().mapClearStatus = MapInformation::getMapInfoList().size();
+      gameInformation.getInfo().mapLevel = MapInformation::getMapInfoList().size();
+      gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel+1;
       gameInformation.getInfo().exp = player->parameter.EXP;
       gameInformation.save();
       return;
     }
     //階層移動したタイミングで保存する。
-    gameInformation.getInfo().mapClearStatus = gameInformation.getInfo().mapLevel =gameInformation.getInfo().mapLevel +1;
     gameInformation.getInfo().exp = player->parameter.EXP;
     gameInformation.save();
     //ダンジョンを作り直す。
