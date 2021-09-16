@@ -10,11 +10,11 @@
 // SkillInterfaceを継承したクラスを生成し、
 // 容易にスキルを作成できる。
 
-#define MAKE_SKILL(classname,mp_,skillName_,desc_) \
+#define MAKE_SKILL(classname,id_,mp_,skillName_,desc_) \
 class classname : public SkillInterface{ \
 public: \
   int mp() override { return mp_;} \
-  int id() override { return 4;} \
+  int id() override { return static_cast<int>(id_);} \
   std::string name() override { return skillName_;} \
   std::string description() override {return desc_;} \
   void update(std::string fromName,std::string toName,Parameter& from,Parameter& to,std::vector<std::string>* log) override; \
@@ -56,14 +56,14 @@ int magicCalc(float flevel, float fdex, float todex) { //physical
   return d;
 }
 
-MAKE_SKILL(SlashMiddle,4,"大斬り","敵に中ダメージ") {
+MAKE_SKILL(SlashMiddle, TypeOfSkills::SLASH_MIDDLE,4,"大斬り","敵に中ダメージ") {
   int damage = damageCalc(from.level, to.level, 1.2 * from.POW, to.DEX);
   to.HP -= damage;
   from.MP -= mp();
   log->push_back(fromName + "の" + name());
   log->push_back(toName + "に" + std::to_string(damage) + "のダメージ");
 }
-MAKE_SKILL(SlashLarge, 8,"渾身斬り","敵に大ダメージ"){
+MAKE_SKILL(SlashLarge,TypeOfSkills::SLASH_LARGE, 8,"渾身斬り","敵に大ダメージ"){
   int damage = damageCalc(from.level,to.level,1.5*from.POW ,to.DEX);
   to.HP -= damage;
   from.MP -= mp();
@@ -72,7 +72,7 @@ MAKE_SKILL(SlashLarge, 8,"渾身斬り","敵に大ダメージ"){
   log->push_back(ss.str());
   log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
 }
-MAKE_SKILL(Heal,3,"ヒール","自身を回復"){
+MAKE_SKILL(Heal,TypeOfSkills::HEAL,3,"ヒール","自身を回復"){
   int heal = magicCalc(from.level,from.DEX*0.9,from.DEX) + from.maxHP*0.3;//from.DEX/1.3;
   from.HP += heal;
   if(from.HP >= from.maxHP)from.HP = from.maxHP;
@@ -80,7 +80,7 @@ MAKE_SKILL(Heal,3,"ヒール","自身を回復"){
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"に"+std::to_string(heal)+"の回復");
 }
-MAKE_SKILL(HighHeal,6,"ハイヒール","自身を大回復"){
+MAKE_SKILL(HighHeal,TypeOfSkills::HIGH_HEAL,6,"ハイヒール","自身を大回復"){
   int heal = magicCalc(from.level,from.DEX*1.3,from.DEX) + from.maxHP*0.5;//from.DEX/1.3;
   from.HP += heal;
   if(from.HP >= from.maxHP)from.HP = from.maxHP;
@@ -88,24 +88,24 @@ MAKE_SKILL(HighHeal,6,"ハイヒール","自身を大回復"){
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"に"+std::to_string(heal)+"の回復");
 }
-MAKE_SKILL(PowerUp,10,"攻撃上げ","3ターン自身の攻撃力をあげる"){
+MAKE_SKILL(PowerUp,TypeOfSkills::POWERUP,10,"攻撃上げ","3ターン自身の攻撃力をあげる"){
   from.MP -= mp();
   from.status.push_back(TypeOfStatus::POWER_UP);//状態異常IDをparameter.statusに追加
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"は攻撃力が上がった");
 }
-MAKE_SKILL(Shield,0,"まもる","1ターン身を守る"){
+MAKE_SKILL(Shield,TypeOfSkills::SHIELD,0,"まもる","1ターン身を守る"){
   from.MP -= mp();
   from.DEX = from.maxDEX + 50;
   log->push_back(fromName+"は身を守った");
 }
-MAKE_SKILL(DefUp,8,"防御上げ","3ターン自身の防御力をあげる"){
+MAKE_SKILL(DefUp,TypeOfSkills::DEFENCEUP,8,"防御上げ","3ターン自身の防御力をあげる"){
   from.MP -= mp();
   from.status.push_back(TypeOfStatus::DEFENCE_UP);//状態異常IDをparameter.statusに追加
   log->push_back(fromName+"の"+name());
   log->push_back(fromName+"は防御力が上がった");
 }
-MAKE_SKILL(Poison,8,"毒攻撃","相手にダメージ与えて毒にする"){
+MAKE_SKILL(Poison,TypeOfSkills::POISON,8,"毒攻撃","相手にダメージ与えて毒にする"){
   int damage = damageCalc(from.level,to.level,1.05*from.POW ,to.DEX);
   to.HP -= damage;
   from.MP -= mp();
@@ -121,7 +121,7 @@ MAKE_SKILL(Poison,8,"毒攻撃","相手にダメージ与えて毒にする"){
     to.status.push_back(TypeOfStatus::POISON); //状態異常IDをparameter.statusに追加
   }
 }
-MAKE_SKILL(MagicMiddle,8,"中魔法","魔力を消費して中ダメージを与える"){
+MAKE_SKILL(MagicMiddle,TypeOfSkills::MAGIC_MIDDLE,8,"中魔法","魔力を消費して中ダメージを与える"){
   int damage = magicCalc(from.level,from.DEX*1.6,0);
   to.HP -= damage;
   from.MP -= mp();
@@ -130,7 +130,7 @@ MAKE_SKILL(MagicMiddle,8,"中魔法","魔力を消費して中ダメージを与
   log->push_back(ss.str());
   log->push_back(toName+"に"+std::to_string(damage)+"のダメージ");
 }
-MAKE_SKILL(MagicHigh,10,"大魔法","魔力を消費して大ダメージを与える"){
+MAKE_SKILL(MagicHigh,TypeOfSkills::MAGIC_HIGH,10,"大魔法","魔力を消費して大ダメージを与える"){
   int damage = magicCalc(from.level*1.3,from.DEX*2.0,0);
   to.HP -= damage;
   from.MP -= mp();

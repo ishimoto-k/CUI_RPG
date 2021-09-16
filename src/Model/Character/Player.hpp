@@ -17,6 +17,7 @@ public:
     auto p = Parameter::loadFromExp(exp);//経験値からレベルとパラメーターを取得
     parameter = p;
     auto skillIds = Parameter::loadSkillFromLevel(p.level);//レベルから覚えているスキルIDを取得
+    parameter.skillIds = skillIds;
     for(auto id:skillIds){
       auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));//スキルIDからスキルの実体を生成しリスト化
       skill.push_back(s);
@@ -42,18 +43,27 @@ public:
         return false;
       }
       auto tmp =  parameter.EXP;
+      auto skillIdsTmp = std::move(parameter.skillIds);
       //レベルアップしたので、そのレベルのパラメータを取得
       parameter = Parameter::loadFromLevel(parameter.level+1);
       gotSkills.clear();
       for(auto id:parameter.skillIds){
-        //獲得したスキルの生成
-        auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));
-        skill.push_back(s);
-        gotSkills.push_back(s);
+        auto f = std::find_if(skillIdsTmp.begin(),skillIdsTmp.end(),[id](int a){
+          return id == a;
+        });
+        if(f == skillIdsTmp.end()) {
+          //獲得したスキルの生成
+          auto s = SkillsCreate::createCommand(static_cast<TypeOfSkills>(id));
+          skill.push_back(s);
+          gotSkills.push_back(s);
+        }
       }
-      std::sort(skill.begin(), skill.end());
-      skill.erase(std::unique(skill.begin(), skill.end()), skill.end());
+      //スキルをID昇順で並び替え
+      std::sort(skill.begin(), skill.end(), [](std::shared_ptr<SkillInterface> a, std::shared_ptr<SkillInterface> b) {
+        return a->id() < b->id();
+      });
       //被ったスキルは削除
+      skill.erase(std::unique(skill.begin(), skill.end()), skill.end());
       parameter.EXP = tmp;
       //経験値を代入
       return true;

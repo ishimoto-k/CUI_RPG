@@ -148,18 +148,18 @@ void BattleScene::Select() {
   } else {
     auto command = commands[cursor];
     switch (command->id()) {
-    case 1: //ATTACK
+    case static_cast<int>(TypeOfSkills::ATTACK): //ATTACK
       selectList = commands;
       cursor = 0;
       selection = commands[0];
       state = State::Action;
       break;
-    case 2: //SKILL
+    case static_cast<int>(TypeOfSkills::SKILL): //SKILL
       cursor = 0;
       state = State::SkillSelect;
       selectList = player->skill;
       break;
-    case 3: //ESCAPE
+    case static_cast<int>(TypeOfSkills::ESCAPE): //ESCAPE
       cursor = 0;
       selection = commands[2];
       state = State::ESCAPE;
